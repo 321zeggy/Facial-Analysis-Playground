@@ -1,6 +1,8 @@
 Practice-Run
 =====================
 
+(Open examples/practice_run.html in a browser to test this out) 
+
 Learned
 ------------------------------
 1. I became more comfortable working with HTTP requests.
