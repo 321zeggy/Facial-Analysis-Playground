@@ -27,8 +27,6 @@
   // kairos SDK
   var kairos = new Kairos("***REMOVED***", "***REMOVED***");
 
-  var betaface = new Betaface("***REMOVED***", "***REMOVED***");
-
   // holder for the image data
   var global_image_data;
 
@@ -192,7 +190,7 @@
     imageObj.src = 'data:image/jpeg;base64,' + global_image_data;
   }
 
- 	function kairosDetectCallback(response) {
+ 	function myDetectCallback(response) {
     console.log(response)
     document.getElementById("kairos_response").innerHTML = response.responseText;
 
@@ -272,7 +270,7 @@
           var options = { "selector" : "FULL"};
 
           // pass your callback method to the Detect function
-          kairos.detect(image_data, kairosDetectCallback, options);
+          kairos.detect(image_data, myDetectCallback, options);
 
           uploadImage(theFile.name, image_data, "classifiers");
 
