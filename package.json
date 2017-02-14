@@ -1,0 +1,26 @@
+{
+  "name": "Practice-Run",
+  "version": "1.0.0",
+  "description": "Practice-Run\r =====================",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/321zeggy/Practice-Run.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/321zeggy/Practice-Run/issues"
+  },
+  "homepage": "https://github.com/321zeggy/Practice-Run#readme",
+  "dependencies": {
+    "@google-cloud/vision": "^0.8.0"
+  }
+}
