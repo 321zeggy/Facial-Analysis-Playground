@@ -1,9 +1,9 @@
   $(document).ready(function() {
 
     // kairos SDK
-    var kairos = new Kairos("99f9be78", "25f5356088731e145315fa9b4f8ffdf3");
+    var kairos = new Kairos(config.KAIROS_APP_ID, config.KAIROS_APP_KEY);
 
-    var betaface = new Betaface("d45fd466-51e2-4701-8da8-04351c872236", "171e8465-f548-401d-b63b-caf0dc28df5f");
+    var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
 
     // holder for the image data
     var global_image_data;
@@ -85,7 +85,7 @@
 
     function kairosDetectCallback(response) {
       console.log(response)
-      //$("#kairos_response").html() = response.responseText;
+        //$("#kairos_response").html() = response.responseText;
 
       $response = $("#kairos_response");
 
@@ -166,7 +166,9 @@
             };
 
             // pass your callback method to the Detect function
-            kairos.detect(image_data, kairosDetectCallback, {"selector": "FULL"});
+            kairos.detect(image_data, kairosDetectCallback, {
+              "selector": "FULL"
+            });
 
             betaface.detect(image_data, betafaceDetectCallback, "classifiers");
 
@@ -193,12 +195,12 @@
 
       var url = $("#photo_url").val();
 
-      
+
       var canvas = $('#myCanvas');
       var context = myCanvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       var imageObj = new Image;
-      
+
       imageObj.onload = function() {
         context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
       };
@@ -213,27 +215,28 @@
       //   imageObj.src = image_data;
       // }
 
-            // image_data = String(image_data);
-            // image_data = image_data.replace("data:image/jpeg;base64,", "");
-            // image_data = image_data.replace("data:image/jpg;base64,", "");
-            // image_data = image_data.replace("data:image/png;base64,", "");
-            // image_data = image_data.replace("data:image/gif;base64,", "");
-            // image_data = image_data.replace("data:image/bmp;base64,", "");
-            global_image_data = image_data;
-            global_is_url = true;
+      // image_data = String(image_data);
+      // image_data = image_data.replace("data:image/jpeg;base64,", "");
+      // image_data = image_data.replace("data:image/jpg;base64,", "");
+      // image_data = image_data.replace("data:image/png;base64,", "");
+      // image_data = image_data.replace("data:image/gif;base64,", "");
+      // image_data = image_data.replace("data:image/bmp;base64,", "");
+      global_image_data = image_data;
+      global_is_url = true;
 
-            var options = {
-              "selector": "FULL"
-            };
+      var options = {
+        "selector": "FULL"
+      };
 
-            // pass your callback method to the Detect function
-            kairos.detect(image_data, kairosDetectCallback, {"selector": "FULL"});
+      // pass your callback method to the Detect function
+      kairos.detect(image_data, kairosDetectCallback, {
+        "selector": "FULL"
+      });
 
-            betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url=true);
+      betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = true);
 
 
-          };
-
+    };
     // Setup the dnd listeners.
     // var dropZone = document.getElementById('drop_zone');
     // dropZone.addEventListener('dragover', handleDragOver, false);
@@ -241,6 +244,5 @@
 
     $('#files').change(handleFileSelect);
     $('#submit_photo_url').click(handleURLSelect);
-
 
   });
