@@ -85,8 +85,6 @@
 
     function kairosDetectCallback(response) {
       console.log(response)
-        //$("#kairos_response").html() = response.responseText;
-
       $response = $("#kairos_response");
 
       $response.removeClass("modal");
@@ -169,7 +167,6 @@
             kairos.detect(image_data, kairosDetectCallback, {
               "selector": "FULL"
             });
-
             betaface.detect(image_data, betafaceDetectCallback, "classifiers");
 
 
@@ -195,12 +192,10 @@
 
       var url = $("#photo_url").val();
 
-
       var canvas = $('#myCanvas');
       var context = myCanvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       var imageObj = new Image;
-
       imageObj.onload = function() {
         context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
       };
@@ -237,6 +232,7 @@
 
 
     };
+
     // Setup the dnd listeners.
     // var dropZone = document.getElementById('drop_zone');
     // dropZone.addEventListener('dragover', handleDragOver, false);
@@ -244,5 +240,6 @@
 
     $('#files').change(handleFileSelect);
     $('#submit_photo_url').click(handleURLSelect);
+
 
   });
