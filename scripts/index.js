@@ -1,12 +1,13 @@
   $(document).ready(function() {
 
     // kairos SDK
-    var kairos = new Kairos("***REMOVED***", "***REMOVED***");
+    var kairos = new Kairos("99f9be78", "25f5356088731e145315fa9b4f8ffdf3");
 
-    var betaface = new Betaface("***REMOVED***", "***REMOVED***");
+    var betaface = new Betaface("d45fd466-51e2-4701-8da8-04351c872236", "171e8465-f548-401d-b63b-caf0dc28df5f");
 
     // holder for the image data
     var global_image_data;
+    var global_is_url;
 
     function imageToDataUri(img, width, height) {
 
@@ -56,7 +57,7 @@
         context.stroke();
       };
 
-      imageObj.src = 'data:image/jpeg;base64,' + global_image_data;
+      imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
     }
 
     function betafaceDetectCallback(response) {
@@ -144,7 +145,7 @@
 
             var image_data = e.target.result;
 
-            var maxWidth = 300;
+            var maxWidth = 475;
             if (imageObj.width > maxWidth) {
               var ratio = maxWidth / imageObj.width;
               image_data = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
@@ -158,6 +159,7 @@
             image_data = image_data.replace("data:image/gif;base64,", "");
             image_data = image_data.replace("data:image/bmp;base64,", "");
             global_image_data = image_data;
+            global_is_url = false;
 
             var options = {
               "selector": "FULL"
@@ -178,14 +180,67 @@
       }
     }
 
+    function handleURLSelect(evt) {
+      $("#kairos_response").innerHTML = "<i>(Kairos response will appear here)</i>";
+      $("#betaface_response").innerHTML = "<i>(Betaface response will appear here)</i>";
 
+      //$response = $("#kairos_response");
+
+      //$response.addClass("modal");
+
+      evt.stopPropagation();
+      evt.preventDefault();
+
+      var url = $("#photo_url").val();
+
+      
+      var canvas = $('#myCanvas');
+      var context = myCanvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      var imageObj = new Image;
+      
+      imageObj.onload = function() {
+        context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
+      };
+      imageObj.src = url;
+
+      var image_data = url;
+
+      // var maxWidth = 475;
+      // if (imageObj.width > maxWidth) {
+      //   var ratio = maxWidth / imageObj.width;
+      //   image_data = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
+      //   imageObj.src = image_data;
+      // }
+
+            // image_data = String(image_data);
+            // image_data = image_data.replace("data:image/jpeg;base64,", "");
+            // image_data = image_data.replace("data:image/jpg;base64,", "");
+            // image_data = image_data.replace("data:image/png;base64,", "");
+            // image_data = image_data.replace("data:image/gif;base64,", "");
+            // image_data = image_data.replace("data:image/bmp;base64,", "");
+            global_image_data = image_data;
+            global_is_url = true;
+
+            var options = {
+              "selector": "FULL"
+            };
+
+            // pass your callback method to the Detect function
+            kairos.detect(image_data, kairosDetectCallback, {"selector": "FULL"});
+
+            betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url=true);
+
+
+          };
 
     // Setup the dnd listeners.
     // var dropZone = document.getElementById('drop_zone');
     // dropZone.addEventListener('dragover', handleDragOver, false);
     // dropZone.addEventListener('drop', handleFileSelect, false);
 
-    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    $('#files').change(handleFileSelect);
+    $('#submit_photo_url').click(handleURLSelect);
 
 
   });

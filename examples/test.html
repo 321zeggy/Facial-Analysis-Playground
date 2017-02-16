@@ -25,15 +25,15 @@
   $(document).ready(function() {
 
   // kairos SDK
-  var kairos = new Kairos("***REMOVED***", "***REMOVED***");
+  var kairos = new Kairos("99f9be78", "25f5356088731e145315fa9b4f8ffdf3");
 
   // holder for the image data
   var global_image_data;
 
   function uploadImage(image_filename, image_data, detection_flags) {
 		var msg = {
-    	"api_key":"***REMOVED***",
-      "api_secret":"***REMOVED***",
+    	"api_key":"d45fd466-51e2-4701-8da8-04351c872236",
+      "api_secret":"171e8465-f548-401d-b63b-caf0dc28df5f",
       "detection_flags":detection_flags,
       "image_base64":image_data,
       "original_filename":image_filename
@@ -100,8 +100,8 @@
 
   function getImageInfo(image_uid) {
 		var msg = {
-    	"api_key":"***REMOVED***",
-      "api_secret":"***REMOVED***",
+    	"api_key":"d45fd466-51e2-4701-8da8-04351c872236",
+      "api_secret":"171e8465-f548-401d-b63b-caf0dc28df5f",
       "img_uid":image_uid
     };
 
