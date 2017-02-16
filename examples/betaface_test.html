@@ -35,8 +35,8 @@
 
             function getFaceImage(face_uid) {
                 var msg = {
-                    "api_key":"***REMOVED***",
-                    "api_secret":"***REMOVED***",
+                    "api_key":"d45fd466-51e2-4701-8da8-04351c872236",
+                    "api_secret":"171e8465-f548-401d-b63b-caf0dc28df5f",
                     "face_uid":face_uid
                 };
 
@@ -77,8 +77,8 @@
 
             function uploadImage(image_filename, image_data, detection_flags) {
                 var msg = {
-                        "api_key":"***REMOVED***",
-                        "api_secret":"***REMOVED***",
+                        "api_key":"d45fd466-51e2-4701-8da8-04351c872236",
+                        "api_secret":"171e8465-f548-401d-b63b-caf0dc28df5f",
                         "detection_flags":detection_flags,
                         "imagefile_data":image_data,
                         "original_filename":image_filename
@@ -110,12 +110,12 @@
             }
 
             function getImageInfo(image_uid) {
-                var msg = '<?xml version="1.0" encoding="utf-8"?><ImageInfoRequestUid><api_key>***REMOVED***</api_key><api_secret>***REMOVED***</api_secret>' +
+                var msg = '<?xml version="1.0" encoding="utf-8"?><ImageInfoRequestUid><api_key>d45fd466-51e2-4701-8da8-04351c872236</api_key><api_secret>171e8465-f548-401d-b63b-caf0dc28df5f</api_secret>' +
                         '<img_uid>' + image_uid + '</img_uid></ImageInfoRequestUid>';
 
                 var msg = {
-                    "api_key":"***REMOVED***",
-                    "api_secret":"***REMOVED***",
+                    "api_key":"d45fd466-51e2-4701-8da8-04351c872236",
+                    "api_secret":"171e8465-f548-401d-b63b-caf0dc28df5f",
                     "img_uid":image_uid
                 };
 
