@@ -2,3 +2,7 @@
 	white-space: pre; 
 	font-family: monospace; 
 }
+
+.sample-img:hover {
+	cursor: pointer;
+}

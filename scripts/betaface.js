@@ -69,7 +69,7 @@ Betaface.prototype.getImageInfo = function(image_uid, callback) {
 			//image is in the queue
 			setTimeout(function() {
 				betaface.getImageInfo(image_uid, callback);
-			}, 500);
+			}, 1000);
 		} else if (betafaceJSON.int_response == 0) {
 			//image processed
 			callback(response);
