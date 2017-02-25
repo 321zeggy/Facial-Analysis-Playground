@@ -8,7 +8,7 @@ Learned
 2. That when sending a request, it's really only the content, not the sender/method of sending, that matters to the server receiving it.
 3. That an image's onload function reruns each time the image is assigned a new src
 
-Ideas for Next Iteraction
+Ideas for Next Iteration
 ------------------------------
 1. Clean up the code. Be more consistant and DRY.
 2. Add face bounding boxes for the different APIs.
