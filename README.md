@@ -1,8 +1,34 @@
 Practice-Run
 =====================
 
-(Open examples/practice_run.html in a browser to test this out) 
+*February 24, 2017*
+Learned
+------------------------------
+1. How to start a basic python server from the command line
+2. That when sending a request, it's really only the content, not the sender/method of sending, that matters to the server receiving it.
+3. That an image's onload function reruns each time the image is assigned a new src
 
+Ideas for Next Iteration
+------------------------------
+1. Clean up the code. Be more consistant and DRY.
+2. Add face bounding boxes for the different APIs.
+3. Connect to additional APIs.
+4. Read up on HTTP and other relevant topics.
+
+Challenges
+------------------------------
+1. Converting images to base64 data without getting CORS related errors.
+2. Overcomplicating the process of starting a server.
+2. Trying to understand the APIs without first fully understanding how requests work.
+
+Triumphs
+------------------------------
+1. Adding sample images that respond as intended when clicked.
+2. Succesfully running a server (fixing the CORS related image errors!)
+3. Aquiring authentication keys for all the relevant APIs (aside from Amazon, because it asked for my credit card info).
+
+
+*February 2, 2017*
 Learned
 ------------------------------
 1. I became more comfortable working with HTTP requests.
