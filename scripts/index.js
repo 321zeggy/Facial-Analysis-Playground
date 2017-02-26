@@ -1,8 +1,6 @@
   $(document).ready(function() {
 
-      // kairos SDK
       var kairos = new Kairos(config.KAIROS_APP_ID, config.KAIROS_APP_KEY);
-
       var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
 
       // holder for the image data
@@ -57,36 +55,29 @@
           };
 
           imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
-      }
+      };
 
       function betafaceDetectCallback(response) {
           var betafaceJSON = JSON.parse(response.responseText);
-
           if (betafaceJSON.faces.length == 0) {
               console.log('no images in face response');
               return;
-          } else {
-              var tags = betafaceJSON.faces[0].tags;
-              var attributes = {};
-              for (var i in tags) {
-                  var name = tags[i]['name'];
-                  var value = tags[i]['value'];
-
-                  if (name == "gender" || name == "age") {
-                      attributes[name] = value;
-                  }
-              }
-              $("#betaface_response").html(JSON.stringify(attributes, null, 4));
           }
-      }
+          var tags = betafaceJSON.faces[0].tags;
+          var attributes = {};
+          for (var i in tags) {
+              var name = tags[i]['name'];
+              var value = tags[i]['value'];
+              if (name == "gender" || name == "age") {
+                  attributes[name] = value;
+              }
+          }
+          $("#betaface_response").html(JSON.stringify(attributes, null, 4));
+      };
 
       function kairosDetectCallback(response) {
           $response = $("#kairos_response");
-
-          $response.removeClass("modal");
-
           var kairosJSON = JSON.parse(response.responseText);
-
           if (!kairosJSON.images[0].faces[0]) {
               console.log('no images in face response');
               return;
@@ -100,7 +91,7 @@
 
           // call custom drawing method
           myDrawMethod(kairosJSON.images[0].faces[0]);
-      }
+      };
 
       function handleFileSelect(evt) {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
@@ -135,7 +126,7 @@
 
                       var image_data = e.target.result;
 
-                      var maxWidth = 475;
+                      var maxWidth = 400;
                       if (imageObj.width > maxWidth) {
                           var ratio = maxWidth / imageObj.width;
                           image_data = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
@@ -183,7 +174,7 @@
           context.clearRect(0, 0, canvas.width, canvas.height);
           var imageObj = new Image;
           imageObj.onload = function() {
-              var maxWidth = 475;
+              var maxWidth = 400;
               if (this.width > maxWidth) {
                   var ratio = maxWidth / imageObj.width;
                   this.src = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
@@ -237,19 +228,6 @@
 
           var image_data = url;
 
-          // var maxWidth = 475;
-          // if (imageObj.width > maxWidth) {
-          //   var ratio = maxWidth / imageObj.width;
-          //   image_data = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
-          //   imageObj.src = image_data;
-          // }
-
-          // image_data = String(image_data);
-          // image_data = image_data.replace("data:image/jpeg;base64,", "");
-          // image_data = image_data.replace("data:image/jpg;base64,", "");
-          // image_data = image_data.replace("data:image/png;base64,", "");
-          // image_data = image_data.replace("data:image/gif;base64,", "");
-          // image_data = image_data.replace("data:image/bmp;base64,", "");
           global_image_data = image_data;
           global_is_url = true;
 
@@ -267,12 +245,7 @@
 
       };
 
-      // Setup the dnd listeners.
-      // var dropZone = document.getElementById('drop_zone');
-      // dropZone.addEventListener('dragover', handleDragOver, false);
-      // dropZone.addEventListener('drop', handleFileSelect, false);
-
-      $('#files').change(handleFileSelect);
+      $('#file').change(handleFileSelect);
       $('#submit_photo_url').click(handleURLSelect);
       $('.sample-img').click(handleSampleSelect);
 
