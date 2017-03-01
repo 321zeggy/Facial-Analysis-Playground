@@ -1,39 +1,28 @@
 var Betaface = function(api_key, api_secret) {
 	this.api_key = api_key;
-	this.api_secret = api_secret
+	this.api_secret = api_secret;
 	this.api_host = 'http://www.betafaceapi.com/service_json.svc/';
 };
 
-/* Authentication checker */
-Betaface.prototype.authenticationProvided = function() {
-	if ((!this.api_key) || (!this.api_secret)) {
-		return false;
-	}
-	return true;
-};
-
-Betaface.prototype.uploadImage = function(detection_flags, image_data, is_url, callback) {
+Betaface.prototype.detect = function(image_data, callback, detection_flags, is_url=false) {
 	var msg = {
-		"api_key": this.api_key,
-		"api_secret": this.api_secret,
-		"detection_flags": detection_flags
+		'api_key': this.api_key,
+		'api_secret': this.api_secret,
+		'detection_flags': detection_flags,
 	};
 
-	if (is_url) {
-		msg["url"] = image_data;
-	} else {
-		msg["image_base64"] = image_data;
-	}
+	msg[(is_url ? 'url' : 'image_base64')] = image_data;
 
 	var url = this.api_host + 'uploadImage';
-	var betaface = this;
+	var betaface = this; // for use in inner_callback
 
 	var inner_callback = function(response) {
 		var betafaceJSON = JSON.parse(response.responseText);
+		// an int_response of 0 indicates that the data has been successfully uploaded
 		if (betafaceJSON.int_response == 0) {
 			betaface.getImageInfo(betafaceJSON.img_uid, callback);
 		}
-		// error
+		// any non-zero int_response indicates that the data upload has failed
 		else {
 			console.info(betafaceJSON.int_response);
 			console.info(betafaceJSON.string_response);
@@ -44,7 +33,7 @@ Betaface.prototype.uploadImage = function(detection_flags, image_data, is_url, c
 	$.support.cors = true;
 	$.ajax(url, {
 		crossDomain: true,
-		type: 'post',
+		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(msg),
 		dataType: 'raw',
@@ -55,12 +44,12 @@ Betaface.prototype.uploadImage = function(detection_flags, image_data, is_url, c
 
 Betaface.prototype.getImageInfo = function(image_uid, callback) {
 	var msg = {
-		"api_key": this.api_key,
-		"api_secret": this.api_secret,
-		"img_uid": image_uid
+		'api_key': this.api_key,
+		'api_secret': this.api_secret,
+		'img_uid': image_uid
 	};
 
-	var url = this.api_host + "GetImageInfo";
+	var url = this.api_host + 'GetImageInfo';
 	var betaface = this;
 
 	var inner_callback = function(response) {
@@ -85,13 +74,4 @@ Betaface.prototype.getImageInfo = function(image_uid, callback) {
 		success: inner_callback,
 		error: inner_callback
 	});
-};
-
-Betaface.prototype.detect = function(image_data, callback, detection_flags, is_url = false) {
-	if (this.authenticationProvided() == false) {
-		console.info('Betaface Error: set your api_key and api_secret before calling this method');
-		return;
-	} else {
-		this.uploadImage(detection_flags, image_data, is_url, callback);
-	}
 };
