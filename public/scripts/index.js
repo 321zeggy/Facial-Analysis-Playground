@@ -2,6 +2,8 @@
 
       var kairos = new Kairos(config.KAIROS_APP_ID, config.KAIROS_APP_KEY);
       var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
+      var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
+
 
       // holder for the image data
       var global_image_data;
