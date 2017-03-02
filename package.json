@@ -1,23 +1,24 @@
 {
-  "name": "practice-run",
+  "name": "facial-analysis-playground",
   "version": "1.0.0",
-  "description": "Practice-Run\r =====================",
+  "description": "Facial-Analysis-Playground\r =====================",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/321zeggy/Practice-Run.git"
+    "url": "git+https://github.com/321zeggy/Facial-Analysis-Playground.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/321zeggy/Practice-Run/issues"
+    "url": "https://github.com/321zeggy/Facial-Analysis-Playground/issues"
   },
-  "homepage": "https://github.com/321zeggy/Practice-Run#readme",
+  "homepage": "https://github.com/321zeggy/Facial-Analysis-Playground#readme",
   "dependencies": {
-    "express": "4.14.1"
+    "express": "4.14.1",
+    "httpdispatcher": "2.0.1"
   }
 }

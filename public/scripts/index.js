@@ -209,41 +209,92 @@
 
 
       function handleURLSelect(evt) {
-          $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-          $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
+        $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
+        $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
 
-          evt.stopPropagation();
-          evt.preventDefault();
+        evt.stopPropagation();
+        evt.preventDefault();
 
-          var url = $("#photo_url").val();
+        var canvas = $('#myCanvas');
+        var context = myCanvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var imageObj = new Image;
+        imageObj.crossOrigin = "Anonymous";
+        imageObj.onload = function() {
+            var maxWidth = 400;
+            if (this.width > maxWidth) {
+              var ratio = maxWidth / imageObj.width;
+              this.src = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
+            } else {
+            context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
 
-          var canvas = $('#myCanvas');
-          var context = myCanvas.getContext('2d');
-          context.clearRect(0, 0, canvas.width, canvas.height);
-          var imageObj = new Image;
-          imageObj.onload = function() {
-              context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
-          };
-          imageObj.src = url;
+            var image_data = imageToDataUri(imageObj, imageObj.width, imageObj.height);
+            image_data = String(image_data);
+            image_data = image_data.replace("data:image/jpeg;base64,", "");
+            image_data = image_data.replace("data:image/jpg;base64,", "");
+            image_data = image_data.replace("data:image/png;base64,", "");
+            image_data = image_data.replace("data:image/gif;base64,", "");
+            image_data = image_data.replace("data:image/bmp;base64,", "");
+            global_image_data = image_data;
+            global_is_url = false;
 
-          var image_data = url;
+            var options = {
+                "selector": "FULL"
+            };
 
-          global_image_data = image_data;
-          global_is_url = true;
+            // pass your callback method to the Detect function
+            kairos.detect(image_data, kairosDetectCallback, {
+                "selector": "FULL"
+            });
+            betaface.detect(image_data, betafaceDetectCallback, "classifiers");
+        };
 
-          var options = {
-              "selector": "FULL"
-          };
+    };
 
-          // pass your callback method to the Detect function
-          kairos.detect(image_data, kairosDetectCallback, {
-              "selector": "FULL"
-          });
+    imageObj.src = $("#photo_url").val();
 
-          betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = true);
+  };
 
 
-      };
+
+
+
+
+          // $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
+          // $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
+
+          // evt.stopPropagation();
+          // evt.preventDefault();
+
+          // var url = $("#photo_url").val();
+
+          // var canvas = $('#myCanvas');
+          // var context = myCanvas.getContext('2d');
+          // context.clearRect(0, 0, canvas.width, canvas.height);
+          // var imageObj = new Image;
+          // imageObj.onload = function() {
+          //     context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
+          // };
+          // imageObj.src = url;
+
+          // var image_data = url;
+
+          // global_image_data = image_data;
+          // global_is_url = true;
+
+          // var options = {
+          //     "selector": "FULL"
+          // };
+
+          // // pass your callback method to the Detect function
+          // kairos.detect(image_data, kairosDetectCallback, {
+          //     "selector": "FULL"
+          // });
+
+          // betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = true);
+
+
+      // };
 
       $('#file').change(handleFileSelect);
       $('#submit_photo_url').click(handleURLSelect);
