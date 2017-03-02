@@ -60,18 +60,18 @@ Kairos.prototype.detect = function(image_data, callback, options) {
   }
 
 	var header_settings = {
-		"Content-type"    : 'application/json',
-        "app_id"          : this.app_id,
-        "app_key"         : this.app_key
-      };
+		'Content-type': 'application/json',
+    'app_id': this.app_id,
+    'app_key': this.app_key
+  };
 
-  	jQuery.ajax(url, {
-        headers  : header_settings,
-        type     : 'POST',
-        dataType : 'raw',
-        data     : JSON.stringify(data),
-        success  : callback,
-        error    : callback
-      });
+	jQuery.ajax(url, {
+      headers  : header_settings,
+      type     : 'POST',
+      dataType : 'raw',
+      data     : JSON.stringify(data),
+      success  : callback,
+      error    : callback
+    });
 };
 
