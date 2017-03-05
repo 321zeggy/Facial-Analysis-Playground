@@ -77,7 +77,25 @@
           $("#betaface_response").html(JSON.stringify(attributes, null, 4));
       };
 
+      function microsoftDetectCallback(response) {
+          console.log(response);
+          var microsoftJSON = JSON.parse(response.responseText);
+          console.log(microsoftJSON);
+          if (!microsoftJSON[0]) {
+              console.log('no images in face response');
+              return;
+          };
+          attributes = microsoftJSON[0].faceAttributes;
+          attributes = {
+              "gender": attributes["gender"],
+              "age": attributes["age"]
+          };
+          $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
+      };
+
+
       function kairosDetectCallback(response) {
+        console.log(response);
           $response = $("#kairos_response");
           var kairosJSON = JSON.parse(response.responseText);
           if (!kairosJSON.images[0].faces[0]) {
@@ -175,6 +193,7 @@
           var context = myCanvas.getContext('2d');
           context.clearRect(0, 0, canvas.width, canvas.height);
           var imageObj = new Image;
+          imageObj.crossOrigin = "Anonymous";
           imageObj.onload = function() {
               var maxWidth = 400;
               if (this.width > maxWidth) {
@@ -200,6 +219,9 @@
 
           };
           imageObj.src = $(this).attr('src');
+          global_is_url = true;
+          global_image_data = $(this).data('url'); 
+          microsoft.detect($(this).data('url'), microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url=true);
       };
 
 
