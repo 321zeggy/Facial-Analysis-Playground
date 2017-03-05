@@ -1,5 +1,31 @@
-Practice-Run
+Facial-Analysis-Playground
 =====================
+
+*March 2, 2017*
+Learned
+------------------------------
+1. A better understanding of why cross-origin resource sharing (CORS) exists, helping me better understand why some of my cross-origin requests succeed while others failed.
+2. Much more confidence in interpreting HTTP requests and responses
+
+Ideas for Next Iteration
+------------------------------
+1. *Before* I jump back into the actual coding, I'd like to set aside time to write out a step-by-step plan I'll need follow in order to accomplish my tasks.
+2. Implement image upload to Google, Microsoft, and IBM.
+3. Implement bounding boxes view for Google, Microsoft, and IBM.
+
+Challenges
+------------------------------
+1. The facial coordinates returned by Betaface aren't as straightforward to use for drawing bounding boxes as those returned by other APIs.
+2. Microsoft's API only accepts photos in the form of web URLs or data streams, making it more complicated to send photos that were represented as strings of base64 data.
+3. I often tried to implement code that involved concepts that were relatively new to me, when I should have first made sure I had at least a high level understanding of those concepts. 
+
+Triumphs
+------------------------------
+1. Finally gave this repository a proper name!  
+2. Made progress on my UAP proposal 
+3. Felt more confident in my understanding of the code I was working with, and much less overwhelmed (even at the points when I found things confusing.)
+4. Being more confident in my understanding of the code made it easier for me to come up with specific questions instead of just feeling too confused to even know what to ask. 
+
 
 *February 24, 2017*
 Learned
