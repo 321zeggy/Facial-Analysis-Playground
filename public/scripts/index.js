@@ -1,4 +1,4 @@
-  $(document).ready(function() {
+  $(document).ready(function($) {
 
       var kairos = new Kairos(config.KAIROS_APP_ID, config.KAIROS_APP_KEY);
       var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
@@ -174,9 +174,7 @@
                       };
 
                       // pass your callback method to the Detect function
-                      kairos.detect(image_data, kairosDetectCallback, {
-                          "selector": "FULL"
-                      });
+                      kairos.detect(image_data, kairosDetectCallback, options);
                       betaface.detect(image_data, betafaceDetectCallback, "classifiers");
 
 
