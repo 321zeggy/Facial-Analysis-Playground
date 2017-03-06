@@ -3,6 +3,7 @@
       var kairos = new Kairos(config.KAIROS_APP_ID, config.KAIROS_APP_KEY);
       var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
       var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
+      var watson = new Watson(config.IBM_API_KEY);
 
 
       // holder for the image data
@@ -78,9 +79,7 @@
       };
 
       function microsoftDetectCallback(response) {
-          console.log(response);
           var microsoftJSON = JSON.parse(response.responseText);
-          console.log(microsoftJSON);
           if (!microsoftJSON[0]) {
               console.log('no images in face response');
               return;
@@ -93,9 +92,22 @@
           $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
       };
 
+      function watsonDetectCallback(response) {
+          var watsonJSON = JSON.parse(response.responseText);
+          if (!watsonJSON.images[0].faces[0]) {
+              console.log('no images in face response');
+              return;
+          };
+          attributes = watsonJSON.images[0].faces[0];
+          attributes = {
+              "gender": attributes.gender.gender,
+              "age": attributes.age
+          };
+          $("#ibm_response").html(JSON.stringify(attributes, null, 4));
+      };
+
 
       function kairosDetectCallback(response) {
-        console.log(response);
           $response = $("#kairos_response");
           var kairosJSON = JSON.parse(response.responseText);
           if (!kairosJSON.images[0].faces[0]) {
@@ -116,6 +128,8 @@
       function handleFileSelect(evt) {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
           $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
+          $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
+          $("#ibm_response").html("<i>(IBM response will appear here)</i>");
 
           evt.stopPropagation();
           evt.preventDefault();
@@ -185,6 +199,8 @@
       function handleSampleSelect(evt) {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
           $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
+          $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
+          $("#ibm_response").html("<i>(IBM response will appear here)</i>");
 
           evt.stopPropagation();
           evt.preventDefault();
@@ -214,7 +230,6 @@
 
                   kairos.detect(image_data, kairosDetectCallback, { "selector": "FULL" });
                   betaface.detect(image_data, betafaceDetectCallback, "classifiers");
-                  // microsoft.detect(image_data, console.log, "returnFaceAttributes=age,gender");
               };
 
           };
@@ -222,12 +237,15 @@
           global_is_url = true;
           global_image_data = $(this).data('url'); 
           microsoft.detect($(this).data('url'), microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url=true);
+          watson.detect($(this).data('url'), watsonDetectCallback, is_url=true);
       };
 
 
       function handleURLSelect(evt) {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
           $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
+          $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
+          $("#ibm_response").html("<i>(IBM response will appear here)</i>");
 
           evt.stopPropagation();
           evt.preventDefault();
@@ -269,6 +287,10 @@
           };
 
           imageObj.src = $("#photo_url").val();
+          global_is_url = true;
+          global_image_data = $(this).data('url'); 
+          microsoft.detect($("#photo_url").val(), microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url=true);
+          watson.detect($("#photo_url").val(), watsonDetectCallback, is_url=true);
 
       };
 
