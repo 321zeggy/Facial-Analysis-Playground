@@ -26,66 +26,75 @@
         <div class="row" style="max-height: 400">
             <div class="col-lg-5 col-lg-offset-1">
                 <canvas id="myCanvas" width="400" height="400"></canvas>
+                <form class="form">
+                        <div>
+                            <label></label>
+                            <input type="file" id="file" class="form-control-file form-control-sm">
+                        </div>
+                        <div>
+                            <div class="input-group">
+                                <label></label>
+                                <input type="url" id="photo_url" class="form-control">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-secondary" id="submit_photo_url">Submit</button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
             </div>
-            <div class="col-lg-4" style="overflow-y: scroll;">
-                <div class="card">
-                    <div class="card-header">JSON</div>
-                    <div class="card-block">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div>
-                                <h4 class="card-title">Kairos</h4>
-                                <p class="card-text responses" id="kairos_response"><i>(Kairos response will appear here)</i></p>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div>
-                                <h4 class="card-title">Betaface</h4>
-                                <p class="card-text responses" id="betaface_response"><i>(Betaface response will appear here)</i></p>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div>
-                                <h4 class="card-title">Microsoft</h4>
-                                <p class="card-text responses" id="microsoft_response"><i>(Microsoft response will appear here)</i></p>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div>
-                                <h4 class="card-title">IBM</h4>
-                                <p class="card-text responses" id="ibm_response"><i>(IBM response will appear here)</i></p>
-                            </div>
-                        </li>
-                    </ul>
+            <div class="col-lg-4">
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+                    <h3>JSON</h3>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingKairos">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseKairos" aria-expanded="true">Kairos</a>
+                            </h5>
+                        </div>
+                        <div id="collapseKairos" class="collapse show" role="tabpanel" aria-labelledby="headingKairos">
+                            <div class="card-block responses" id="kairos_response"><i>(Kairos response will appear here)</i></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingBetaface">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseBetaface" aria-expanded="false">Betaface</a>
+                            </h5>
+                        </div>
+                        <div id="collapseBetaface" class="collapse" role="tabpanel" aria-labelledby="headingBetaface">
+                            <div class="card-block responses" id="betaface_response"><i>(Betaface response will appear here)</i></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingMicrosoft">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseMicrosoft" aria-expanded="false">Microsoft</a>
+                            </h5>
+                        </div>
+                        <div id="collapseMicrosoft" class="collapse" role="tabpanel" aria-labelledby="headingMicrosoft">
+                            <div class="card-block responses" id="microsoft_response"><i>(Microsoft response will appear here)</i></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingIBM">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseIBM" aria-expanded="false">IBM</a>
+                            </h5>
+                        </div>
+                        <div id="collapseIBM" class="collapse" role="tabpanel" aria-labelledby="headingIBM">
+                            <div class="card-block responses" id="ibm_response"><i>(IBM response will appear here)</i></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <form class="form-inline">
-                    <div class="col-6">
-                        <label></label>
-                        <input type="file" id="file" class="form-control-file form-control-sm">
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <label></label>
-                            <input type="url" id="photo_url" class="form-control">
-                            <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-secondary" id="submit_photo_url">Submit</button>
-                                </span>
-                        </div>
-                    </div>
-                </form>
+            
+            <div class="row">
+                <div class="col-lg-2 col-lg-offset-1"><img src="images/sample1.jpg" class="img-fluid sample-img" id="sample1" data-url="http://68.media.tumblr.com/59a065e3a95370ddb9aad57859e662e8/tumblr_ofx6vy1Sz41rvapjbo1_500.jpg"></div>
+                <div class="col-lg-2"><img src="images/sample2.jpg" class="img-fluid sample-img" id="sample2"></div>
+                <div class="col-lg-2"><img src="images/sample3.jpg" class="img-fluid sample-img" id="sample3" data-url="http://68.media.tumblr.com/ea389b1e3b1da578b1d3f665af7dfda0/tumblr_ofx5tm8wuW1rvapjbo1_500.jpg"></div>
+                <div class="col-lg-2"><img src="images/sample4.jpg" class="img-fluid sample-img" id="sample4"></div>
+                <div class="col-lg-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5"></div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-2 col-lg-offset-1"><img src="images/sample1.jpg" class="img-fluid sample-img" id="sample1" data-url="http://68.media.tumblr.com/59a065e3a95370ddb9aad57859e662e8/tumblr_ofx6vy1Sz41rvapjbo1_500.jpg"></div>
-            <div class="col-lg-2"><img src="images/sample2.jpg" class="img-fluid sample-img" id="sample2"></div>
-            <div class="col-lg-2"><img src="images/sample3.jpg" class="img-fluid sample-img" id="sample3" data-url="http://68.media.tumblr.com/ea389b1e3b1da578b1d3f665af7dfda0/tumblr_ofx5tm8wuW1rvapjbo1_500.jpg"></div>
-            <div class="col-lg-2"><img src="images/sample4.jpg" class="img-fluid sample-img" id="sample4"></div>
-            <div class="col-lg-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5"></div>
         </div>
     </div>
 </body>
