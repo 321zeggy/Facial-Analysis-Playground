@@ -67,14 +67,15 @@
               return;
           }
           var tags = betafaceJSON.faces[0].tags;
-          var attributes = {};
+          attributes = [];
           for (var i in tags) {
-              var name = tags[i]['name'];
-              var value = tags[i]['value'];
-              if (name == "gender" || name == "age") {
-                  attributes[name] = value;
-              }
-          }
+            var attribute = tags[i]['name'];
+            var relevantAttributes = ['gender', 'age', 'race'];
+            // check if attribute is in relevantAttributes
+            if (relevantAttributes.indexOf(attribute) != -1) {
+              attributes.push(tags[i]);
+            } 
+          }; 
           $("#betaface_response").html(JSON.stringify(attributes, null, 4));
       };
 
@@ -85,10 +86,6 @@
               return;
           };
           attributes = microsoftJSON[0].faceAttributes;
-          attributes = {
-              "gender": attributes["gender"],
-              "age": attributes["age"]
-          };
           $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
       };
 
@@ -100,7 +97,7 @@
           };
           attributes = watsonJSON.images[0].faces[0];
           attributes = {
-              "gender": attributes.gender.gender,
+              "gender": attributes.gender,
               "age": attributes.age
           };
           $("#ibm_response").html(JSON.stringify(attributes, null, 4));
@@ -115,10 +112,6 @@
               return;
           };
           attributes = kairosJSON.images[0].faces[0].attributes;
-          attributes = {
-              "gender": attributes["gender"]["type"],
-              "age": attributes["age"]
-          };
           $("#kairos_response").html(JSON.stringify(attributes, null, 4));
 
           // call custom drawing method
@@ -294,46 +287,6 @@
 
       };
 
-
-
-
-
-
-      // $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-      // $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
-
-      // evt.stopPropagation();
-      // evt.preventDefault();
-
-      // var url = $("#photo_url").val();
-
-      // var canvas = $('#myCanvas');
-      // var context = myCanvas.getContext('2d');
-      // context.clearRect(0, 0, canvas.width, canvas.height);
-      // var imageObj = new Image;
-      // imageObj.onload = function() {
-      //     context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
-      // };
-      // imageObj.src = url;
-
-      // var image_data = url;
-
-      // global_image_data = image_data;
-      // global_is_url = true;
-
-      // var options = {
-      //     "selector": "FULL"
-      // };
-
-      // // pass your callback method to the Detect function
-      // kairos.detect(image_data, kairosDetectCallback, {
-      //     "selector": "FULL"
-      // });
-
-      // betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = true);
-
-
-      // };
 
       $('#file').change(handleFileSelect);
       $('#submit_photo_url').click(handleURLSelect);
