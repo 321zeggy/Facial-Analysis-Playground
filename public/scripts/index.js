@@ -1,5 +1,4 @@
   $(document).ready(function($) {
-
       var kairos = new Kairos(config.KAIROS_APP_ID, config.KAIROS_APP_KEY);
       var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
       var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
@@ -9,9 +8,13 @@
       // holder for the image data
       var global_image_data;
       var global_is_url;
+      var global_ratio;
+
+      var kairosBoundingBox;
+      var microsoftBoundingBox;
+      var ibmBoundingBox;
 
       function imageToDataUri(img, width, height) {
-
           // create an off-screen canvas
           var canvas = document.createElement('canvas');
           var ctx = canvas.getContext('2d');
@@ -28,33 +31,28 @@
       }
 
       // drawing method
-      function myDrawMethod(face) {
-          var canvas = document.getElementById('myCanvas');
+      function drawBoundingBox(face, color) {
+          var canvas = $('#photoCanvas')[0];
           var context = canvas.getContext('2d');
           context.clearRect(0, 0, canvas.width, canvas.height);
           var imageObj = new Image();
-
           imageObj.onload = function() {
-              context.drawImage(imageObj, 0, 0);
+              context.drawImage(imageObj, 0, 0, imageObj.width * global_ratio, imageObj.height * global_ratio);
 
-              // draw face box
-              context.beginPath();
-              context.rect(face.topLeftX, face.topLeftY, face.width, face.height);
-              context.lineWidth = 4;
-              context.strokeStyle = '#139C8A';
-              context.stroke();
+              if (face) {
+                  var top = face.top * global_ratio;
+                  var left = face.left * global_ratio;
+                  var width = face.width * global_ratio;
+                  var height = face.height * global_ratio;
 
-              // draw left eye
-              context.beginPath();
-              context.moveTo(face.leftEyeCenterX, (face.leftEyeCenterY + (face.height / 25)));
-              context.lineTo(face.leftEyeCenterX, (face.leftEyeCenterY - (face.height / 25)));
-              context.stroke();
 
-              // draw right eye
-              context.beginPath();
-              context.moveTo(face.rightEyeCenterX, (face.rightEyeCenterY + (face.height / 25)));
-              context.lineTo(face.rightEyeCenterX, (face.rightEyeCenterY - (face.height / 25)));
-              context.stroke();
+                  // draw face box
+                  context.beginPath();
+                  context.rect(left, top, width, height);
+                  context.lineWidth = 4;
+                  context.strokeStyle = color;
+                  context.stroke();
+              }
           };
 
           imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
@@ -64,43 +62,58 @@
           var betafaceJSON = JSON.parse(response.responseText);
           if (betafaceJSON.faces.length == 0) {
               console.log('no images in face response');
-              return;
+              $("#betaface_response").html('No faces detected');
+          } else {
+              var tags = betafaceJSON.faces[0].tags;
+              attributes = [];
+              for (var i in tags) {
+                  var attribute = tags[i]['name'];
+                  var relevantAttributes = ['gender', 'age', 'race'];
+                  // check if attribute is in relevantAttributes
+                  if (relevantAttributes.indexOf(attribute) != -1) { attributes.push(tags[i]); }
+              };
+              $("#betaface_response").html(JSON.stringify(attributes, null, 4));
           }
-          var tags = betafaceJSON.faces[0].tags;
-          attributes = [];
-          for (var i in tags) {
-            var attribute = tags[i]['name'];
-            var relevantAttributes = ['gender', 'age', 'race'];
-            // check if attribute is in relevantAttributes
-            if (relevantAttributes.indexOf(attribute) != -1) {
-              attributes.push(tags[i]);
-            } 
-          }; 
-          $("#betaface_response").html(JSON.stringify(attributes, null, 4));
       };
 
       function microsoftDetectCallback(response) {
           var microsoftJSON = JSON.parse(response.responseText);
           if (!microsoftJSON[0]) {
               console.log('no images in face response');
-              return;
-          };
-          attributes = microsoftJSON[0].faceAttributes;
-          $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
+              $("#microsoft_response").html('No faces detected');
+          } else {
+              var attributes = microsoftJSON[0].faceAttributes;
+              var face = microsoftJSON[0].faceRectangle;
+              microsoftBoundingBox = {
+                  top: face.top,
+                  left: face.left,
+                  width: face.width,
+                  height: face.height
+              };
+              $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
+          }
       };
 
       function watsonDetectCallback(response) {
           var watsonJSON = JSON.parse(response.responseText);
           if (!watsonJSON.images[0].faces[0]) {
               console.log('no images in face response');
-              return;
-          };
-          attributes = watsonJSON.images[0].faces[0];
-          attributes = {
-              "gender": attributes.gender,
-              "age": attributes.age
-          };
-          $("#ibm_response").html(JSON.stringify(attributes, null, 4));
+              $("#ibm_response").html('No faces detected');
+          } else {
+              attributes = watsonJSON.images[0].faces[0];
+              attributes = {
+                  "gender": attributes.gender,
+                  "age": attributes.age
+              };
+              $("#ibm_response").html(JSON.stringify(attributes, null, 4));
+              var face = watsonJSON.images[0].faces[0].face_location;
+              ibmBoundingBox = {
+                  top: face.top,
+                  left: face.left,
+                  width: face.width,
+                  height: face.height
+              };
+          }
       };
 
 
@@ -109,187 +122,129 @@
           var kairosJSON = JSON.parse(response.responseText);
           if (!kairosJSON.images[0].faces[0]) {
               console.log('no images in face response');
-              return;
-          };
-          attributes = kairosJSON.images[0].faces[0].attributes;
-          $("#kairos_response").html(JSON.stringify(attributes, null, 4));
+              $("#kairos_response").html('No faces detected');
+          } else {
+              attributes = kairosJSON.images[0].faces[0].attributes;
+              $("#kairos_response").html(JSON.stringify(attributes, null, 4));
 
-          // call custom drawing method
-          myDrawMethod(kairosJSON.images[0].faces[0]);
+              // call custom drawing method
+              var face = kairosJSON.images[0].faces[0];
+              kairosBoundingBox = {
+                  top: face.topLeftY,
+                  left: face.topLeftX,
+                  width: face.width,
+                  height: face.height
+              };
+
+              $('#collapseKairos').collapse('show');
+              drawBoundingBox(kairosBoundingBox, 'blue');
+          }
       };
+
+      function resetResponseText() {
+          $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
+          $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
+          $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
+          $("#ibm_response").html("<i>(IBM response will appear here)</i>");
+      };
+
+      // get ratio by which to multiply image width and height in order to fit canvas
+      function getConversionRatio(imageObj, maxWidth, maxHeight) {
+          return Math.min(maxWidth / imageObj.width, maxHeight / imageObj.height);
+      };
+
 
       function handleFileSelect(evt) {
-          $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-          $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
-          $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
-          $("#ibm_response").html("<i>(IBM response will appear here)</i>");
-
-          evt.stopPropagation();
-          evt.preventDefault();
-
-          var files = evt.target.files; // FileList object.
-
-          // Loop through the FileList and render image files as thumbnails.
-          for (var i = 0, f; f = files[i]; i++) {
-
-              // Only process image files.
-              if (!f.type.match('image.*')) {
-                  continue;
-              }
-
+          resetResponseText();
+          $('.show').collapse('hide');
+          
+          global_ratio = null;
+          var file = evt.target.files[0];
+          if (file.type.match('image.*')) { // Only process image files
               var reader = new FileReader();
+              reader.onload = function(e) {
+                  var canvas = $('#photoCanvas')[0];
+                  var context = canvas.getContext('2d');
+                  context.clearRect(0, 0, canvas.width, canvas.height);
+                  var imageObj = new Image;
+                  imageObj.onload = function() {
+                      var ratio = getConversionRatio(imageObj, 400, 400);
+                      if (!global_ratio) {
+                          global_ratio = ratio;
+                          imageObj.src = imageToDataUri(imageObj, imageObj.width, imageObj.height);
+                      } else {
+                          context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
 
-              reader.onload = (function(theFile) {
-                  return function(e) {
+                          var image_data = String(imageObj.src);
+                          image_data = image_data.replace("data:image/jpeg;base64,", "");
+                          image_data = image_data.replace("data:image/jpg;base64,", "");
+                          image_data = image_data.replace("data:image/png;base64,", "");
+                          image_data = image_data.replace("data:image/gif;base64,", "");
+                          image_data = image_data.replace("data:image/bmp;base64,", "");
+                          global_image_data = image_data;
+                          global_is_url = false;
 
-                      var canvas = $('#myCanvas');
-                      var context = myCanvas.getContext('2d');
-                      context.clearRect(0, 0, canvas.width, canvas.height);
-                      var imageObj = new Image;
-                      imageObj.onload = function() {
-                          context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
-                      };
-                      imageObj.src = e.target.result;
-
-                      var image_data = e.target.result;
-
-                      var maxWidth = 400;
-                      if (imageObj.width > maxWidth) {
-                          var ratio = maxWidth / imageObj.width;
-                          image_data = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
-                          imageObj.src = image_data;
+                          kairos.detect(image_data, kairosDetectCallback);
+                          betaface.detect(image_data, betafaceDetectCallback, "classifiers");
+                          microsoftBoundingBox = null;
                       }
-
-                      image_data = String(image_data);
-                      image_data = image_data.replace("data:image/jpeg;base64,", "");
-                      image_data = image_data.replace("data:image/jpg;base64,", "");
-                      image_data = image_data.replace("data:image/png;base64,", "");
-                      image_data = image_data.replace("data:image/gif;base64,", "");
-                      image_data = image_data.replace("data:image/bmp;base64,", "");
-                      global_image_data = image_data;
-                      global_is_url = false;
-
-                      var options = {
-                          "selector": "FULL"
-                      };
-
-                      // pass your callback method to the Detect function
-                      kairos.detect(image_data, kairosDetectCallback, options);
-                      betaface.detect(image_data, betafaceDetectCallback, "classifiers");
-
-
                   };
-              })(f);
+                  imageObj.src = e.target.result;
+              };
 
               // Read in the image file as a data URL.
-              reader.readAsDataURL(f);
+              reader.readAsDataURL(file);
 
-          }
-      }
+          };
+      };
 
-      function handleSampleSelect(evt) {
-          $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-          $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
-          $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
-          $("#ibm_response").html("<i>(IBM response will appear here)</i>");
 
-          evt.stopPropagation();
-          evt.preventDefault();
+      function handleURLSelect(url) {
+          resetResponseText();
+          $('.show').collapse('hide');
 
-          var canvas = $('#myCanvas');
-          var context = myCanvas.getContext('2d');
+          var canvas = $('#photoCanvas')[0];
+          var context = canvas.getContext('2d');
           context.clearRect(0, 0, canvas.width, canvas.height);
           var imageObj = new Image;
           imageObj.crossOrigin = "Anonymous";
           imageObj.onload = function() {
-              var maxWidth = 400;
-              if (this.width > maxWidth) {
-                  var ratio = maxWidth / imageObj.width;
-                  this.src = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
-              } else {
-                  context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
+              var ratio = getConversionRatio(imageObj, 400, 400);
+              context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
 
-                  var image_data = imageToDataUri(imageObj, imageObj.width, imageObj.height);
-                  image_data = String(image_data);
-                  image_data = image_data.replace("data:image/jpeg;base64,", "");
-                  image_data = image_data.replace("data:image/jpg;base64,", "");
-                  image_data = image_data.replace("data:image/png;base64,", "");
-                  image_data = image_data.replace("data:image/gif;base64,", "");
-                  image_data = image_data.replace("data:image/bmp;base64,", "");
-                  global_image_data = image_data;
-                  global_is_url = false;
-
-                  kairos.detect(image_data, kairosDetectCallback, { "selector": "FULL" });
-                  betaface.detect(image_data, betafaceDetectCallback, "classifiers");
-              };
-
+              global_image_data = url;
+              global_is_url = true;
+              global_ratio = ratio;
           };
-          imageObj.src = $(this).attr('src');
-          global_is_url = true;
-          global_image_data = $(this).data('url'); 
-          microsoft.detect($(this).data('url'), microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url=true);
-          watson.detect($(this).data('url'), watsonDetectCallback, is_url=true);
+          imageObj.src = url;
+
+          kairos.detect(url, kairosDetectCallback);
+          betaface.detect(url, betafaceDetectCallback, "classifiers", is_url = true);
+          microsoft.detect(url, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
+          watson.detect(url, watsonDetectCallback, is_url = true);
       };
 
-
-      function handleURLSelect(evt) {
-          $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-          $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
-          $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
-          $("#ibm_response").html("<i>(IBM response will appear here)</i>");
-
-          evt.stopPropagation();
-          evt.preventDefault();
-
-          var canvas = $('#myCanvas');
-          var context = myCanvas.getContext('2d');
-          context.clearRect(0, 0, canvas.width, canvas.height);
-          var imageObj = new Image;
-          imageObj.crossOrigin = "Anonymous";
-          imageObj.onload = function() {
-              var maxWidth = 400;
-              if (this.width > maxWidth) {
-                  var ratio = maxWidth / imageObj.width;
-                  this.src = imageToDataUri(imageObj, imageObj.width * ratio, imageObj.height * ratio);
-              } else {
-                  context.drawImage(imageObj, 0, 0); // Or at whatever offset you like
-
-                  var image_data = imageToDataUri(imageObj, imageObj.width, imageObj.height);
-                  image_data = String(image_data);
-                  image_data = image_data.replace("data:image/jpeg;base64,", "");
-                  image_data = image_data.replace("data:image/jpg;base64,", "");
-                  image_data = image_data.replace("data:image/png;base64,", "");
-                  image_data = image_data.replace("data:image/gif;base64,", "");
-                  image_data = image_data.replace("data:image/bmp;base64,", "");
-                  global_image_data = image_data;
-                  global_is_url = false;
-
-                  var options = {
-                      "selector": "FULL"
-                  };
-
-                  // pass your callback method to the Detect function
-                  kairos.detect(image_data, kairosDetectCallback, {
-                      "selector": "FULL"
-                  });
-                  betaface.detect(image_data, betafaceDetectCallback, "classifiers");
-              };
-
-          };
-
-          imageObj.src = $("#photo_url").val();
-          global_is_url = true;
-          global_image_data = $(this).data('url'); 
-          microsoft.detect($("#photo_url").val(), microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url=true);
-          watson.detect($("#photo_url").val(), watsonDetectCallback, is_url=true);
-
-      };
 
 
       $('#file').change(handleFileSelect);
-      $('#submit_photo_url').click(handleURLSelect);
-      $('.sample-img').click(handleSampleSelect);
+      $('#submit_photo_url').click(
+          function(evt) {
+              url = $("#photo_url").val();
+              handleURLSelect(url);
+          }
+      );
+      $('.sample-img').click(
+          function(evt) {
+              var url = $(this).data("url");
+              handleURLSelect(url);
+          }
+      );
 
       $('#sample1').click();
+
+      $('#collapseKairos').on('show.bs.collapse', function() { drawBoundingBox(kairosBoundingBox, 'blue') });
+      $('#collapseBetaface').on('show.bs.collapse', function() { drawBoundingBox() });
+      $('#collapseMicrosoft').on('show.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green') });
+      $('#collapseIBM').on('show.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red') });
 
   });

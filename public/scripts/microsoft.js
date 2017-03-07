@@ -15,19 +15,10 @@ Microsoft.prototype.detect = function(image_data, callback, options, is_url = fa
     };
 
     var data;
-    if (is_url) {
+    // if (is_url) {
         data = JSON.stringify({'url': image_data });
         header_settings['Content-type'] = 'application/json';
-    } else {
-    	var xhr = new XMLHttpRequest();
-    	xhr.open('GET', 'image_data/' + image_data, true);
-    	xhr.send();
-
-        data = image_data;
-        header_settings['Content-type'] = 'application/octet-stream';
-    }
-
-    $.ajax(url, {
+        $.ajax(url, {
         headers: header_settings,
         type: 'POST',
         data: data,
@@ -36,4 +27,22 @@ Microsoft.prototype.detect = function(image_data, callback, options, is_url = fa
         success: callback,
         error: callback
     });
+    // } else {
+    // 	var xhr = new XMLHttpRequest();
+    // 	xhr.open('GET', 'image_data/' + image_data, true);
+    // 	xhr.send();
+
+    //     data = image_data;
+    //     header_settings['Content-type'] = 'application/octet-stream';
+    // }
+
+    // $.ajax(url, {
+    //     headers: header_settings,
+    //     type: 'POST',
+    //     data: data,
+    //     dataType: 'raw',
+    //     processData: false,
+    //     success: callback,
+    //     error: callback
+    // });
 };
