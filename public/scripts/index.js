@@ -125,7 +125,6 @@
               $("#kairos_response").html('No faces detected');
           } else {
               attributes = kairosJSON.images[0].faces[0].attributes;
-              $("#kairos_response").html(JSON.stringify(attributes, null, 4));
 
               // call custom drawing method
               var face = kairosJSON.images[0].faces[0];
@@ -135,17 +134,23 @@
                   width: face.width,
                   height: face.height
               };
-
-              $('#collapseKairos').collapse('show');
-              drawBoundingBox(kairosBoundingBox, 'blue');
+              $("#kairos_response").html(JSON.stringify(attributes, null, 4));
+              // $('#collapseKairos').collapse('show');
+              // drawBoundingBox(kairosBoundingBox, 'blue');
           }
       };
 
-      function resetResponseText() {
+      function reset() {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
           $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
           $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
           $("#ibm_response").html("<i>(IBM response will appear here)</i>");
+
+          kairosBoundingBox = {};
+          microsoftBoundingBox = {};
+          ibmBoundingBox = {};
+
+          $('.show').collapse('hide');
       };
 
       // get ratio by which to multiply image width and height in order to fit canvas
@@ -155,9 +160,7 @@
 
 
       function handleFileSelect(evt) {
-          resetResponseText();
-          $('.show').collapse('hide');
-          
+          reset();
           global_ratio = null;
           var file = evt.target.files[0];
           if (file.type.match('image.*')) { // Only process image files
@@ -191,16 +194,20 @@
                   };
                   imageObj.src = e.target.result;
               };
-
               // Read in the image file as a data URL.
               reader.readAsDataURL(file);
-
           };
+          var dataReader = new FileReader();
+          dataReader.onload = function(e) {
+            microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender");
+            // watson.detect(e.target.result, watsonDetectCallback);
+          };
+          dataReader.readAsArrayBuffer(file);
       };
 
 
       function handleURLSelect(url) {
-          resetResponseText();
+          reset();
           $('.show').collapse('hide');
 
           var canvas = $('#photoCanvas')[0];

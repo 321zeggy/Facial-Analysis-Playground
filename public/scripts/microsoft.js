@@ -6,19 +6,18 @@ var Microsoft = function(api_key_1, api_key_2) {
 
 Microsoft.prototype.detect = function(image_data, callback, options, is_url = false) {
     var url = this.api_host + 'detect';
-    if (options) {
-        url += '?' + options;
-    }
-    var header_settings = { 
-    	'Ocp-Apim-Subscription-Key': this.api_key_1,
-    	'Content-type': 'application/json'
-    };
-
+    if (options) { url += '?' + options; };
     var data;
-    // if (is_url) {
-        data = JSON.stringify({'url': image_data });
+    var header_settings = { 'Ocp-Apim-Subscription-Key': this.api_key_1 };
+    if (is_url) {
         header_settings['Content-type'] = 'application/json';
-        $.ajax(url, {
+        data = JSON.stringify({ 'url': image_data });
+    } else {
+        header_settings['Content-type'] = 'application/octet-stream';
+        data = image_data;
+    }
+
+    $.ajax(url, {
         headers: header_settings,
         type: 'POST',
         data: data,
@@ -27,22 +26,4 @@ Microsoft.prototype.detect = function(image_data, callback, options, is_url = fa
         success: callback,
         error: callback
     });
-    // } else {
-    // 	var xhr = new XMLHttpRequest();
-    // 	xhr.open('GET', 'image_data/' + image_data, true);
-    // 	xhr.send();
-
-    //     data = image_data;
-    //     header_settings['Content-type'] = 'application/octet-stream';
-    // }
-
-    // $.ajax(url, {
-    //     headers: header_settings,
-    //     type: 'POST',
-    //     data: data,
-    //     dataType: 'raw',
-    //     processData: false,
-    //     success: callback,
-    //     error: callback
-    // });
 };
