@@ -1,18 +1,22 @@
   $(document).ready(function($) {
-      var kairos = new Kairos(config.KAIROS_APP_ID, config.KAIROS_APP_KEY);
+
+
+      var kairos = new Kairos(config.KAIROS_API_ID, config.KAIROS_API_KEY);
       var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
       var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
       var watson = new Watson(config.IBM_API_KEY);
+      var google = new Google(config.GOOGLE_API_KEY);
+      var faceplusplus = new FacePlusPlus(config.FACEPLUSPLUS_API_KEY, config.FACEPLUSPLUS_API_SECRET);
 
 
       // holder for the image data
-      var global_image_data;
-      var global_is_url;
-      var global_ratio;
+      var global_image_data = null;
+      var global_is_url = null;
+      var global_ratio = null;
 
-      var kairosBoundingBox;
-      var microsoftBoundingBox;
-      var ibmBoundingBox;
+      var kairosBoundingBox = null;
+      var microsoftBoundingBox = null;
+      var ibmBoundingBox = null;
 
       function imageToDataUri(img, width, height) {
           // create an off-screen canvas
@@ -56,25 +60,25 @@
           };
 
           imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
-      };
+      }
 
       function betafaceDetectCallback(response) {
           var betafaceJSON = JSON.parse(response.responseText);
-          if (betafaceJSON.faces.length == 0) {
+          if (betafaceJSON.faces.length === 0) {
               console.log('no images in face response');
               $("#betaface_response").html('No faces detected');
           } else {
               var tags = betafaceJSON.faces[0].tags;
-              attributes = [];
+              var attributes = [];
               for (var i in tags) {
-                  var attribute = tags[i]['name'];
+                  var attribute = tags[i].name;
                   var relevantAttributes = ['gender', 'age', 'race'];
                   // check if attribute is in relevantAttributes
                   if (relevantAttributes.indexOf(attribute) != -1) { attributes.push(tags[i]); }
-              };
+              }
               $("#betaface_response").html(JSON.stringify(attributes, null, 4));
           }
-      };
+      }
 
       function microsoftDetectCallback(response) {
           var microsoftJSON = JSON.parse(response.responseText);
@@ -92,7 +96,7 @@
               };
               $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
           }
-      };
+      }
 
       function watsonDetectCallback(response) {
           var watsonJSON = JSON.parse(response.responseText);
@@ -100,7 +104,7 @@
               console.log('no images in face response');
               $("#ibm_response").html('No faces detected');
           } else {
-              attributes = watsonJSON.images[0].faces[0];
+              var attributes = watsonJSON.images[0].faces[0];
               attributes = {
                   "gender": attributes.gender,
                   "age": attributes.age
@@ -114,17 +118,16 @@
                   height: face.height
               };
           }
-      };
+      }
 
 
       function kairosDetectCallback(response) {
-          $response = $("#kairos_response");
           var kairosJSON = JSON.parse(response.responseText);
           if (!kairosJSON.images[0].faces[0]) {
               console.log('no images in face response');
               $("#kairos_response").html('No faces detected');
           } else {
-              attributes = kairosJSON.images[0].faces[0].attributes;
+              var attributes = kairosJSON.images[0].faces[0].attributes;
 
               // call custom drawing method
               var face = kairosJSON.images[0].faces[0];
@@ -138,25 +141,47 @@
               // $('#collapseKairos').collapse('show');
               // drawBoundingBox(kairosBoundingBox, 'blue');
           }
-      };
+      }
+
+      function googleDetectCallback(response) {
+          var googleJSON = JSON.parse(response.responseText);
+          if (!googleJSON.responses[0].faceAnnotations[0]) {
+              console.log('no images in face response');
+              $("#google_response").html('No faces detected');
+          } else {
+              var attributes = googleJSON.responses[0].faceAnnotations[0];
+              attributes = {
+                  detectionConfidence: attributes.detectionConfidence,
+                  joyLikelihood: attributes.joyLikelihood,
+                  sorrowLikelihood: attributes.sorrowLikelihood,
+                  angerLikelihood: attributes.angerLikelihood,
+                  surpriseLikelihood: attributes.surpriseLikelihood,
+                  underExposedLikelihood: attributes.underExposedLikelihood,
+                  blurredLikelihood: attributes.blurredLikelihood,
+                  headwearLikelihood: attributes.headwearLikelihood
+              };
+              $("#google_response").html(JSON.stringify(attributes, null, 4));
+          }
+      }
 
       function reset() {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
           $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
           $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
           $("#ibm_response").html("<i>(IBM response will appear here)</i>");
+          $("#google_response").html("<i>(Google response will appear here)</i>");
 
           kairosBoundingBox = {};
           microsoftBoundingBox = {};
           ibmBoundingBox = {};
 
           $('.show').collapse('hide');
-      };
+      }
 
       // get ratio by which to multiply image width and height in order to fit canvas
       function getConversionRatio(imageObj, maxWidth, maxHeight) {
           return Math.min(maxWidth / imageObj.width, maxHeight / imageObj.height);
-      };
+      }
 
 
       function handleFileSelect(evt) {
@@ -169,7 +194,7 @@
                   var canvas = $('#photoCanvas')[0];
                   var context = canvas.getContext('2d');
                   context.clearRect(0, 0, canvas.width, canvas.height);
-                  var imageObj = new Image;
+                  var imageObj = new Image();
                   imageObj.onload = function() {
                       var ratio = getConversionRatio(imageObj, 400, 400);
                       if (!global_ratio) {
@@ -188,7 +213,10 @@
                           global_is_url = false;
 
                           kairos.detect(image_data, kairosDetectCallback);
-                          betaface.detect(image_data, betafaceDetectCallback, "classifiers");
+                          betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = false);
+                          google.detect(image_data, googleDetectCallback, is_url = false);
+                          // watson.detect(image_data, watsonDetectCallback, is_url = false); 
+                          // faceplusplus.detect(image_data, console.log, is_url = false);
                           microsoftBoundingBox = null;
                       }
                   };
@@ -196,62 +224,66 @@
               };
               // Read in the image file as a data URL.
               reader.readAsDataURL(file);
-          };
+          }
           var dataReader = new FileReader();
           dataReader.onload = function(e) {
-            microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender");
-            // watson.detect(e.target.result, watsonDetectCallback);
+              // microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = false);
           };
           dataReader.readAsArrayBuffer(file);
-      };
+      }
 
 
-      function handleURLSelect(url) {
+      function handleURLSelect(image_url) {
           reset();
-          $('.show').collapse('hide');
 
           var canvas = $('#photoCanvas')[0];
           var context = canvas.getContext('2d');
           context.clearRect(0, 0, canvas.width, canvas.height);
-          var imageObj = new Image;
+          var imageObj = new Image();
           imageObj.crossOrigin = "Anonymous";
+
           imageObj.onload = function() {
               var ratio = getConversionRatio(imageObj, 400, 400);
               context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
 
-              global_image_data = url;
+              global_image_data = image_url;
               global_is_url = true;
               global_ratio = ratio;
-          };
-          imageObj.src = url;
 
-          kairos.detect(url, kairosDetectCallback);
-          betaface.detect(url, betafaceDetectCallback, "classifiers", is_url = true);
-          microsoft.detect(url, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
-          watson.detect(url, watsonDetectCallback, is_url = true);
-      };
+              kairos.detect(image_url, kairosDetectCallback);
+              betaface.detect(image_url, betafaceDetectCallback, "classifiers", is_url = true);
+              // faceplusplus.detect(image_url, console.log, is_url = true);
+              microsoft.detect(image_url, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
+              watson.detect(image_url, watsonDetectCallback, is_url = true);
+              google.detect(image_url, googleDetectCallback, is_url = true);
+          };
+          imageObj.src = image_url;
+      }
 
 
 
       $('#file').change(handleFileSelect);
       $('#submit_photo_url').click(
           function(evt) {
-              url = $("#photo_url").val();
+              var url = $("#photo_url").val();
               handleURLSelect(url);
+              return false;
           }
       );
       $('.sample-img').click(
           function(evt) {
               var url = $(this).data("url");
               handleURLSelect(url);
+              return false;
           }
       );
 
       $('#sample1').click();
 
-      $('#collapseKairos').on('show.bs.collapse', function() { drawBoundingBox(kairosBoundingBox, 'blue') });
-      $('#collapseBetaface').on('show.bs.collapse', function() { drawBoundingBox() });
-      $('#collapseMicrosoft').on('show.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green') });
-      $('#collapseIBM').on('show.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red') });
+      $('#collapseKairos').on('show.bs.collapse', function() { drawBoundingBox(kairosBoundingBox, 'blue'); });
+      $('#collapseBetaface').on('show.bs.collapse', function() { drawBoundingBox(); });
+      $('#collapseMicrosoft').on('show.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green'); });
+      $('#collapseIBM').on('show.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red'); });
+      $('#collapseGoogle').on('show.bs.collapse', function() { drawBoundingBox(); });
 
   });

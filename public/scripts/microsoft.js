@@ -1,12 +1,12 @@
 var Microsoft = function(api_key_1, api_key_2) {
     this.api_key_1 = api_key_1;
     this.api_key_2 = api_key_2;
-    this.api_host = 'https://westus.api.cognitive.microsoft.com/face/v1.0/'
+    this.api_host = 'https://westus.api.cognitive.microsoft.com/face/v1.0/';
 };
 
-Microsoft.prototype.detect = function(image_data, callback, options, is_url = false) {
+Microsoft.prototype.detect = function(image_data, callback, options, is_url) {
     var url = this.api_host + 'detect';
-    if (options) { url += '?' + options; };
+    if (options) { url += '?' + options; }
     var data;
     var header_settings = { 'Ocp-Apim-Subscription-Key': this.api_key_1 };
     if (is_url) {
@@ -22,7 +22,7 @@ Microsoft.prototype.detect = function(image_data, callback, options, is_url = fa
         type: 'POST',
         data: data,
         dataType: 'raw',
-        processData: false,
+        // processData: false,
         success: callback,
         error: callback
     });

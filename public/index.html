@@ -17,6 +17,8 @@
     <script src="scripts/betaface.js"></script>
     <script src="scripts/microsoft.js"></script>
     <script src="scripts/watson.js"></script>
+    <script src="scripts/google.js"></script>
+    <script src="scripts/faceplusplus.js"></script>
 </head>
 
 <body>
@@ -34,9 +36,9 @@
                     <div>
                         <div class="input-group">
                             <label></label>
-                            <input type="url" id="photo_url" class="form-control">
+                            <input type="text" id="photo_url" class="form-control">
                             <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-secondary" id="submit_photo_url">Submit</button>
+                                    <button class="btn btn-secondary" id="submit_photo_url">Submit</button>
                                 </span>
                         </div>
                     </div>
@@ -83,6 +85,16 @@
                         </div>
                         <div id="collapseIBM" class="collapse" role="tabpanel" aria-labelledby="headingIBM">
                             <div class="card-block responses" id="ibm_response"><i>(IBM response will appear here)</i></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingGoogle">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseGoogle" aria-expanded="false">Google</a>
+                            </h5>
+                        </div>
+                        <div id="collapseGoogle" class="collapse" role="tabpanel" aria-labelledby="headingIBM">
+                            <div class="card-block responses" id="google_response"><i>(Google response will appear here)</i></div>
                         </div>
                     </div>
                 </div>
