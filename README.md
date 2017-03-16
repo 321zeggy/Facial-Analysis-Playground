@@ -1,5 +1,22 @@
 # Facial-Analysis-Playground
-=====================
+------------------------------
+## **March 16, 2017**
+#### Learned
+1. Event handlers called upon the submission of an HTML input element must return false in order to prevent the page from reloadind.
+
+#### Ideas for Next Iteration
+1. Add bounding box for Google API
+2. Finish debugging problems with uploading images by URL
+3. Continue cleaning up code.
+4. Finish fully including Face++
+
+#### Challenges
+1. Figuring out why the page reloaded upon submitting a photo URL. (It was because I hadn't set the input element submit event handler to return false.)
+2. Getting Face++ to work. It seems to think I'm not including the API Key, despite my definitely including it.
+
+#### Triumphs
+1. Making slow, but genuine, progress at cleaning up my code.
+2. Added Google and Face++ APIs (though both are still works in progress)
 
 ------------------------------
 ## **March 9, 2017**
