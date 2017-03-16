@@ -17,6 +17,7 @@
       var kairosBoundingBox = null;
       var microsoftBoundingBox = null;
       var ibmBoundingBox = null;
+      var googleBoundingBox = null;
 
       function imageToDataUri(img, width, height) {
           // create an off-screen canvas
@@ -61,6 +62,24 @@
 
           imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
       }
+
+      function drawGoogleBoundingBox(face, color) {
+          var canvas = $('#photoCanvas')[0];
+          var context = canvas.getContext('2d');
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          var imageObj = new Image();
+          imageObj.onload = function() {
+              context.drawImage(imageObj, 0, 0, imageObj.width * global_ratio, imageObj.height * global_ratio);
+              context.beginPath();
+              for (var vertex in face) {
+                  context.lineTo(face[vertex].x * global_ratio, face[vertex].y * global_ratio);
+              }
+              context.lineTo(face[0].x * global_ratio, face[0].y * global_ratio);
+              context.stroke();
+          };
+          imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
+      }
+
 
       function betafaceDetectCallback(response) {
           var betafaceJSON = JSON.parse(response.responseText);
@@ -161,6 +180,10 @@
                   headwearLikelihood: attributes.headwearLikelihood
               };
               $("#google_response").html(JSON.stringify(attributes, null, 4));
+              var face = googleJSON.responses[0].faceAnnotations[0].boundingPoly.vertices;
+              console.log(face);
+              googleBoundingBox = face;
+
           }
       }
 
@@ -230,6 +253,7 @@
               // microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = false);
           };
           dataReader.readAsArrayBuffer(file);
+          // watson.detect(file, watsonDetectCallback, is_url = false);
       }
 
 
@@ -252,12 +276,13 @@
 
               kairos.detect(image_url, kairosDetectCallback);
               betaface.detect(image_url, betafaceDetectCallback, "classifiers", is_url = true);
-              // faceplusplus.detect(image_url, console.log, is_url = true);
+              faceplusplus.detect(image_url, console.log, is_url = true);
               microsoft.detect(image_url, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
               watson.detect(image_url, watsonDetectCallback, is_url = true);
               google.detect(image_url, googleDetectCallback, is_url = true);
           };
           imageObj.src = image_url;
+          console.log(imageObj);
       }
 
 
@@ -284,6 +309,6 @@
       $('#collapseBetaface').on('show.bs.collapse', function() { drawBoundingBox(); });
       $('#collapseMicrosoft').on('show.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green'); });
       $('#collapseIBM').on('show.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red'); });
-      $('#collapseGoogle').on('show.bs.collapse', function() { drawBoundingBox(); });
+      $('#collapseGoogle').on('show.bs.collapse', function() { drawGoogleBoundingBox(googleBoundingBox, 'yellow'); });
 
   });

@@ -27,22 +27,27 @@ Watson.prototype.detect = function(image_data, callback, is_url) {
             error: callback
         });
     } else {
-    	var watson = this; 
-    	data = new FormData();
-    	data.append('images_file', image_data);
-    	data.append('version', watson.version);
-    	data.append('api_key', watson.api_key);
+    	var watson = this;
+        header_settings = {}; 
+        data = {
+            'images_file': image_data,
+            'version': this.version,
+            'api_key': this.api_key
+        };
+    	// data = new FormData();
+    	// data.append('images_file', image_data);
+    	// data.append('version', watson.version);
+    	// data.append('api_key', watson.api_key);
         
         $.ajax(url, {
-            headers: {},
+            headers: {'api_key': this.api_key},
             type: 'POST',
-            data: data,
+            data: JSON.stringify(image_data),
             // data: data,
-            // dataType: 'raw',
-            // processData: false,
-            contentType: 'multipart/form-data',
-            mimeType: 'multipart/form-data',
+            dataType: 'raw',
+            processData: false,
             crossDomain: true,
+            // beforeSend: function(xhr){xhr.setRequestHeader('api_key', this.api_key); xhr.setRequestHeader('version', this.version);},
             success: callback,
             error: callback
         });

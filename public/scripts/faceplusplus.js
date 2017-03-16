@@ -20,6 +20,6 @@ FacePlusPlus.prototype.detect = function(image_data, callback, is_url) {
         success: callback,
         error: callback,
         contentType: 'application/json',
-        crossDomain: true
+        // crossDomain: true
     });
 };
