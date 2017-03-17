@@ -70,6 +70,8 @@
           var imageObj = new Image();
           imageObj.onload = function() {
               context.drawImage(imageObj, 0, 0, imageObj.width * global_ratio, imageObj.height * global_ratio);
+              context.lineWidth = 4;
+              context.strokeStyle = color;
               context.beginPath();
               for (var vertex in face) {
                   context.lineTo(face[vertex].x * global_ratio, face[vertex].y * global_ratio);
@@ -180,7 +182,7 @@
                   headwearLikelihood: attributes.headwearLikelihood
               };
               $("#google_response").html(JSON.stringify(attributes, null, 4));
-              var face = googleJSON.responses[0].faceAnnotations[0].boundingPoly.vertices;
+              var face = googleJSON.responses[0].faceAnnotations[0].fdBoundingPoly.vertices;
               console.log(face);
               googleBoundingBox = face;
 
