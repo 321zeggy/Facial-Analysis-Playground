@@ -183,7 +183,6 @@
               };
               $("#google_response").html(JSON.stringify(attributes, null, 4));
               var face = googleJSON.responses[0].faceAnnotations[0].fdBoundingPoly.vertices;
-              console.log(face);
               googleBoundingBox = face;
 
           }
@@ -266,25 +265,23 @@
           var context = canvas.getContext('2d');
           context.clearRect(0, 0, canvas.width, canvas.height);
           var imageObj = new Image();
-          imageObj.crossOrigin = "Anonymous";
 
           imageObj.onload = function() {
               var ratio = getConversionRatio(imageObj, 400, 400);
               context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
 
-              global_image_data = image_url;
+              global_image_data = imageObj.src;
               global_is_url = true;
               global_ratio = ratio;
 
-              kairos.detect(image_url, kairosDetectCallback);
-              betaface.detect(image_url, betafaceDetectCallback, "classifiers", is_url = true);
-              faceplusplus.detect(image_url, console.log, is_url = true);
-              microsoft.detect(image_url, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
-              watson.detect(image_url, watsonDetectCallback, is_url = true);
-              google.detect(image_url, googleDetectCallback, is_url = true);
+              kairos.detect(imageObj.src, kairosDetectCallback);
+              betaface.detect(imageObj.src, betafaceDetectCallback, "classifiers", is_url = true);
+              // faceplusplus.detect(image_url, console.log, is_url = true);
+              microsoft.detect(imageObj.src, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
+              watson.detect(imageObj.src, watsonDetectCallback, is_url = true);
+              google.detect(imageObj.src, googleDetectCallback, is_url = true);
           };
           imageObj.src = image_url;
-          console.log(imageObj);
       }
 
 
