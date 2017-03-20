@@ -18,6 +18,7 @@
       var microsoftBoundingBox = null;
       var ibmBoundingBox = null;
       var googleBoundingBox = null;
+      var facePlusPlusBoundingBox = null;
 
       function imageToDataUri(img, width, height) {
           // create an off-screen canvas
@@ -188,16 +189,36 @@
           }
       }
 
+      function facePlusPlusDetectCallback(response) {
+          var facePlusPlusJSON = response;
+          if (!facePlusPlusJSON.faces[0]) {
+              console.log('no images in face response');
+              $("#faceplusplus_response").html('No faces detected');
+          } else {
+              var attributes = facePlusPlusJSON.faces[0].attributes;
+              var face = facePlusPlusJSON.faces[0].face_rectangle;
+              facePlusPlusBoundingBox = {
+                  top: face.top,
+                  left: face.left,
+                  width: face.width,
+                  height: face.height
+              };
+              $("#faceplusplus_response").html(JSON.stringify(attributes, null, 4));
+          }
+      }
+
       function reset() {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
           $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
           $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
           $("#ibm_response").html("<i>(IBM response will appear here)</i>");
           $("#google_response").html("<i>(Google response will appear here)</i>");
+          $("#faceplusplus_response").html("<i>(Face++ response will appear here)</i>");
 
           kairosBoundingBox = {};
           microsoftBoundingBox = {};
           ibmBoundingBox = {};
+          facePlusPlusBoundingBox = {};
 
           $('.show').collapse('hide');
       }
@@ -240,7 +261,7 @@
                           betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = false);
                           google.detect(image_data, googleDetectCallback, is_url = false);
                           // watson.detect(image_data, watsonDetectCallback, is_url = false); 
-                          // faceplusplus.detect(image_data, console.log, is_url = false);
+                          faceplusplus.detect(image_data, facePlusPlusDetectCallback, is_url = false);
                           microsoftBoundingBox = null;
                       }
                   };
@@ -276,7 +297,7 @@
 
               kairos.detect(imageObj.src, kairosDetectCallback);
               betaface.detect(imageObj.src, betafaceDetectCallback, "classifiers", is_url = true);
-              // faceplusplus.detect(image_url, console.log, is_url = true);
+              faceplusplus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
               microsoft.detect(imageObj.src, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
               watson.detect(imageObj.src, watsonDetectCallback, is_url = true);
               google.detect(imageObj.src, googleDetectCallback, is_url = true);
@@ -290,6 +311,7 @@
       $('#submit_photo_url').click(
           function(evt) {
               var url = $("#photo_url").val();
+              $("#photo_url").val('');
               handleURLSelect(url);
               return false;
           }
@@ -309,5 +331,6 @@
       $('#collapseMicrosoft').on('show.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green'); });
       $('#collapseIBM').on('show.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red'); });
       $('#collapseGoogle').on('show.bs.collapse', function() { drawGoogleBoundingBox(googleBoundingBox, 'yellow'); });
+      $('#collapseFacePlusPlus').on('show.bs.collapse', function() { drawBoundingBox(facePlusPlusBoundingBox, 'purple'); });
 
   });
