@@ -18,7 +18,7 @@ FacePlusPlus.prototype.detect = function(image_data, callback, is_url) {
         data = {'image_url' : image_data};
     } else {
         // url += '&image_file=' + image_data;
-        data = {'image_file' : image_data};
+        data = {'image_base64' : image_data};
     }
     // data[(is_url ? 'image_url' : 'image_file')] = image_data;
     
