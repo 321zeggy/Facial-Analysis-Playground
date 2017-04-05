@@ -44,7 +44,6 @@
           var imageObj = new Image();
           imageObj.onload = function() {
               context.drawImage(imageObj, 0, 0, imageObj.width * global_ratio, imageObj.height * global_ratio);
-
               if (face) {
                   var top = face.top * global_ratio;
                   var left = face.left * global_ratio;
@@ -60,7 +59,8 @@
                   context.stroke();
               }
           };
-
+          $('#loading').hide();
+          $('#photoCanvas').show();
           imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
       }
 
@@ -208,6 +208,11 @@
       }
 
       function reset() {
+          $('.show').collapse('hide');
+
+          $("#photoCanvas").hide();
+          $("#loading").show();
+          
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
           // $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
           $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
@@ -220,8 +225,6 @@
           ibmBoundingBox = null;
           facePlusPlusBoundingBox = null;
           googleBoundingBox = null;
-
-          $('.show').collapse('hide');
       }
 
       // get ratio by which to multiply image width and height in order to fit canvas
@@ -285,17 +288,16 @@
 
 
       function handleURLSelect(image_url) {
-          reset();
-
           var canvas = $('#photoCanvas')[0];
           var context = canvas.getContext('2d');
           context.clearRect(0, 0, canvas.width, canvas.height);
+          reset();
           var imageObj = new Image();
 
           imageObj.onload = function() {
               var ratio = getConversionRatio(imageObj, 400, 400);
               context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
-
+              // $('#loading').show();
               global_image_data = imageObj.src;
               global_is_url = true;
               global_ratio = ratio;
@@ -331,12 +333,14 @@
 
       $('#sample1').click();
 
-      $('#collapseKairos').on('show.bs.collapse', function() { drawBoundingBox(kairosBoundingBox, 'blue'); });
-      // $('#collapseBetaface').on('show.bs.collapse', function() { drawBoundingBox(); });
-      $('#collapseMicrosoft').on('show.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green'); });
-      $('#collapseIBM').on('show.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red'); });
-      $('#collapseGoogle').on('show.bs.collapse', function() { drawGoogleBoundingBox(googleBoundingBox, 'yellow'); });
-      $('#collapseFacePlusPlus').on('show.bs.collapse', function() { drawBoundingBox(facePlusPlusBoundingBox, 'purple'); });
+      $('#collapseKairos').on('shown.bs.collapse', function() { drawBoundingBox(kairosBoundingBox, 'blue'); });
+      // $('#collapseBetaface').on('shown.bs.collapse', function() { drawBoundingBox(); });
+      $('#collapseMicrosoft').on('shown.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green'); });
+      $('#collapseIBM').on('shown.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red'); });
+      $('#collapseGoogle').on('shown.bs.collapse', function() { drawGoogleBoundingBox(googleBoundingBox, 'yellow'); });
+      $('#collapseFacePlusPlus').on('shown.bs.collapse', function() { drawBoundingBox(facePlusPlusBoundingBox, 'purple'); });
+
+
 
       $('.collapse').on('hide.bs.collapse', function() { drawBoundingBox(); });
 
