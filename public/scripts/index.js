@@ -259,10 +259,7 @@
                           global_is_url = false;
 
                           kairos.detect(image_data, kairosDetectCallback);
-                          // betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = false);
                           google.detect(image_data, googleDetectCallback, is_url = false);
-                          // watson.detect(image_data, watsonDetectCallback, is_url = false); 
-                          faceplusplus.detect(image_data, facePlusPlusDetectCallback, is_url = false);
                           microsoftBoundingBox = null;
                       }
                   };
@@ -273,11 +270,17 @@
           }
           var dataReader = new FileReader();
           dataReader.onloadend = function(e) {
-              console.log(e.target.result.byteLength);
               microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = false);
           };
           dataReader.readAsArrayBuffer(file);
-          // watson.detect(file, watsonDetectCallback, is_url = false);
+
+          var watsonFormData = new FormData();
+          watsonFormData.append('images_file', file, file.name);
+          watson.detect(watsonFormData, watsonDetectCallback, is_url = false);
+
+          var facePlusPlusFormData = new FormData();
+          facePlusPlusFormData.append('image_file', file, file.name);
+          faceplusplus.detect(facePlusPlusFormData, facePlusPlusDetectCallback, is_url = false);
       }
 
 
