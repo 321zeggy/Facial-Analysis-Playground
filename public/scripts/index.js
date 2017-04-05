@@ -4,7 +4,7 @@
       var kairos = new Kairos(config.KAIROS_API_ID, config.KAIROS_API_KEY);
       // var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
       var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
-      var watson = new Watson(config.IBM_API_KEY);
+      var ibm = new IBM(config.IBM_API_KEY);
       var google = new Google(config.GOOGLE_API_KEY);
       var faceplusplus = new FacePlusPlus(config.FACEPLUSPLUS_API_KEY, config.FACEPLUSPLUS_API_SECRET);
 
@@ -122,19 +122,19 @@
           }
       }
 
-      function watsonDetectCallback(response) {
-          var watsonJSON = JSON.parse(response.responseText);
-          if (!watsonJSON.images[0].faces[0]) {
+      function ibmDetectCallback(response) {
+          var ibmJSON = JSON.parse(response.responseText);
+          if (!ibmJSON.images[0].faces[0]) {
               console.log('no images in face response');
               $("#ibm_response").html('No faces detected');
           } else {
-              var attributes = watsonJSON.images[0].faces[0];
+              var attributes = ibmJSON.images[0].faces[0];
               attributes = {
                   "gender": attributes.gender,
                   "age": attributes.age
               };
               $("#ibm_response").html(JSON.stringify(attributes, null, 4));
-              var face = watsonJSON.images[0].faces[0].face_location;
+              var face = ibmJSON.images[0].faces[0].face_location;
               ibmBoundingBox = {
                   top: face.top,
                   left: face.left,
@@ -274,9 +274,9 @@
           };
           dataReader.readAsArrayBuffer(file);
 
-          var watsonFormData = new FormData();
-          watsonFormData.append('images_file', file, file.name);
-          watson.detect(watsonFormData, watsonDetectCallback, is_url = false);
+          var ibmFormData = new FormData();
+          ibmFormData.append('images_file', file, file.name);
+          ibm.detect(ibmFormData, ibmDetectCallback, is_url = false);
 
           var facePlusPlusFormData = new FormData();
           facePlusPlusFormData.append('image_file', file, file.name);
@@ -304,7 +304,7 @@
               // betaface.detect(imageObj.src, betafaceDetectCallback, "classifiers", is_url = true);
               faceplusplus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
               microsoft.detect(imageObj.src, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
-              watson.detect(imageObj.src, watsonDetectCallback, is_url = true);
+              ibm.detect(imageObj.src, ibmDetectCallback, is_url = true);
               google.detect(imageObj.src, googleDetectCallback, is_url = true);
           };
           imageObj.src = image_url;

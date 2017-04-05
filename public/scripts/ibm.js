@@ -1,10 +1,10 @@
-var Watson = function(api_key) {
+var IBM = function(api_key) {
 	this.api_key = api_key;
     this.version = "2016-05-20";
     this.api_host = "https://gateway-a.watsonplatform.net/visual-recognition/api/";
 };
 
-Watson.prototype.detect = function(image_data, callback, is_url) {
+IBM.prototype.detect = function(image_data, callback, is_url) {
     var url = this.api_host + 'v3/detect_faces';
     var header_settings = {};
     var data;
