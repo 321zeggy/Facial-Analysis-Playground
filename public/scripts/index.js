@@ -2,7 +2,7 @@
 
 
       var kairos = new Kairos(config.KAIROS_API_ID, config.KAIROS_API_KEY);
-      var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
+      // var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
       var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
       var watson = new Watson(config.IBM_API_KEY);
       var google = new Google(config.GOOGLE_API_KEY);
@@ -71,14 +71,16 @@
           var imageObj = new Image();
           imageObj.onload = function() {
               context.drawImage(imageObj, 0, 0, imageObj.width * global_ratio, imageObj.height * global_ratio);
-              context.lineWidth = 4;
-              context.strokeStyle = color;
-              context.beginPath();
-              for (var vertex in face) {
-                  context.lineTo(face[vertex].x * global_ratio, face[vertex].y * global_ratio);
-              }
-              context.lineTo(face[0].x * global_ratio, face[0].y * global_ratio);
-              context.stroke();
+              if (face) {
+                context.lineWidth = 4;
+                context.strokeStyle = color;
+                context.beginPath();
+                for (var vertex in face) {
+                    context.lineTo(face[vertex].x * global_ratio, face[vertex].y * global_ratio);
+                }
+                context.lineTo(face[0].x * global_ratio, face[0].y * global_ratio);
+                context.stroke();
+              };
           };
           imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
       }
@@ -145,13 +147,11 @@
 
       function kairosDetectCallback(response) {
           var kairosJSON = JSON.parse(response.responseText);
-          if (!kairosJSON.images[0].faces[0]) {
+          if ('Errors' in kairosJSON) {
               console.log('no images in face response');
               $("#kairos_response").html('No faces detected');
           } else {
               var attributes = kairosJSON.images[0].faces[0].attributes;
-
-              // call custom drawing method
               var face = kairosJSON.images[0].faces[0];
               kairosBoundingBox = {
                   top: face.topLeftY,
@@ -160,14 +160,14 @@
                   height: face.height
               };
               $("#kairos_response").html(JSON.stringify(attributes, null, 4));
-              // $('#collapseKairos').collapse('show');
+              $('#collapseKairos').collapse('show');
               // drawBoundingBox(kairosBoundingBox, 'blue');
           }
       }
 
       function googleDetectCallback(response) {
           var googleJSON = JSON.parse(response.responseText);
-          if (!googleJSON.responses[0].faceAnnotations[0]) {
+          if (! ('faceAnnotations' in googleJSON.responses[0])) {
               console.log('no images in face response');
               $("#google_response").html('No faces detected');
           } else {
@@ -209,16 +209,17 @@
 
       function reset() {
           $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-          $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
+          // $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
           $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
           $("#ibm_response").html("<i>(IBM response will appear here)</i>");
           $("#google_response").html("<i>(Google response will appear here)</i>");
           $("#faceplusplus_response").html("<i>(Face++ response will appear here)</i>");
 
-          kairosBoundingBox = {};
-          microsoftBoundingBox = {};
-          ibmBoundingBox = {};
-          facePlusPlusBoundingBox = {};
+          kairosBoundingBox = null;
+          microsoftBoundingBox = null;
+          ibmBoundingBox = null;
+          facePlusPlusBoundingBox = null;
+          googleBoundingBox = null;
 
           $('.show').collapse('hide');
       }
@@ -258,7 +259,7 @@
                           global_is_url = false;
 
                           kairos.detect(image_data, kairosDetectCallback);
-                          betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = false);
+                          // betaface.detect(image_data, betafaceDetectCallback, "classifiers", is_url = false);
                           google.detect(image_data, googleDetectCallback, is_url = false);
                           // watson.detect(image_data, watsonDetectCallback, is_url = false); 
                           faceplusplus.detect(image_data, facePlusPlusDetectCallback, is_url = false);
@@ -271,8 +272,9 @@
               reader.readAsDataURL(file);
           }
           var dataReader = new FileReader();
-          dataReader.onload = function(e) {
-              // microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = false);
+          dataReader.onloadend = function(e) {
+              console.log(e.target.result.byteLength);
+              microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = false);
           };
           dataReader.readAsArrayBuffer(file);
           // watson.detect(file, watsonDetectCallback, is_url = false);
@@ -296,7 +298,7 @@
               global_ratio = ratio;
 
               kairos.detect(imageObj.src, kairosDetectCallback);
-              betaface.detect(imageObj.src, betafaceDetectCallback, "classifiers", is_url = true);
+              // betaface.detect(imageObj.src, betafaceDetectCallback, "classifiers", is_url = true);
               faceplusplus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
               microsoft.detect(imageObj.src, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
               watson.detect(imageObj.src, watsonDetectCallback, is_url = true);
@@ -327,10 +329,12 @@
       $('#sample1').click();
 
       $('#collapseKairos').on('show.bs.collapse', function() { drawBoundingBox(kairosBoundingBox, 'blue'); });
-      $('#collapseBetaface').on('show.bs.collapse', function() { drawBoundingBox(); });
+      // $('#collapseBetaface').on('show.bs.collapse', function() { drawBoundingBox(); });
       $('#collapseMicrosoft').on('show.bs.collapse', function() { drawBoundingBox(microsoftBoundingBox, 'green'); });
       $('#collapseIBM').on('show.bs.collapse', function() { drawBoundingBox(ibmBoundingBox, 'red'); });
       $('#collapseGoogle').on('show.bs.collapse', function() { drawGoogleBoundingBox(googleBoundingBox, 'yellow'); });
       $('#collapseFacePlusPlus').on('show.bs.collapse', function() { drawBoundingBox(facePlusPlusBoundingBox, 'purple'); });
+
+      $('.collapse').on('hide.bs.collapse', function() { drawBoundingBox(); });
 
   });

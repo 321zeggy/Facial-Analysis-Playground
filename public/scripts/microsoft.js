@@ -22,7 +22,7 @@ Microsoft.prototype.detect = function(image_data, callback, options, is_url) {
         type: 'POST',
         data: data,
         dataType: 'raw',
-        // processData: false,
+        processData: false,
         success: callback,
         error: callback
     });
