@@ -6,3 +6,8 @@
 .sample-img:hover {
 	cursor: pointer;
 }
+
+a.disabled {
+	pointer-events: none;
+	cursor: default;
+}

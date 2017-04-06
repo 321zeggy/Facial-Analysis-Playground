@@ -48,12 +48,12 @@
                 </form>
             </div>
             <div class="col-lg-4">
-                <div id="accordion" role="tablist" aria-multiselectable="true">
+                <div id="accordion" role="tablist" aria-multiselectable="false">
                     <h3>JSON</h3>
                     <div class="card">
                         <div class="card-header" role="tab" id="headingKairos">
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseKairos" aria-expanded="false">Kairos</a>
+                                <a id="kairos-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseKairos" aria-expanded="false">Kairos</a>
                             </h5>
                         </div>
                         <div id="collapseKairos" class="collapse" role="tabpanel" aria-labelledby="headingKairos">
@@ -63,7 +63,7 @@
                    <!--  <div class="card">
                         <div class="card-header" role="tab" id="headingBetaface">
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseBetaface" aria-expanded="false">Betaface</a>
+                                <a id="betaface-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseBetaface" aria-expanded="false">Betaface</a>
                             </h5>
                         </div>
                         <div id="collapseBetaface" class="collapse" role="tabpanel" aria-labelledby="headingBetaface">
@@ -73,7 +73,7 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="headingMicrosoft">
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseMicrosoft" aria-expanded="false">Microsoft</a>
+                                <a id="microsoft-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseMicrosoft" aria-expanded="false">Microsoft</a>
                             </h5>
                         </div>
                         <div id="collapseMicrosoft" class="collapse" role="tabpanel" aria-labelledby="headingMicrosoft">
@@ -83,7 +83,7 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="headingIBM">
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseIBM" aria-expanded="false">IBM</a>
+                                <a id="ibm-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseIBM" aria-expanded="false">IBM</a>
                             </h5>
                         </div>
                         <div id="collapseIBM" class="collapse" role="tabpanel" aria-labelledby="headingIBM">
@@ -93,7 +93,7 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="headingGoogle">
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseGoogle" aria-expanded="false">Google</a>
+                                <a id="google-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseGoogle" aria-expanded="false">Google</a>
                             </h5>
                         </div>
                         <div id="collapseGoogle" class="collapse" role="tabpanel" aria-labelledby="headingGoogle">
@@ -103,7 +103,7 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="headingFacePlusPlus">
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFacePlusPlus" aria-expanded="false">Face++</a>
+                                <a id="faceplusplus-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFacePlusPlus" aria-expanded="false">Face++</a>
                             </h5>
                         </div>
                         <div id="collapseFacePlusPlus" class="collapse" role="tabpanel" aria-labelledby="headingFacePlusPlus">
