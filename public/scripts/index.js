@@ -112,6 +112,8 @@
         $("#microsoft_response").html('No faces detected');
       } else {
         var attributes = microsoftJSON[0].faceAttributes;
+        $("#microsoft_gender").html(attributes.gender);
+        $("#microsoft_age").html(attributes.age);
         var face = microsoftJSON[0].faceRectangle;
         microsoftBoundingBox = {
           top: face.top,
@@ -135,6 +137,8 @@
           "gender": attributes.gender,
           "age": attributes.age
         };
+        $("#ibm_gender").html(attributes.gender.gender);
+        $("#ibm_age").html(attributes.age.max);
         $("#ibm_response").html(JSON.stringify(attributes, null, 4));
         var face = ibmJSON.images[0].faces[0].face_location;
         ibmBoundingBox = {
@@ -155,6 +159,8 @@
         $("#kairos_response").html('No faces detected');
       } else {
         var attributes = kairosJSON.images[0].faces[0].attributes;
+        $("#kairos_gender").html(attributes.gender.type);
+        $("#kairos_age").html(attributes.age);
         var face = kairosJSON.images[0].faces[0];
         kairosBoundingBox = {
           top: face.topLeftY,
@@ -199,6 +205,8 @@
         $("#faceplusplus_response").html('No faces detected');
       } else {
         var attributes = facePlusPlusJSON.faces[0].attributes;
+        $("#faceplusplus_gender").html(attributes.gender.value);
+        $("#faceplusplus_age").html(attributes.age.value);
         var face = facePlusPlusJSON.faces[0].face_rectangle;
         facePlusPlusBoundingBox = {
           top: face.top,
