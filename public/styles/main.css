@@ -11,3 +11,7 @@ a.disabled {
 	pointer-events: none;
 	cursor: default;
 }
+
+.card-columns {
+	column-count: 1;
+}
