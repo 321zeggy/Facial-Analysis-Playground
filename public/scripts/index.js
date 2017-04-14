@@ -384,9 +384,24 @@
       drawBoundingBox(facePlusPlusBoundingBox, 'purple');
     });
 
-    $('.collapse').on('hide.bs.collapse', drawBoundingBox);
+    $('.collapse').on('hide.bs.collapse', function() {
+      drawBoundingBox();
+      $(this).parent().hide();
+    });
 
+    $('.collapse').on('show.bs.collapse', function() {
+      $(this).parent().show();
+    });
 
+    $('.toggle').click(function() {
+      if ($(this).hasClass('active')) {
+        $(this).removeClass('active');  
+      } else {
+        $('.active').removeClass('active');
+        $(this).addClass('active');
+      }
+      
+    });
 
     $('#sample1').click();
 

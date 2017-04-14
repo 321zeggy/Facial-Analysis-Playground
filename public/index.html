@@ -25,8 +25,8 @@
     <div class="container">
         <h1>Facial Analysis Playground</h1>
         <br/>
-        <div class="row" style="max-height: 350">
-            <div class="col-lg-5 col-lg-offset-1">
+        <div class="row" style="height: 350" >
+            <div class="col-md-4">
                 <div class="row">
                     <img src="images/loading.svg" id="loading">
                     <canvas id="photoCanvas" width="350" height="350"></canvas>
@@ -54,54 +54,52 @@
                     </form>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div id="accordion" class="card-columns" role="tablist" aria-multiselectable="true">
-                    <h3>JSON</h3>
-                    <div class="card">
+            <div class="col-md-3 offset-md-1">
+                <div class="list-group">
+                    <a id="kairos-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseKairos" aria-expanded="false">Kairos</a>
+                    <a id="microsoft-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseMicrosoft" aria-expanded="false">Microsoft</a>
+                    <a id="ibm-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseIBM" aria-expanded="false">IBM</a>
+                    <a id="google-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseGoogle" aria-expanded="false">Google</a>
+                    <a id="faceplusplus-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFacePlusPlus" aria-expanded="false">Face++</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="accordion"  aria-multiselectable="true">
+                    <div class="card response-card kairos-card">
                         <div class="card-header" role="tab" id="headingKairos">
-                            <h5 class="mb-0">
-                                <a id="kairos-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseKairos" aria-expanded="false">Kairos</a>
-                            </h5>
+                            <h5 class="mb-0">Kairos Results</h5>
                         </div>
                         <div id="collapseKairos" class="collapse" role="tabpanel" aria-labelledby="headingKairos">
                             <div class="card-block responses" id="kairos_response"><i>(Kairos response will appear here)</i></div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card response-card microsoft-card">
                         <div class="card-header" role="tab" id="headingMicrosoft">
-                            <h5 class="mb-0">
-                                <a id="microsoft-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseMicrosoft" aria-expanded="false">Microsoft</a>
-                            </h5>
+                            <h5 class="mb-0">Microsoft Results</h5>
                         </div>
                         <div id="collapseMicrosoft" class="collapse" role="tabpanel" aria-labelledby="headingMicrosoft">
                             <div class="card-block responses" id="microsoft_response"><i>(Microsoft response will appear here)</i></div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card response-card ibm-card">
                         <div class="card-header" role="tab" id="headingIBM">
-                            <h5 class="mb-0">
-                                <a id="ibm-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseIBM" aria-expanded="false">IBM</a>
-                            </h5>
+                            <h5 class="mb-0">IBM Results</h5>
                         </div>
                         <div id="collapseIBM" class="collapse" role="tabpanel" aria-labelledby="headingIBM">
                             <div class="card-block responses" id="ibm_response"><i>(IBM response will appear here)</i></div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card response-card google-card">
                         <div class="card-header" role="tab" id="headingGoogle">
-                            <h5 class="mb-0">
-                                <a id="google-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseGoogle" aria-expanded="false">Google</a>
-                            </h5>
+                            <h5 class="mb-0">Google Results</h5>
                         </div>
                         <div id="collapseGoogle" class="collapse" role="tabpanel" aria-labelledby="headingGoogle">
                             <div class="card-block responses" id="google_response"><i>(Google response will appear here)</i></div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card response-card faceplusplus-card">
                         <div class="card-header" role="tab" id="headingFacePlusPlus">
-                            <h5 class="mb-0">
-                                <a id="faceplusplus-toggle" class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFacePlusPlus" aria-expanded="false">Face++</a>
-                            </h5>
+                            <h5 class="mb-0">Face++ Results</h5>
                         </div>
                         <div id="collapseFacePlusPlus" class="collapse" role="tabpanel" aria-labelledby="headingFacePlusPlus">
                             <div class="card-block responses" id="faceplusplus_response"><i>(Face++ response will appear here)</i></div>
@@ -110,11 +108,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-2 col-lg-offset-1"><img src="images/sample1.jpg" class="img-fluid sample-img" id="sample1" data-url="http://68.media.tumblr.com/59a065e3a95370ddb9aad57859e662e8/tumblr_ofx6vy1Sz41rvapjbo1_500.jpg"></div>
-                <div class="col-lg-2"><img src="images/sample2.jpg" class="img-fluid sample-img" id="sample2" data-url="http://68.media.tumblr.com/b3bbd66741365db486ffbff3c163f8bd/tumblr_nw466pJ3sS1rvapjbo1_500.jpg"></div>
-                <div class="col-lg-2"><img src="images/sample3.jpg" class="img-fluid sample-img" id="sample3" data-url="http://68.media.tumblr.com/25d3ee2574509e7a15f177a74e4267c9/tumblr_o72k0uksUF1rvapjbo1_500.jpg"></div>
-                <div class="col-lg-2"><img src="images/sample4.jpg" class="img-fluid sample-img" id="sample4" data-url="http://68.media.tumblr.com/25c1eea3ca9a393306b66655eacdacf6/tumblr_nv4p4wE5aW1rvapjbo1_500.jpg"></div>
-                <div class="col-lg-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5" data-url="http://68.media.tumblr.com/de43dd2c9034d008f7ea36cf849babac/tumblr_nvdldqj1Ez1rvapjbo1_500.jpg"></div>
+                <div class="col-md-2 col-md-offset-1"><img src="images/sample1.jpg" class="img-fluid sample-img" id="sample1" data-url="http://68.media.tumblr.com/59a065e3a95370ddb9aad57859e662e8/tumblr_ofx6vy1Sz41rvapjbo1_500.jpg"></div>
+                <div class="col-md-2"><img src="images/sample2.jpg" class="img-fluid sample-img" id="sample2" data-url="http://68.media.tumblr.com/b3bbd66741365db486ffbff3c163f8bd/tumblr_nw466pJ3sS1rvapjbo1_500.jpg"></div>
+                <div class="col-md-2"><img src="images/sample3.jpg" class="img-fluid sample-img" id="sample3" data-url="http://68.media.tumblr.com/25d3ee2574509e7a15f177a74e4267c9/tumblr_o72k0uksUF1rvapjbo1_500.jpg"></div>
+                <div class="col-md-2"><img src="images/sample4.jpg" class="img-fluid sample-img" id="sample4" data-url="http://68.media.tumblr.com/25c1eea3ca9a393306b66655eacdacf6/tumblr_nv4p4wE5aW1rvapjbo1_500.jpg"></div>
+                <div class="col-md-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5" data-url="http://68.media.tumblr.com/de43dd2c9034d008f7ea36cf849babac/tumblr_nvdldqj1Ez1rvapjbo1_500.jpg"></div>
             </div>
         </div>
         <!-- Modal -->
@@ -128,7 +126,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table" >
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Results</th>
@@ -163,44 +161,43 @@
                             </tr>
                         </table>
                         <div id="questions" hidden>
-                        <fieldset class="form-group row">
-                            <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
+                            <fieldset class="form-group row">
+                                <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked> Age and Gender
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"> Only Age
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"> Only Gender
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
                             <div class="col-sm-10">
-                                <div class="form-check">
+                                <label>Actual Age:</label>
+                                <input type="number" min="0">
+                                <label>Actual Gender:</label>
+                                <!-- <div class="col-sm-10"> -->
+                                <div class="form-check form-check-inline">
                                     <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked> Age and Gender
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Female
                                     </label>
                                 </div>
-                                <div class="form-check">
+                                <div class="form-check form-check-inline">
                                     <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"> Only Age
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"> Only Gender
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Male
                                     </label>
                                 </div>
                             </div>
-                        </fieldset>
-                        <div class="col-sm-10">
-                        <label>Actual Age:</label>
-                        <input type="number" min="0">
-                        <label>Actual Gender:</label>
-                            <!-- <div class="col-sm-10"> -->
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Female
-                            </label>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Male
-                            </label>
-                        </div>
-                        </div>
-                    </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary">Submit Results</button>

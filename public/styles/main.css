@@ -15,3 +15,7 @@ a.disabled {
 .card-columns {
 	column-count: 1;
 }
+
+.response-card {
+	display: none;
+}
