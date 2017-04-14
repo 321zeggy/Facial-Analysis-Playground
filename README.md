@@ -1,5 +1,26 @@
 # Facial-Analysis-Playground
 ------------------------------
+## **April 14, 2017**
+#### Learned
+1. It's difficult for me to pinpoint specific things I've learned, but I've definitely been learning.
+
+#### Ideas for Next Iteration
+1. More fully completing the API results comparison.
+2. Giving users the option of submitting their results for research
+      
+
+#### Challenges
+1. Getting caught up in figuring out to display content to users
+
+#### Triumphs
+1. Getting responses from all APIs for both image files and image URLs
+2. Adding bounding boxes working for all APIs
+3. Setting up the framework for users to visually compare the results of the different APIs.
+
+
+
+------------------------------
+
 ## **March 16, 2017**
 #### Learned
 1. Event handlers called upon the submission of an HTML input element must return false in order to prevent the page from reloadind.
