@@ -268,7 +268,6 @@
 
               kairos.detect(image_data, kairosDetectCallback);
               google.detect(image_data, googleDetectCallback, is_url = false);
-              microsoftBoundingBox = null;
             }
           };
           imageObj.src = e.target.result;
@@ -303,7 +302,6 @@
       imageObj.onload = function() {
         var ratio = getConversionRatio(imageObj, 350, 350);
         context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
-        // $('#loading').show();
         global_image_data = imageObj.src;
         global_is_url = true;
         global_ratio = ratio;
@@ -342,39 +340,37 @@
       }
     );
 
-    $('#collapseKairos').on('shown.bs.collapse', function() {
-      drawBoundingBox(kairosBoundingBox, 'blue');
+    $('.collapse').on('show.bs.collapse', function() {
+      $(this).parent().show();
     });
-    $('#collapseMicrosoft').on('shown.bs.collapse', function() {
-      drawBoundingBox(microsoftBoundingBox, 'green');
-    });
-    $('#collapseIBM').on('shown.bs.collapse', function() {
-      drawBoundingBox(ibmBoundingBox, 'red');
-    });
-    $('#collapseGoogle').on('shown.bs.collapse', function() {
-      drawGoogleBoundingBox(googleBoundingBox, 'yellow');
-    });
-    $('#collapseFacePlusPlus').on('shown.bs.collapse', function() {
-      drawBoundingBox(facePlusPlusBoundingBox, 'purple');
-    });
-
     $('.collapse').on('hide.bs.collapse', function() {
-      drawBoundingBox();
       $(this).parent().hide();
     });
 
-    $('.collapse').on('show.bs.collapse', function() {
-      $(this).parent().show();
+    $('#collapseKairos').on('show.bs.collapse', function() {
+      drawBoundingBox(kairosBoundingBox, 'blue');
+    });
+    $('#collapseMicrosoft').on('show.bs.collapse', function() {
+      drawBoundingBox(microsoftBoundingBox, 'green');
+    });
+    $('#collapseIBM').on('show.bs.collapse', function() {
+      drawBoundingBox(ibmBoundingBox, 'red');
+    });
+    $('#collapseGoogle').on('show.bs.collapse', function() {
+      drawGoogleBoundingBox(googleBoundingBox, 'yellow');
+    });
+    $('#collapseFacePlusPlus').on('show.bs.collapse', function() {
+      drawBoundingBox(facePlusPlusBoundingBox, 'purple');
     });
 
     $('.toggle').click(function() {
       if ($(this).hasClass('active')) {
-        $(this).removeClass('active');  
+        drawBoundingBox();
+        $(this).removeClass('active');
       } else {
         $('.active').removeClass('active');
         $(this).addClass('active');
       }
-      
     });
 
     $('#sample1').click();
