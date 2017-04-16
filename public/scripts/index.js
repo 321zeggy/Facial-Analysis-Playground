@@ -7,12 +7,24 @@
     var google = new Google(config.GOOGLE_API_KEY);
     var faceplusplus = new FacePlusPlus(config.FACEPLUSPLUS_API_KEY, config.FACEPLUSPLUS_API_SECRET);
 
+    var global_image_data;
+    var global_is_url;
+    var global_ratio;
 
     var kairosBoundingBox;
     var microsoftBoundingBox;
     var ibmBoundingBox;
     var googleBoundingBox;
     var facePlusPlusBoundingBox;
+
+    var responsesCount;
+
+    function incrementResponsesCount() {
+      responsesCount += 1;
+      if (responsesCount == 4) {
+        $("#results-button").prop('disabled', false);
+      }
+    }
 
 
     function imageToDataUri(img, width, height) {
@@ -97,6 +109,8 @@
       if (!microsoftJSON[0]) {
         console.log('no images in face response');
         $("#microsoft_response").html('No faces detected');
+        $("#microsoft_gender").html('No faces detected');
+        $("#microsoft_age").html('No faces detected');
       } else {
         var attributes = microsoftJSON[0].faceAttributes;
         $("#microsoft_gender").html(getGender(attributes.gender));
@@ -111,6 +125,7 @@
         $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
       }
       $("#microsoft-toggle").removeClass('disabled');
+      incrementResponsesCount();
     }
 
     function ibmDetectCallback(response) {
@@ -118,6 +133,8 @@
       if (!ibmJSON.images[0].faces[0]) {
         console.log('no images in face response');
         $("#ibm_response").html('No faces detected');
+        $("#ibm_gender").html('No faces detected');
+        $("#ibm_age").html('No faces detected');
       } else {
         var attributes = ibmJSON.images[0].faces[0];
         attributes = {
@@ -136,6 +153,7 @@
         $("#ibm_response").html(JSON.stringify(attributes, null, 4));
       }
       $("#ibm-toggle").removeClass('disabled');
+      incrementResponsesCount();
     }
 
 
@@ -144,6 +162,8 @@
       if ('Errors' in kairosJSON) {
         console.log('no images in face response');
         $("#kairos_response").html('No faces detected');
+        $("#kairos_gender").html('No faces detected');
+        $("#kairos_age").html('No faces detected');
       } else {
         var attributes = kairosJSON.images[0].faces[0].attributes;
         $("#kairos_gender").html(getGender(attributes.gender.type));
@@ -158,8 +178,8 @@
         $("#kairos_response").html(JSON.stringify(attributes, null, 4));
       }
       $("#kairos-toggle").removeClass('disabled');
-      $("#results-button").prop('disabled', false);
       $('#kairos-toggle').click();
+      incrementResponsesCount();
     }
 
     function googleDetectCallback(response) {
@@ -190,6 +210,8 @@
       if (!facePlusPlusJSON.faces[0]) {
         console.log('no images in face response');
         $("#faceplusplus_response").html('No faces detected');
+        $("#faceplusplus_gender").html('No faces detected');
+        $("#faceplusplus_age").html('No faces detected');
       } else {
         var attributes = facePlusPlusJSON.faces[0].attributes;
         $("#faceplusplus_gender").html(getGender(attributes.gender.value));
@@ -204,17 +226,20 @@
         $("#faceplusplus_response").html(JSON.stringify(attributes, null, 4));
       }
       $("#faceplusplus-toggle").removeClass('disabled');
+      incrementResponsesCount();
     }
 
     function reset() {
+      responsesCount = 0;
+
+      // holder for the image data
+      global_image_data = null;
+      global_is_url = null;
+      global_ratio = null;
+      
       $('.toggle').addClass('disabled');
       $('.toggle.active').click();
       $("#results-button").prop('disabled', true);
-
-      // holder for the image data
-      var global_image_data = null;
-      var global_is_url = null;
-      var global_ratio = null;
 
       $("#photoCanvas").hide();
       $("#loading").show();
