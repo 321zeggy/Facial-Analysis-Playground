@@ -12,6 +12,10 @@ a.disabled {
 	cursor: default;
 }
 
+#results-button:disabled {
+	cursor: progress;
+}
+
 .card-columns {
 	column-count: 1;
 }
