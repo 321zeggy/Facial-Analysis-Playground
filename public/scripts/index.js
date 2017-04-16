@@ -2,7 +2,6 @@
 
 
     var kairos = new Kairos(config.KAIROS_API_ID, config.KAIROS_API_KEY);
-    // var betaface = new Betaface(config.BETAFACE_API_KEY, config.BETAFACE_API_SECRET);
     var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
     var ibm = new IBM(config.IBM_API_KEY);
     var google = new Google(config.GOOGLE_API_KEY);
@@ -91,27 +90,6 @@
 
     function getGender(genderString) {
       return genderString.toUpperCase()[0];
-    }
-
-    function betafaceDetectCallback(response) {
-      var betafaceJSON = JSON.parse(response.responseText);
-      if (betafaceJSON.faces.length === 0) {
-        console.log('no images in face response');
-        $("#betaface_response").html('No faces detected');
-      } else {
-        var tags = betafaceJSON.faces[0].tags;
-        var attributes = [];
-        for (var i in tags) {
-          var attribute = tags[i].name;
-          var relevantAttributes = ['gender', 'age', 'race'];
-          // check if attribute is in relevantAttributes
-          if (relevantAttributes.indexOf(attribute) != -1) {
-            attributes.push(tags[i]);
-          }
-        }
-        $("#betaface_response").html(JSON.stringify(attributes, null, 4));
-      }
-      $("#betaface-toggle").removeClass('disabled');
     }
 
     function microsoftDetectCallback(response) {
@@ -230,6 +208,7 @@
 
     function reset() {
       $('.toggle').addClass('disabled');
+      $('.toggle.active').click();
       $("#results-button").prop('disabled', true);
 
       // holder for the image data
@@ -237,13 +216,10 @@
       var global_is_url = null;
       var global_ratio = null;
 
-      $('.show').collapse('hide');
-
       $("#photoCanvas").hide();
       $("#loading").show();
 
       $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-      // $("#betaface_response").html("<i>(Betaface response will appear here)</i>");
       $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
       $("#ibm_response").html("<i>(IBM response will appear here)</i>");
       $("#google_response").html("<i>(Google response will appear here)</i>");
@@ -333,7 +309,6 @@
         global_ratio = ratio;
 
         kairos.detect(imageObj.src, kairosDetectCallback);
-        // betaface.detect(imageObj.src, betafaceDetectCallback, "classifiers", is_url = true);
         faceplusplus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
         microsoft.detect(imageObj.src, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
         ibm.detect(imageObj.src, ibmDetectCallback, is_url = true);
@@ -370,7 +345,6 @@
     $('#collapseKairos').on('shown.bs.collapse', function() {
       drawBoundingBox(kairosBoundingBox, 'blue');
     });
-    // $('#collapseBetaface').on('shown.bs.collapse', function() { drawBoundingBox(); });
     $('#collapseMicrosoft').on('shown.bs.collapse', function() {
       drawBoundingBox(microsoftBoundingBox, 'green');
     });
