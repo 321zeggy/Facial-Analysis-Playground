@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <!-- bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/f748178fc1.js"></script>
     <script src="scripts/config.js"></script>
     <script src="scripts/index.js"></script>
     <script src="scripts/kairos.js"></script>
@@ -107,11 +108,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2 col-md-offset-1"><img src="images/sample1.jpg" class="img-fluid sample-img" id="sample1" data-url="http://68.media.tumblr.com/59a065e3a95370ddb9aad57859e662e8/tumblr_ofx6vy1Sz41rvapjbo1_500.jpg"></div>
-                <div class="col-md-2"><img src="images/sample2.jpg" class="img-fluid sample-img" id="sample2" data-url="http://68.media.tumblr.com/b3bbd66741365db486ffbff3c163f8bd/tumblr_nw466pJ3sS1rvapjbo1_500.jpg"></div>
-                <div class="col-md-2"><img src="images/sample3.jpg" class="img-fluid sample-img" id="sample3" data-url="http://68.media.tumblr.com/25d3ee2574509e7a15f177a74e4267c9/tumblr_o72k0uksUF1rvapjbo1_500.jpg"></div>
-                <div class="col-md-2"><img src="images/sample4.jpg" class="img-fluid sample-img" id="sample4" data-url="http://68.media.tumblr.com/25c1eea3ca9a393306b66655eacdacf6/tumblr_nv4p4wE5aW1rvapjbo1_500.jpg"></div>
-                <div class="col-md-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5" data-url="http://68.media.tumblr.com/de43dd2c9034d008f7ea36cf849babac/tumblr_nvdldqj1Ez1rvapjbo1_500.jpg"></div>
+                <div class="col-md-2 col-md-offset-1"><img src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg" class="img-fluid sample-img" id="sample1" data-url="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg"></div>
+                <div class="col-md-2"><img src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ5MDE4Mzk5MV5BMl5BanBnXkFtZTgwNDI0ODIwMTE@._V1_UX214_CR0,0,214,317_AL_.jpg" class="img-fluid sample-img" id="sample2" data-url="https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ5MDE4Mzk5MV5BMl5BanBnXkFtZTgwNDI0ODIwMTE@._V1_UX214_CR0,0,214,317_AL_.jpg"></div>
+                <div class="col-md-2"><img src="http://kingofwallpapers.com/eddie-murphy/eddie-murphy-004.jpg" class="img-fluid sample-img" id="sample3" data-url="http://kingofwallpapers.com/eddie-murphy/eddie-murphy-004.jpg"></div>
+                <div class="col-md-2"><img src="http://starsignstyle.com/wp-content/uploads/2015/12/taylor-swift-astrology.jpg" class="img-fluid sample-img" id="sample4" data-url="http://starsignstyle.com/wp-content/uploads/2015/12/taylor-swift-astrology.jpg"></div>
+                <div class="col-md-2"><img src="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg" class="img-fluid sample-img" id="sample5" data-url="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg"></div>
             </div>
         </div>
         <!-- Modal -->
@@ -125,7 +126,62 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table">
+                        <div class="card">
+                            <div>
+                                <img class="card-img-left" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg" alt="Card image cap">
+                                <p><strong>Gender: Female</strong></p>
+                                <p><strong>Age: 22</strong></p>
+                                <p><strong>Ethnicity: Black</strong></p>
+                            </div>
+                            <div class="card-block">
+                                <h3 class="card-text">Coded Gaze Score: 4/13</h3>
+                            </div>
+                            <div class="card-block">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Microsoft</th>
+                                            <th>IBM</th>
+                                            <th>Face++</th>
+                                            <th>Kairos</th>
+                                            <th>Google</th>
+                                            <th>Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Gender</th>
+                                            <td class="microsoft_gender table-danger">?</td>
+                                            <td class="ibm_gender table-danger">?</td>
+                                            <td class="faceplusplus_gender table-danger">?</td>
+                                            <td class="kairos_gender table-danger">?</td>
+                                            <td class="google_gender table-warning">NA</td>
+                                            <td>0/4</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Age</th>
+                                            <td class="microsoft_age table-danger">?</td>
+                                            <td class="ibm_age table-success">?</td>
+                                            <td class="faceplusplus_age table-danger">?</td>
+                                            <td class="kairos_age table-danger">?</td>
+                                            <td class="google_age table-warning">NA</td>
+                                            <td>1/4</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Face Detected</th>
+                                            <td class="microsoft_face_detected table-danger">?</td>
+                                            <td class="ibm_face_detected table-success">?</td>
+                                            <td class="faceplusplus_face_detected table-danger">?</td>
+                                            <td class="kairos_face_detected table-success">?</td>
+                                            <td class="google_face_detected table-success">?</td>
+                                            <td>3/5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <table class="table" hidden>
                             <thead>
                                 <tr>
                                     <th>Results</th>
@@ -135,33 +191,33 @@
                             </thead>
                             <tr>
                                 <th scope="row">Microsoft</th>
-                                <td id="microsoft_gender">?</td>
-                                <td id="microsoft_age">?</td>
+                                <td class="microsoft_gender">?</td>
+                                <td class="microsoft_age">?</td>
                             </tr>
                             <tr>
                                 <th scope="row">IBM</th>
-                                <td id="ibm_gender">?</td>
-                                <td id="ibm_age">?</td>
+                                <td class="ibm_gender">?</td>
+                                <td class="ibm_age">?</td>
                             </tr>
                             <tr>
                                 <th scope="row">Face++</th>
-                                <td id="faceplusplus_gender">?</td>
-                                <td id="faceplusplus_age">?</td>
+                                <td class="faceplusplus_gender">?</td>
+                                <td class="faceplusplus_age">?</td>
                             </tr>
                             <tr>
                                 <th scope="row">Kairos</th>
-                                <td id="kairos_gender">?</td>
-                                <td id="kairos_age">?</td>
+                                <td class="kairos_gender">?</td>
+                                <td class="kairos_age">?</td>
                             </tr>
                             <tr>
                                 <th scope="row">True Value</th>
-                                <td id="faceplusplus_gender">?</td>
-                                <td id="faceplusplus_age">?</td>
+                                <td class="faceplusplus_gender">?</td>
+                                <td class="faceplusplus_age">?</td>
                             </tr>
                         </table>
-                        <div class="alert alert-info" role="alert">
+                       <!--  <div class="alert alert-info" role="alert">
                             <strong>Google omitted - </strong>API does not estimate age or gender
-                        </div>
+                        </div> -->
                         <div id="questions" hidden>
                             <fieldset class="form-group row">
                                 <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
@@ -202,7 +258,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Make Scorecard</button>
+                        <button type="button" class="btn btn-primary">Share Scorecard</button>
                     </div>
                 </div>
             </div>

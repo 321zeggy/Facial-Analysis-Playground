@@ -21,7 +21,7 @@
 
     function incrementResponsesCount() {
       responsesCount += 1;
-      if (responsesCount == 4) {
+      if (responsesCount == 5) {
         $("#results-button").prop('disabled', false);
       }
     }
@@ -109,12 +109,14 @@
       if (!microsoftJSON[0]) {
         console.log('no images in face response');
         $("#microsoft_response").html('No faces detected');
-        $("#microsoft_gender").html('No faces detected');
-        $("#microsoft_age").html('No faces detected');
+        $(".microsoft_gender").html('No faces detected');
+        $(".microsoft_age").html('No faces detected');
+        $(".microsoft_face_detected").html('False');
       } else {
         var attributes = microsoftJSON[0].faceAttributes;
-        $("#microsoft_gender").html(getGender(attributes.gender));
-        $("#microsoft_age").html(attributes.age);
+        $(".microsoft_gender").html(getGender(attributes.gender));
+        $(".microsoft_age").html(attributes.age);
+        $(".microsoft_face_detected").html('True');
         var face = microsoftJSON[0].faceRectangle;
         microsoftBoundingBox = {
           top: face.top,
@@ -133,16 +135,26 @@
       if (!ibmJSON.images[0].faces[0]) {
         console.log('no images in face response');
         $("#ibm_response").html('No faces detected');
-        $("#ibm_gender").html('No faces detected');
-        $("#ibm_age").html('No faces detected');
+        $(".ibm_gender").html('No faces detected');
+        $(".ibm_age").html('No faces detected');
+        $(".ibm_face_detected").html('False');
       } else {
         var attributes = ibmJSON.images[0].faces[0];
         attributes = {
           "gender": attributes.gender,
           "age": attributes.age
         };
-        $("#ibm_gender").html(getGender(attributes.gender.gender));
-        $("#ibm_age").html(attributes.age.max);
+        $(".ibm_gender").html(getGender(attributes.gender.gender));
+        if ('min' in attributes.age) {
+          if ('max' in attributes.age) {
+            $(".ibm_age").html(attributes.age.min + '-' + attributes.age.max);
+          } else {
+            $(".ibm_age").html(attributes.age.min);
+          }
+        } else {
+          $(".ibm_age").html(attributes.age.max);
+        }
+        $(".ibm_face_detected").html('True');
         var face = ibmJSON.images[0].faces[0].face_location;
         ibmBoundingBox = {
           top: face.top,
@@ -162,12 +174,14 @@
       if ('Errors' in kairosJSON) {
         console.log('no images in face response');
         $("#kairos_response").html('No faces detected');
-        $("#kairos_gender").html('No faces detected');
-        $("#kairos_age").html('No faces detected');
+        $(".kairos_gender").html('No faces detected');
+        $(".kairos_age").html('No faces detected');
+        $(".kairos_face_detected").html('False');
       } else {
         var attributes = kairosJSON.images[0].faces[0].attributes;
-        $("#kairos_gender").html(getGender(attributes.gender.type));
-        $("#kairos_age").html(attributes.age);
+        $(".kairos_gender").html(getGender(attributes.gender.type));
+        $(".kairos_age").html(attributes.age);
+        $(".kairos_face_detected").html('True');
         var face = kairosJSON.images[0].faces[0];
         kairosBoundingBox = {
           top: face.topLeftY,
@@ -187,6 +201,7 @@
       if (!('faceAnnotations' in googleJSON.responses[0])) {
         console.log('no images in face response');
         $("#google_response").html('No faces detected');
+        $(".google_face_detected").html('False');
       } else {
         var attributes = googleJSON.responses[0].faceAnnotations[0];
         attributes = {
@@ -201,8 +216,10 @@
         };
         googleBoundingBox = googleJSON.responses[0].faceAnnotations[0].fdBoundingPoly.vertices;
         $("#google_response").html(JSON.stringify(attributes, null, 4));
+        $(".google_face_detected").html('True');
       }
       $("#google-toggle").removeClass('disabled');
+      incrementResponsesCount();
     }
 
     function facePlusPlusDetectCallback(response) {
@@ -210,12 +227,14 @@
       if (!facePlusPlusJSON.faces[0]) {
         console.log('no images in face response');
         $("#faceplusplus_response").html('No faces detected');
-        $("#faceplusplus_gender").html('No faces detected');
-        $("#faceplusplus_age").html('No faces detected');
+        $(".faceplusplus_gender").html('No faces detected');
+        $(".faceplusplus_age").html('No faces detected');
+        $(".faceplusplus_face_detected").html('False');
       } else {
         var attributes = facePlusPlusJSON.faces[0].attributes;
-        $("#faceplusplus_gender").html(getGender(attributes.gender.value));
-        $("#faceplusplus_age").html(attributes.age.value);
+        $(".faceplusplus_gender").html(getGender(attributes.gender.value));
+        $(".faceplusplus_age").html(attributes.age.value);
+        $(".faceplusplus_face_detected").html('True');
         var face = facePlusPlusJSON.faces[0].face_rectangle;
         facePlusPlusBoundingBox = {
           top: face.top,
