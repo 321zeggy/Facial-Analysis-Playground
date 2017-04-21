@@ -1,5 +1,22 @@
 # Facial-Analysis-Playground
 ------------------------------
+## **April 21, 2017**
+#### Learned
+1. Refamiliarized myself with some of the quirks of javascript objects that I'd forgotten about
+
+#### Ideas for Next Iteration
+1. Replace check-marks and ex-marks on scorecard with actual values estimated by APIs
+2. Complete the implementation of scorecard scoring (to replace the currently hardcoded values)
+
+#### Challenges
+1. I had a bit of a learning curve to getting the scorecard UI to look at all like what we had in mind
+2. I had to push past my perfectionism in order to really make progress
+
+#### Triumphs
+1. Actually made a scorecard that looks similar to what I was trying for
+2. Added a url shortener to prevent errors  when submitted image urls are longer than allowed 
+
+------------------------------
 ## **April 14, 2017**
 #### Learned
 1. It's difficult for me to pinpoint specific things I've learned, but I've definitely been learning.
@@ -17,10 +34,7 @@
 2. Adding bounding boxes working for all APIs
 3. Setting up the framework for users to visually compare the results of the different APIs.
 
-
-
 ------------------------------
-
 ## **March 16, 2017**
 #### Learned
 1. Event handlers called upon the submission of an HTML input element must return false in order to prevent the page from reloadind.
