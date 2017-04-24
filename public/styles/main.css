@@ -30,10 +30,16 @@ a.disabled {
   /*float: left;*/
   /*padding-right: 1em;*/
   /*margin-bottom: -1.25em;*/
-  width: 180px;
+  max-width: 180px;
+  max-height: 180px;
 }
 
-#scorecard-table td {
+#scorecard-table td, #scorecard-table th {
 	vertical-align: middle;
 	text-align: center;
+}
+
+#coded-gaze {
+	font-size: 2.3rem;
+	padding: 0.7em;
 }

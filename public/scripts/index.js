@@ -7,8 +7,9 @@
     var google = new Google(config.GOOGLE_API_KEY);
     var faceplusplus = new FacePlusPlus(config.FACEPLUSPLUS_API_KEY, config.FACEPLUSPLUS_API_SECRET);
 
+    var scorecard;
+
     var global_image_data;
-    var global_is_url;
     var global_ratio;
 
     var kairosBoundingBox;
@@ -22,7 +23,13 @@
     function incrementResponsesCount() {
       responsesCount += 1;
       if (responsesCount == 5) {
+        scorecard.setFaceImage(global_image_data);
         $("#results-button").prop('disabled', false);
+        console.log(scorecard);
+        scorecard.setGender('Female');
+        scorecard.setAge(22);
+        scorecard.setEthnicity('Black');
+        scorecard.updateTotalScore('F', 22);
       }
     }
 
@@ -72,7 +79,7 @@
         $('#loading').hide();
         $('#photoCanvas').show();
       };
-      imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
+      imageObj.src = global_image_data;
     }
 
     function drawGoogleBoundingBox(face, color) {
@@ -99,7 +106,7 @@
         $('#loading').hide();
         $('#photoCanvas').show();
       };
-      imageObj.src = global_is_url ? global_image_data : 'data:image/jpeg;base64,' + global_image_data;
+      imageObj.src = global_image_data;
     }
 
     function getGender(genderString) {
@@ -109,16 +116,20 @@
     function microsoftDetectCallback(response) {
       var microsoftJSON = JSON.parse(response.responseText);
       if (!microsoftJSON[0]) {
-        console.log('no images in face response');
         $("#microsoft_response").html('No faces detected');
         // $(".microsoft_gender").html('No faces detected');
         // $(".microsoft_age").html('No faces detected');
+        scorecard.setMicrosoftFaceDetected(false);
         // $(".microsoft_face_detected").html('False');
       } else {
         var attributes = microsoftJSON[0].faceAttributes;
         // $(".microsoft_gender").html(getGender(attributes.gender));
         // $(".microsoft_age").html(attributes.age);
         // $(".microsoft_face_detected").html('True');
+        scorecard.setMicrosoftGender(getGender(attributes.gender));
+        scorecard.setMicrosoftAge(parseFloat(attributes.age));
+        scorecard.setMicrosoftFaceDetected(true);
+
         var face = microsoftJSON[0].faceRectangle;
         microsoftBoundingBox = {
           top: face.top,
@@ -140,22 +151,28 @@
         // $(".ibm_gender").html('No faces detected');
         // $(".ibm_age").html('No faces detected');
         // $(".ibm_face_detected").html('False');
+        scorecard.setIBMFaceDetected(false);
       } else {
         var attributes = ibmJSON.images[0].faces[0];
         attributes = {
           "gender": attributes.gender,
           "age": attributes.age
         };
+        scorecard.setIBMGender(getGender(attributes.gender.gender));
         // $(".ibm_gender").html(getGender(attributes.gender.gender));
-        // if ('min' in attributes.age) {
-        //   if ('max' in attributes.age) {
-        //     $(".ibm_age").html(attributes.age.min + '-' + attributes.age.max);
-        //   } else {
-        //     $(".ibm_age").html(attributes.age.min);
-        //   }
-        // } else {
-        //   $(".ibm_age").html(attributes.age.max);
-        // }
+        if ('min' in attributes.age) {
+          if ('max' in attributes.age) {
+            scorecard.setIBMAge(min_age=parseInt(attributes.age.min), max_age=parseInt(attributes.age.max));
+            // $(".ibm_age").html(attributes.age.min + '-' + attributes.age.max);
+          } else {
+            // $(".ibm_age").html(attributes.age.min);
+            scorecard.setIBMAge(min_age=parseInt(attributes.age.min));
+          }
+        } else {
+          scorecard.setIBMAge(max_age=parseInt(attributes.age.max));
+          // $(".ibm_age").html(attributes.age.max);
+        }
+        scorecard.setIBMFaceDetected(true);
         // $(".ibm_face_detected").html('True');
         var face = ibmJSON.images[0].faces[0].face_location;
         ibmBoundingBox = {
@@ -179,11 +196,16 @@
         // $(".kairos_gender").html('No faces detected');
         // $(".kairos_age").html('No faces detected');
         // $(".kairos_face_detected").html('False');
+        scorecard.setKairosFaceDetected(false);
       } else {
         var attributes = kairosJSON.images[0].faces[0].attributes;
         // $(".kairos_gender").html(getGender(attributes.gender.type));
         // $(".kairos_age").html(attributes.age);
         // $(".kairos_face_detected").html('True');
+        scorecard.setKairosGender(getGender(attributes.gender.type));
+        scorecard.setKairosAge(parseInt(attributes.age));
+        scorecard.setKairosFaceDetected(true);
+
         var face = kairosJSON.images[0].faces[0];
         kairosBoundingBox = {
           top: face.topLeftY,
@@ -201,9 +223,9 @@
     function googleDetectCallback(response) {
       var googleJSON = JSON.parse(response.responseText);
       if (!('faceAnnotations' in googleJSON.responses[0])) {
-        console.log('no images in face response');
         $("#google_response").html('No faces detected');
         // $(".google_face_detected").html('False');
+        scorecard.setGoogleFaceDetected(false);
       } else {
         var attributes = googleJSON.responses[0].faceAnnotations[0];
         attributes = {
@@ -219,6 +241,7 @@
         googleBoundingBox = googleJSON.responses[0].faceAnnotations[0].fdBoundingPoly.vertices;
         $("#google_response").html(JSON.stringify(attributes, null, 4));
         // $(".google_face_detected").html('True');
+        scorecard.setGoogleFaceDetected(true);
       }
       $("#google-toggle").removeClass('disabled');
       incrementResponsesCount();
@@ -232,11 +255,16 @@
         // $(".faceplusplus_gender").html('No faces detected');
         // $(".faceplusplus_age").html('No faces detected');
         // $(".faceplusplus_face_detected").html('False');
+        scorecard.setFacePlusPlusFaceDetected(false);
       } else {
         var attributes = facePlusPlusJSON.faces[0].attributes;
         // $(".faceplusplus_gender").html(getGender(attributes.gender.value));
         // $(".faceplusplus_age").html(attributes.age.value);
         // $(".faceplusplus_face_detected").html('True');
+        scorecard.setFacePlusPlusGender(getGender(attributes.gender.value));
+        scorecard.setFacePlusPlusAge(parseInt(attributes.age.value));
+        scorecard.setFacePlusPlusFaceDetected(true);
+
         var face = facePlusPlusJSON.faces[0].face_rectangle;
         facePlusPlusBoundingBox = {
           top: face.top,
@@ -251,11 +279,11 @@
     }
 
     function reset() {
+      scorecard = new ScoreCard();
       responsesCount = 0;
 
       // holder for the image data
       global_image_data = null;
-      global_is_url = null;
       global_ratio = null;
 
       $('.toggle').addClass('disabled');
@@ -309,8 +337,7 @@
               image_data = image_data.replace("data:image/png;base64,", "");
               image_data = image_data.replace("data:image/gif;base64,", "");
               image_data = image_data.replace("data:image/bmp;base64,", "");
-              global_image_data = image_data;
-              global_is_url = false;
+              global_image_data = 'data:image/jpeg;base64,' + image_data;
 
               kairos.detect(image_data, kairosDetectCallback);
               google.detect(image_data, googleDetectCallback, is_url = false);
@@ -349,7 +376,6 @@
         var ratio = getConversionRatio(imageObj, 350, 350);
         context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
         global_image_data = imageObj.src;
-        global_is_url = true;
         global_ratio = ratio;
 
         kairos.detect(imageObj.src, kairosDetectCallback);
@@ -384,7 +410,8 @@
   });
   $('.sample-img').click(
     function(evt) {
-      var url = $(this).data("url");
+      // var url = $(this).data("url");
+      var url = $(this).attr('src');
       handleURLSelect(url);
       return false;
     }

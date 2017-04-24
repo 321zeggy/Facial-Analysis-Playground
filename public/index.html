@@ -14,6 +14,7 @@
     <script src="scripts/jquery.urlshortener.min.js" type="text/javascript"></script>
     <script src="https://use.fontawesome.com/f748178fc1.js"></script>
     <script src="scripts/config.js"></script>
+    <script src="scripts/scorecard.js"></script>
     <script src="scripts/index.js"></script>
     <script src="scripts/kairos.js"></script>
     <script src="scripts/microsoft.js"></script>
@@ -24,7 +25,7 @@
 
 <body>
     <div class="container">
-        <h4 class="display-4">Facial Analysis Playground</h4>
+        <h1 class="display-4">Facial Analysis Playground</h1>
         <br/>
         <div class="row" style="height: 350">
             <div class="col-md-4">
@@ -111,7 +112,7 @@
             <div class="row">
                 <div class="col-md-2 col-md-offset-1"><img src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg" class="img-fluid sample-img" id="sample1" data-url="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg"></div>
                 <div class="col-md-2"><img src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ5MDE4Mzk5MV5BMl5BanBnXkFtZTgwNDI0ODIwMTE@._V1_UX214_CR0,0,214,317_AL_.jpg" class="img-fluid sample-img" id="sample2" data-url="https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ5MDE4Mzk5MV5BMl5BanBnXkFtZTgwNDI0ODIwMTE@._V1_UX214_CR0,0,214,317_AL_.jpg"></div>
-                <div class="col-md-2"><img src="http://kingofwallpapers.com/eddie-murphy/eddie-murphy-004.jpg" class="img-fluid sample-img" id="sample3" data-url="http://kingofwallpapers.com/eddie-murphy/eddie-murphy-004.jpg"></div>
+                <div class="col-md-2"><img src="http://media.extratv.com/archive/images/news/0630eddie.jpg" class="img-fluid sample-img" id="sample3" data-url="http://media.extratv.com/archive/images/news/0630eddie.jpg"></div>
                 <div class="col-md-2"><img src="http://starsignstyle.com/wp-content/uploads/2015/12/taylor-swift-astrology.jpg" class="img-fluid sample-img" id="sample4" data-url="http://starsignstyle.com/wp-content/uploads/2015/12/taylor-swift-astrology.jpg"></div>
                 <div class="col-md-2"><img src="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg" class="img-fluid sample-img" id="sample5" data-url="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg"></div>
             </div>
@@ -127,199 +128,151 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card bg-faded">
-                            <div class="card-block">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <img class="card-img-left float-left" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg" alt="Card image cap">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-unstyled">
-                                            <li><strong>Gender: Female</strong></li>
-                                            <li><strong>Age: 22</strong></li>
-                                            <li><strong>Ethnicity: Black</strong></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="card-block" style="text-align: center;">
-                                    <h4 class="card-title">Coded Gaze Score: 4/13</h4>
-                                </div>
+                        <div id="scorecard" class="card card-outline-info">
+                        <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
+                        <div class="card-img-overlay">
+                            
+                            <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
+                                <dt class="col-sm-5">Gender: </dt>
+                                <dd class="col-sm-3" id="actual_gender"></dd>
+                                
+                                <dt class="col-sm-5">Age: </dt>
+                                <dd class="col-sm-3" id="actual_age"></dd>
+
+                                <dt class="col-sm-5">Ethnicity: </dt>
+                                <dd class="col-sm-3" id="actual_ethnicity"></dd>
+                            </dl> 
                             </div>
+                            <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
                             <div class="card-block">
                                 <table id="scorecard-table" class="table table-bordered table-responsive">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>Correct Gender</th>
-                                            <th>Correct Age</th>
-                                            <th>Face Detected</th>
+                                            <td></td>
+                                            <th scope="col">Gender</th>
+                                            <th scope="col">Age</th>
+                                            <th scope="col">Detected</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th scope="row">Score</th>
+                                            <th scope="col" id="gender_score"></th>
+                                            <th scope="col" id="age_score"></th>
+                                            <th scope="col" id="detected_score"></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         <tr>
-                                            <th scope="row"><img class="img-fluid" src="images/microsoft_logo.png"></th>
-                                            <td class="microsoft_gender bg-warning text-white"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="microsoft_age bg-warning text-white"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="microsoft_face_detected bg-danger text-white"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
+                                            <th scope="row"><img class="img-fluid" src="images/2abdd1401c124e4aa5b660b22da3e964.png"></th>
+                                            <td class="microsoft_gender"></td>
+                                            <td class="microsoft_age"></td>
+                                            <td class="microsoft_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/ibm_logo.png"></th>
-                                            <td class="ibm_gender bg-danger text-white"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="ibm_age bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
-                                            <td class="ibm_face_detected bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
+                                            <td class="ibm_gender"></td>
+                                            <td class="ibm_age"></td>
+                                            <td class="ibm_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/faceplusplus_logo.png"></th>
-                                            <td class="faceplusplus_gender bg-warning text-white"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="faceplusplus_age bg-warning text-white"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="faceplusplus_face_detected bg-danger text-white"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
+                                            <td class="faceplusplus_gender"></td>
+                                            <td class="faceplusplus_age"></td>
+                                            <td class="faceplusplus_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/kairos_logo.png"></th>
-                                            <td class="kairos_gender bg-danger text-white"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="kairos_age bg-danger text-white"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="kairos_face_detected bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
+                                            <td class="kairos_gender"></td>
+                                            <td class="kairos_age"></td>
+                                            <td class="kairos_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/google_logo.png"></th>
-                                            <td class="google_gender table-warning bg-primary text-white">NA</td>
-                                            <td class="google_age table-warning bg-primary text-white">NA</td>
-                                            <td class="google_face_detected bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Score</th>
-                                            <td>0/4</td>
-                                            <td>1/4</td>
-                                            <td>3/5</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table id="scorecard-table" class="table table-bordered table-responsive" hidden>
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Microsoft</th>
-                                            <th>IBM</th>
-                                            <th>Face++</th>
-                                            <th>Kairos</th>
-                                            <th>Google</th>
-                                            <th>Score</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Gender</th>
-                                            <td class="microsoft_gender"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="ibm_gender"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="faceplusplus_gender"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="kairos_gender"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="google_gender table-warning">NA</td>
-                                            <td>0/4</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Age</th>
-                                            <td class="microsoft_age"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="ibm_age bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
-                                            <td class="faceplusplus_age"><i class="fa fa-lg fa-exclamation-triangle" aria-hidden="true"></i></td>
-                                            <td class="kairos_age"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="google_age table-warning">NA</td>
-                                            <td>1/4</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Face Detected</th>
-                                            <td class="microsoft_face_detected"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="ibm_face_detected bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
-                                            <td class="faceplusplus_face_detected"><i class="fa fa-2x fa-times" aria-hidden="true"></i></td>
-                                            <td class="kairos_face_detected bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
-                                            <td class="google_face_detected bg-success text-white"><i class="fa fa-2x fa-check" aria-hidden="true"></i></td>
-                                            <td>3/5</td>
+                                            <td class="google_gender bg-faded">NA</td>
+                                            <td class="google_age bg-faded">NA</td>
+                                            <td class="google_face_detected bg-success text-white"></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <table class="table" hidden>
-                            <thead>
+                            <table class="table" hidden>
+                                <thead>
+                                    <tr>
+                                        <th>Results</th>
+                                        <th>Gender</th>
+                                        <th>Age</th>
+                                    </tr>
+                                </thead>
                                 <tr>
-                                    <th>Results</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
+                                    <th scope="row">Microsoft</th>
+                                    <td class="microsoft_gender">?</td>
+                                    <td class="microsoft_age">?</td>
                                 </tr>
-                            </thead>
-                            <tr>
-                                <th scope="row">Microsoft</th>
-                                <td class="microsoft_gender">?</td>
-                                <td class="microsoft_age">?</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">IBM</th>
-                                <td class="ibm_gender">?</td>
-                                <td class="ibm_age">?</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Face++</th>
-                                <td class="faceplusplus_gender">?</td>
-                                <td class="faceplusplus_age">?</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Kairos</th>
-                                <td class="kairos_gender">?</td>
-                                <td class="kairos_age">?</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">True Value</th>
-                                <td class="faceplusplus_gender">?</td>
-                                <td class="faceplusplus_age">?</td>
-                            </tr>
-                        </table>
-                        <!--  <div class="alert alert-info" role="alert">
-                            <strong>Google omitted - </strong>API does not estimate age or gender
-                        </div> -->
-                        <div id="questions" hidden>
-                            <fieldset class="form-group row">
-                                <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
+                                <tr>
+                                    <th scope="row">IBM</th>
+                                    <td class="ibm_gender">?</td>
+                                    <td class="ibm_age">?</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Face++</th>
+                                    <td class="faceplusplus_gender">?</td>
+                                    <td class="faceplusplus_age">?</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Kairos</th>
+                                    <td class="kairos_gender">?</td>
+                                    <td class="kairos_age">?</td>
+                                </tr>
+                            </table>
+                            <!-- <div class="alert alert-info" role="alert">
+                                <strong>Google omitted - </strong>API does not estimate age or gender
+                            </div> -->
+                            <div id="questions" hidden>
+                                <fieldset class="form-group row">
+                                    <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked> Age and Gender
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"> Only Age
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"> Only Gender
+                                            </label>
+                                        </div>
+                                    </div>
+                                </fieldset>
                                 <div class="col-sm-10">
-                                    <div class="form-check">
+                                    <label>Actual Age:</label>
+                                    <input type="number" min="0">
+                                    <label>Actual Gender:</label>
+                                    <!-- <div class="col-sm-10"> -->
+                                    <div class="form-check form-check-inline">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked> Age and Gender
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Female
                                         </label>
                                     </div>
-                                    <div class="form-check">
+                                    <div class="form-check form-check-inline">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"> Only Age
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Male
                                         </label>
                                     </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"> Only Gender
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <div class="col-sm-10">
-                                <label>Actual Age:</label>
-                                <input type="number" min="0">
-                                <label>Actual Gender:</label>
-                                <!-- <div class="col-sm-10"> -->
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Female
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Male
-                                    </label>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Share Scorecard</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">Share Scorecard</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 </body>
 
 </html>

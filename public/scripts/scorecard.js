@@ -1,188 +1,156 @@
-var Scorecard = function() {
-	this.Microsoft_gender = null;
-	this.IBM_gender = null;
-	this.FacePlusPlus_gender = null;
-	this.Kairos_gender = null;
+var ScoreCard = function() {
+	this.microsoft_gender = undefined;
+	this.ibm_gender = undefined;
+	this.faceplusplus_gender = undefined;
+	this.kairos_gender = undefined;
 
-	this.Microsoft_age_range = null;
-	this.IBM_age_range = null;
-	this.FacePlusPlus_age_range = null;
-	this.Kairos_age_range = null;
+	this.microsoft_age = undefined;
+	this.ibm_age = undefined;
+	this.faceplusplus_age = undefined;
+	this.kairos_age = undefined;
 
-	this.Microsoft_face_detected = null;
-	this.IBM_face_detected = null;
-	this.FacePlusPlus_face_detected = null;
-	this.Kairos_face_detected = null;
-	this.Google_face_detected = null;
-};
+	this.microsoft_face_detected = undefined;
+	this.ibm_face_detected = undefined;
+	this.faceplusplus_face_detected = undefined;
+	this.kairos_face_detected = undefined;
+	this.google_face_detected = undefined;
 
-Scorecard.prototype.updateGenderScores = function(true_gender) {
-	var total_correct = 0;
-	if (this.Microsoft_face_detected) {
-		if (self.Microsoft_gender == true_gender) {
-			total_correct += 1;
-			// update table data with check-mark
-		} else {
-			// update table data with ex-mark
+	// SET SCORECARD HEADER CONTENT //
+	this.setFaceImage = function(image) {
+		this.face_image = image;
+		$('#face_image').attr('src', image);
+	};
+	this.setGender = function(gender) {
+		this.actual_gender = gender[0];
+		$('#actual_gender').html(gender);
+	};
+	this.setAge = function(age) {
+		this.actual_age = age;
+		$('#actual_age').html(age);
+	};
+	this.setEthnicity = function(ethnicity) {
+		this.ethnicity = ethnicity;
+		$('#actual_ethnicity').html(ethnicity);
+	};
+
+
+	this.updateGenderScores = function(true_gender) {
+		var total_correct = 0;
+		var apis = ['microsoft', 'ibm', 'faceplusplus', 'kairos'];
+		for (i = 0; i < apis.length; i++) {
+			var className = apis[i] + '_gender';
+			var selecter = '#scorecard .' + className;
+			$(selecter).replaceWith('<td class="' + className + ' text-white"></td');
+			if (this[apis[i] + '_face_detected']) {
+				if (this[className] == true_gender) {
+					total_correct += 1;
+					$(selecter).html(this[className]).addClass('bg-success');
+				} else {
+					$(selecter).html(this[className]).addClass('bg-danger');
+				}
+			} else {
+				$(selecter).html('No Face Detected').addClass('bg-danger');
+			}
 		}
-	}
-	if (this.IBM_face_detected) {
-		if (self.IBM_gender == true_gender) {
-			total_correct += 1;
-			// update table data with check-mark	
-		} else {
-			// update table data with ex-mark
+		$('#gender_score').html(total_correct + '/4');
+		return total_correct;
+	};
+	this.updateAgeScores = function(true_age) {
+		var total_correct = 0;
+		var apis = ['microsoft', 'ibm', 'faceplusplus', 'kairos'];
+		for (i = 0; i < apis.length; i++) {
+			var className = apis[i] + '_age';
+			var selecter = '#scorecard .' + className;
+			$(selecter).replaceWith('<td class="' + className + ' text-white"></td');
+			if (this[apis[i] + '_face_detected']) {
+				if (apis[i] == 'ibm' && this.ibm_age_range) {
+					if (true_age >= this.ibm_age_range[0] && true_age <= this.ibm_age_range[1])	{
+						total_correct += 1;
+						$(selecter).html(this[className]).addClass('bg-success');
+					} else {
+						$(selecter).html(this[className]).addClass('bg-danger');
+					}
+				}
+				else if (Math.abs(this[className] - true_age) <= 5) {
+					total_correct += 1;
+					$(selecter).html(this[className]).addClass('bg-success');
+				} else {
+					$(selecter).html(this[className]).addClass('bg-danger');
+				}
+			} else {
+				$(selecter).html('No Face Detected').addClass('bg-danger');
+			}
 		}
-	}
-	if (self.FacePlusPlus_face_detected) {
-		if (self.FacePlusPlus_gender == true_gender) {
-			total_correct += 1;
-			// update table data with check-mark	
-		} else {
-			// update table data with ex-mark
+		$('#age_score').html(total_correct + '/4');
+		return total_correct;
+		
+	};
+	this.updateFaceDetectedScores = function() {
+		var total_correct = 0;
+		var apis = ['microsoft', 'ibm', 'faceplusplus', 'kairos', 'google'];
+		for (i = 0; i < apis.length; i++) {
+			var className = apis[i] + '_face_detected';
+			var selecter = '#scorecard .' + className;
+			if (this[apis[i] + '_face_detected']) {
+				total_correct += 1;
+				$(selecter).replaceWith(
+					'<td class="' + className + ' bg-success text-white"><i class="fa fa-2x fa-check"></i></td>');
+			} else {
+				$(selecter).replaceWith(
+					'<td class="' + className + ' bg-danger text-white"><i class="fa fa-2x fa-times"></i></td>');
+			}
 		}
-	}
-	if (self.Kairos_face_detected) {
-		if (self.Kairos_gender == true_gender) {
-			total_correct += 1;
-			// update table data with check-mark	
-		} else {
-			// update table data with ex-mark
-		}
-	}
-	// update gender score table data with total_correct + '/4' 
-	return total_correct;
-};
-
-Scorecard.prototype.updateAgeScores = function(true_age) {
-	var total_correct = 0;
-	if (self.Microsoft_face_detected) {
-		if (self.Microsoft_age_range[0] <= true_age || self.Microsoft_age_range[1] >= true_age) {
-			total_correct += 1;
-			// update table data with check-mark
-		} else {
-			// update table data with ex-mark
-		}
-	}
-	if (self.IBM_face_detected) {
-		if (self.IBM_age_range[0] <= true_age || self.IBM_age_range[1] >= true_age) {
-			total_correct += 1;
-			// update table data with check-mark	
-		} else {
-			// update table data with ex-mark
-		}
-	}
-	if (self.FacePlusPlus_face_detected) {
-		if (self.FacePlusPlus_age_range[0] <= true_age || self.FacePlusPlus_age_range[1] >= true_age) {
-			total_correct += 1;
-			// update table data with check-mark	
-		} else {
-			// update table data with ex-mark
-		}
-	}
-	if (self.Kairos_face_detected) {
-		if (self.Kairos_age_range[0] <= true_age || self.Kairos_age_range[1] >= true_age) {
-			total_correct += 1;
-			// update table data with check-mark	
-		} else {
-			// update table data with ex-mark
-		}
-	}
-	// update age score table data with total_correct + '/4'  
-};
-
-Scorecard.prototype.updateFaceDetectedScores = function() {
-	var total_correct = 0;
-	if (self.Microsoft_face_detected) {
-		total_correct += 1;
-		// update table data with check-mark
-	} else {
-		// update table data with ex-mark
-	}
-	if (self.IBM_face_detected) {
-		total_correct += 1;
-		// update table data with check-mark	
-	} else {
-		// update table data with ex-mark
-	}
-	if (self.FacePlusPlus_face_detected) {
-		total_correct += 1;
-		// update table data with check-mark	
-	} else {
-		// update table data with ex-mark
-	}
-	if (self.Kairos_face_detected) {
-		total_correct += 1;
-		// update table data with check-mark	
-	} else {
-		// update table data with ex-mark
-	}
-	if (self.Google_face_detected) {
-		total_correct += 1;
-		// update table data with check-mark
-	} else {
-		// update table data with ex-mark
-	}
-	// update age score table data with total_correct + '/5'  
-};
-
-Scorecard.prototype.updateTotalScore = function(true_gender, true_age) {
-	var total_correct = 0;
-	total_correct += this.updateGenderScores(true_gender) + this.updateAgeScores(true_age) + this.updateFaceDetectedScores();
-	// update coded gaze score with total_correct + '/13'
-};
+		$('#detected_score').html(total_correct + '/4');
+		return total_correct;
+	};
 
 
-
-
-Scorecard.prototype.setMicrosoftGender = function(gender) {
-	self.Microsoft_gender = gender;
-};
-Scorecard.prototype.setIBMGender = function(gender) {
-	self.IBM_gender = gender;
-};
-Scorecard.prototype.setFacePlusPlusGender = function(gender) {
-	self.Face_gender = gender;
-};
-Scorecard.prototype.setKairosGender = function(gender) {
-	self.Kairos_gender = gender;
-};
-
-
-Scorecard.prototype.setMicrosoftAgeRange = function(age) {
-	self.Microsoft_age_range = [age - 5, age + 5];
-};
-Scorecard.prototype.setIBMAgeRange = function(min_age, max_age) {
-	if (min_age) {
-		if (max_age) {
-			self.IBM_age_range = [min_age, max_age];
-		} else {
-			self.IBM_age_range = [min_age - 5, min_age + 5];
-		}
-	} else {
-		self.IBM_age_range = [max_age - 5, max_age + 5];
-	}
-};
-Scorecard.prototype.setFacePlusPlusAgeRange = function(age) {
-	self.FacePlusPlus_age_range = [age - 5, age + 5];
-};
-Scorecard.prototype.setKairosAgeRange = function(age) {
-	self.Kairos_age_range = [age - 5, age + 5];
-};
-
-
-Scorecard.prototype.setMicrosoftFaceDetected = function(face_detected) {
-	self.Microsoft_face_detected = face_detected;
-};
-Scorecard.prototype.setIBMFaceDetected = function(face_detected) {
-	self.IBM_face_detected = face_detected;
-};
-Scorecard.prototype.setFacePlusPlusFaceDetected = function(face_detected) {
-	self.FacePlusPlus_face_detected = face_detected;
-};
-Scorecard.prototype.setKairosFaceDetected = function(face_detected) {
-	self.Kairos_face_detected = face_detected;
-};
-Scorecard.prototype.setGoogleFaceDetected = function(face_detected) {
-	self.Google_face_detected = face_detected;
+	this.updateTotalScore = function(true_gender, true_age) {
+		var total_correct = this.updateGenderScores(true_gender) + this.updateAgeScores(true_age) + this.updateFaceDetectedScores();
+		$('#total_score').html(total_correct + '/13');
+	};
+	this.setMicrosoftGender = function(gender) {
+		this.microsoft_gender = gender;
+	};
+	this.setIBMGender = function(gender) {
+		this.ibm_gender = gender;
+	};
+	this.setFacePlusPlusGender = function(gender) {
+		this.faceplusplus_gender = gender;
+	};
+	this.setKairosGender = function(gender) {
+		this.kairos_gender = gender;
+	};
+	this.setMicrosoftAge = function(age) {
+		this.microsoft_age = Math.round(age);
+	};
+	this.setIBMAge = function(min_age, max_age) {
+		if (min_age) {
+			if (max_age) {
+				this.ibm_age_range = [min_age, max_age];
+				this.ibm_age = Math.round((min_age + max_age) / 2);
+			} else this.ibm_age = min_age;
+		} else this.ibm_age = max_age;
+	};
+	this.setFacePlusPlusAge = function(age) {
+		this.faceplusplus_age = age;
+	};
+	this.setKairosAge = function(age) {
+		this.kairos_age = age;
+	};
+	this.setMicrosoftFaceDetected = function(face_detected) {
+		this.microsoft_face_detected = face_detected;
+	};
+	this.setIBMFaceDetected = function(face_detected) {
+		this.ibm_face_detected = face_detected;
+	};
+	this.setFacePlusPlusFaceDetected = function(face_detected) {
+		this.faceplusplus_face_detected = face_detected;
+	};
+	this.setKairosFaceDetected = function(face_detected) {
+		this.kairos_face_detected = face_detected;
+	};
+	this.setGoogleFaceDetected = function(face_detected) {
+		this.google_face_detected = face_detected;
+	};
 };
