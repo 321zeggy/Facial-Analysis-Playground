@@ -25,11 +25,6 @@ a.disabled {
 }
 
 .card-img-left {
-  /*border-bottom-left-radius: calc(.25rem - 1px);*/
-  /*border-top-left-radius: calc(.25rem - 1px);*/
-  /*float: left;*/
-  /*padding-right: 1em;*/
-  /*margin-bottom: -1.25em;*/
   max-width: 180px;
   max-height: 180px;
 }

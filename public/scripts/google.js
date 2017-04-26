@@ -1,10 +1,10 @@
-var Google = function(api_key) {
-    this.api_key = api_key;
-    this.api_host = 'https://vision.googleapis.com/v1/';
+var Google = {
+    api_key: config.GOOGLE_API_KEY,
+    api_host: 'https://vision.googleapis.com/v1/'
 };
 
 /* Detect faces in an image */
-Google.prototype.detect = function(image_data, callback, is_url) {
+Google.detect = function(image_data, callback, is_url) {
 
     var image = is_url ? { 'source': { 'imageUri': image_data } } : { 'content': image_data };
     var data = {

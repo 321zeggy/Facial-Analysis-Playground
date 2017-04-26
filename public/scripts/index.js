@@ -1,12 +1,5 @@
   $(document).ready(function($) {
 
-
-    var kairos = new Kairos(config.KAIROS_API_ID, config.KAIROS_API_KEY);
-    var microsoft = new Microsoft(config.MICROSOFT_KEY_1, config.MICROSOFT_KEY_2);
-    var ibm = new IBM(config.IBM_API_KEY);
-    var google = new Google(config.GOOGLE_API_KEY);
-    var faceplusplus = new FacePlusPlus(config.FACEPLUSPLUS_API_KEY, config.FACEPLUSPLUS_API_SECRET);
-
     var scorecard;
 
     var global_image_data;
@@ -117,15 +110,16 @@
       var microsoftJSON = JSON.parse(response.responseText);
       if (!microsoftJSON[0]) {
         $("#microsoft_response").html('No faces detected');
-        // $(".microsoft_gender").html('No faces detected');
-        // $(".microsoft_age").html('No faces detected');
+
+        $("#comparison_table .microsoft_gender").html('No faces detected');
+        $("#comparison_table .microsoft_age").html('No faces detected');
         scorecard.setMicrosoftFaceDetected(false);
-        // $(".microsoft_face_detected").html('False');
+        $("#comparison_table .microsoft_face_detected").html('False');
       } else {
         var attributes = microsoftJSON[0].faceAttributes;
-        // $(".microsoft_gender").html(getGender(attributes.gender));
-        // $(".microsoft_age").html(attributes.age);
-        // $(".microsoft_face_detected").html('True');
+        $("#comparison_table .microsoft_gender").html(getGender(attributes.gender));
+        $("#comparison_table .microsoft_age").html(attributes.age);
+        $("#comparison_table .microsoft_face_detected").html('True');
         scorecard.setMicrosoftGender(getGender(attributes.gender));
         scorecard.setMicrosoftAge(parseFloat(attributes.age));
         scorecard.setMicrosoftFaceDetected(true);
@@ -146,11 +140,11 @@
     function ibmDetectCallback(response) {
       var ibmJSON = JSON.parse(response.responseText);
       if (!ibmJSON.images[0].faces[0]) {
-        console.log('no images in face response');
         $("#ibm_response").html('No faces detected');
-        // $(".ibm_gender").html('No faces detected');
-        // $(".ibm_age").html('No faces detected');
-        // $(".ibm_face_detected").html('False');
+
+        $("#comparison_table .ibm_gender").html('No faces detected');
+        $("#comparison_table .ibm_age").html('No faces detected');
+        $("#comparison_table .ibm_face_detected").html('False');
         scorecard.setIBMFaceDetected(false);
       } else {
         var attributes = ibmJSON.images[0].faces[0];
@@ -159,21 +153,21 @@
           "age": attributes.age
         };
         scorecard.setIBMGender(getGender(attributes.gender.gender));
-        // $(".ibm_gender").html(getGender(attributes.gender.gender));
+        $("#comparison_table .ibm_gender").html(getGender(attributes.gender.gender));
         if ('min' in attributes.age) {
           if ('max' in attributes.age) {
-            scorecard.setIBMAge(min_age=parseInt(attributes.age.min), max_age=parseInt(attributes.age.max));
-            // $(".ibm_age").html(attributes.age.min + '-' + attributes.age.max);
+            scorecard.setIBMAge(min_age = parseInt(attributes.age.min), max_age = parseInt(attributes.age.max));
+            $("#comparison_table .ibm_age").html(attributes.age.min + '-' + attributes.age.max);
           } else {
-            // $(".ibm_age").html(attributes.age.min);
-            scorecard.setIBMAge(min_age=parseInt(attributes.age.min));
+            $("#comparison_table .ibm_age").html(attributes.age.min);
+            scorecard.setIBMAge(min_age = parseInt(attributes.age.min));
           }
         } else {
-          scorecard.setIBMAge(max_age=parseInt(attributes.age.max));
-          // $(".ibm_age").html(attributes.age.max);
+          scorecard.setIBMAge(max_age = parseInt(attributes.age.max));
+          $("#comparison_table .ibm_age").html(attributes.age.max);
         }
         scorecard.setIBMFaceDetected(true);
-        // $(".ibm_face_detected").html('True');
+        $("#comparison_table .ibm_face_detected").html('True');
         var face = ibmJSON.images[0].faces[0].face_location;
         ibmBoundingBox = {
           top: face.top,
@@ -193,15 +187,16 @@
       if ('Errors' in kairosJSON) {
         console.log('no images in face response');
         $("#kairos_response").html('No faces detected');
-        // $(".kairos_gender").html('No faces detected');
-        // $(".kairos_age").html('No faces detected');
-        // $(".kairos_face_detected").html('False');
+
+        $("#comparison_table .kairos_gender").html('No faces detected');
+        $("#comparison_table .kairos_age").html('No faces detected');
+        $("#comparison_table .kairos_face_detected").html('False');
         scorecard.setKairosFaceDetected(false);
       } else {
         var attributes = kairosJSON.images[0].faces[0].attributes;
-        // $(".kairos_gender").html(getGender(attributes.gender.type));
-        // $(".kairos_age").html(attributes.age);
-        // $(".kairos_face_detected").html('True');
+        $("#comparison_table .kairos_gender").html(getGender(attributes.gender.type));
+        $("#comparison_table .kairos_age").html(attributes.age);
+        $("#comparison_table .kairos_face_detected").html('True');
         scorecard.setKairosGender(getGender(attributes.gender.type));
         scorecard.setKairosAge(parseInt(attributes.age));
         scorecard.setKairosFaceDetected(true);
@@ -224,7 +219,6 @@
       var googleJSON = JSON.parse(response.responseText);
       if (!('faceAnnotations' in googleJSON.responses[0])) {
         $("#google_response").html('No faces detected');
-        // $(".google_face_detected").html('False');
         scorecard.setGoogleFaceDetected(false);
       } else {
         var attributes = googleJSON.responses[0].faceAnnotations[0];
@@ -240,7 +234,6 @@
         };
         googleBoundingBox = googleJSON.responses[0].faceAnnotations[0].fdBoundingPoly.vertices;
         $("#google_response").html(JSON.stringify(attributes, null, 4));
-        // $(".google_face_detected").html('True');
         scorecard.setGoogleFaceDetected(true);
       }
       $("#google-toggle").removeClass('disabled');
@@ -252,15 +245,15 @@
       if (!facePlusPlusJSON.faces[0]) {
         console.log('no images in face response');
         $("#faceplusplus_response").html('No faces detected');
-        // $(".faceplusplus_gender").html('No faces detected');
-        // $(".faceplusplus_age").html('No faces detected');
-        // $(".faceplusplus_face_detected").html('False');
+        $("#comparison_table .faceplusplus_gender").html('No faces detected');
+        $(".faceplusplus_age").html('No faces detected');
+        $("#comparison_table .faceplusplus_face_detected").html('False');
         scorecard.setFacePlusPlusFaceDetected(false);
       } else {
         var attributes = facePlusPlusJSON.faces[0].attributes;
-        // $(".faceplusplus_gender").html(getGender(attributes.gender.value));
-        // $(".faceplusplus_age").html(attributes.age.value);
-        // $(".faceplusplus_face_detected").html('True');
+        $("#comparison_table .faceplusplus_gender").html(getGender(attributes.gender.value));
+        $("#comparison_table .faceplusplus_age").html(attributes.age.value);
+        $("#comparison_table .faceplusplus_face_detected").html('True');
         scorecard.setFacePlusPlusGender(getGender(attributes.gender.value));
         scorecard.setFacePlusPlusAge(parseInt(attributes.age.value));
         scorecard.setFacePlusPlusFaceDetected(true);
@@ -282,7 +275,6 @@
       scorecard = new ScoreCard();
       responsesCount = 0;
 
-      // holder for the image data
       global_image_data = null;
       global_ratio = null;
 
@@ -314,7 +306,6 @@
 
     function handleFileSelect(evt) {
       reset();
-      global_ratio = null;
       var file = evt.target.files[0];
       if (file.type.match('image.*')) { // Only process image files
         var reader = new FileReader();
@@ -339,28 +330,30 @@
               image_data = image_data.replace("data:image/bmp;base64,", "");
               global_image_data = 'data:image/jpeg;base64,' + image_data;
 
-              kairos.detect(image_data, kairosDetectCallback);
-              google.detect(image_data, googleDetectCallback, is_url = false);
+              Kairos.detect(image_data, kairosDetectCallback);
+              Google.detect(image_data, googleDetectCallback, is_url = false);
+
+              var dataReader = new FileReader();
+              dataReader.onloadend = function(e) {
+                Microsoft.detect(e.target.result, microsoftDetectCallback, is_url = false);
+              };
+              dataReader.readAsArrayBuffer(file);
+
+              var ibmFormData = new FormData();
+              ibmFormData.append('images_file', file, file.name);
+              IBM.detect(ibmFormData, ibmDetectCallback, is_url = false);
+
+              var facePlusPlusFormData = new FormData();
+              facePlusPlusFormData.append('image_file', file, file.name);
+              FacePlusPlus.detect(facePlusPlusFormData, facePlusPlusDetectCallback, is_url = false);
             }
+
           };
           imageObj.src = e.target.result;
         };
         // Read in the image file as a data URL.
         reader.readAsDataURL(file);
       }
-      var dataReader = new FileReader();
-      dataReader.onloadend = function(e) {
-        microsoft.detect(e.target.result, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = false);
-      };
-      dataReader.readAsArrayBuffer(file);
-
-      var ibmFormData = new FormData();
-      ibmFormData.append('images_file', file, file.name);
-      ibm.detect(ibmFormData, ibmDetectCallback, is_url = false);
-
-      var facePlusPlusFormData = new FormData();
-      facePlusPlusFormData.append('image_file', file, file.name);
-      faceplusplus.detect(facePlusPlusFormData, facePlusPlusDetectCallback, is_url = false);
     }
 
 
@@ -378,78 +371,74 @@
         global_image_data = imageObj.src;
         global_ratio = ratio;
 
-        kairos.detect(imageObj.src, kairosDetectCallback);
-        faceplusplus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
-        microsoft.detect(imageObj.src, microsoftDetectCallback, "returnFaceAttributes=age,gender", is_url = true);
-        ibm.detect(imageObj.src, ibmDetectCallback, is_url = true);
-        google.detect(imageObj.src, googleDetectCallback, is_url = true);
+        Kairos.detect(imageObj.src, kairosDetectCallback);
+        FacePlusPlus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
+        Microsoft.detect(imageObj.src, microsoftDetectCallback, is_url = true);
+        IBM.detect(imageObj.src, ibmDetectCallback, is_url = true);
+        Google.detect(imageObj.src, googleDetectCallback, is_url = true);
       };
       imageObj.src = image_url;
     }
 
 
 
-    $('#file').change(
-      function(evt) {
-        if ($("#file").val !== '') {
-          handleFileSelect(evt);
-        }
+    $('#file').change(function(evt) {
+      if ($("#file").val !== '') { 
+        handleFileSelect(evt);
       }
-    );
-    $('#submit_photo_url').click(
-      function(evt) {
-        jQuery.urlShortener({
+    });
+    $('#submit_photo_url').click(function(evt) {
+      jQuery.urlShortener({
           longUrl: $("#photo_url").val(),
           success: function(shortUrl) {
             $("#photo_url").val('');
             handleURLSelect(shortUrl);
           },
           error: console.log
+        });
+        return false;
       });
-    return false;
-  });
-  $('.sample-img').click(
-    function(evt) {
-      // var url = $(this).data("url");
-      var url = $(this).attr('src');
-      handleURLSelect(url);
-      return false;
-    }
-  );
 
-  $('.collapse').on('show.bs.collapse', function() {
-    $(this).parent().show();
-  });
-  $('.collapse').on('hide.bs.collapse', function() {
-    $(this).parent().hide();
-  });
+    $('.sample-img').click(function(evt) {
+        var url = $(this).data("url");
+        // var url = $(this).attr('src');
+        handleURLSelect(url);
+        return false;
+    });
 
-  $('#collapseKairos').on('show.bs.collapse', function() {
-    drawBoundingBox(kairosBoundingBox, 'blue');
-  });
-  $('#collapseMicrosoft').on('show.bs.collapse', function() {
-    drawBoundingBox(microsoftBoundingBox, 'green');
-  });
-  $('#collapseIBM').on('show.bs.collapse', function() {
-    drawBoundingBox(ibmBoundingBox, 'red');
-  });
-  $('#collapseGoogle').on('show.bs.collapse', function() {
-    drawGoogleBoundingBox(googleBoundingBox, 'yellow');
-  });
-  $('#collapseFacePlusPlus').on('show.bs.collapse', function() {
-    drawBoundingBox(facePlusPlusBoundingBox, 'purple');
-  });
+    $('.collapse').on('show.bs.collapse', function() {
+      $(this).parent().show();
+    });
+    $('.collapse').on('hide.bs.collapse', function() {
+      $(this).parent().hide();
+    });
 
-  $('.toggle').click(function() {
-    if ($(this).hasClass('active')) {
-      drawBoundingBox();
-      $(this).removeClass('active');
-    } else {
-      $('.active').removeClass('active');
-      $(this).addClass('active');
-    }
-  });
+    $('#collapseKairos').on('show.bs.collapse', function() {
+      drawBoundingBox(kairosBoundingBox, 'blue');
+    });
+    $('#collapseMicrosoft').on('show.bs.collapse', function() {
+      drawBoundingBox(microsoftBoundingBox, 'green');
+    });
+    $('#collapseIBM').on('show.bs.collapse', function() {
+      drawBoundingBox(ibmBoundingBox, 'red');
+    });
+    $('#collapseGoogle').on('show.bs.collapse', function() {
+      drawGoogleBoundingBox(googleBoundingBox, 'yellow');
+    });
+    $('#collapseFacePlusPlus').on('show.bs.collapse', function() {
+      drawBoundingBox(facePlusPlusBoundingBox, 'purple');
+    });
 
-  $('#sample1').click();
+    $('.toggle').click(function() {
+      if ($(this).hasClass('active')) {
+        drawBoundingBox();
+        $(this).removeClass('active');
+      } else {
+        $('.active').removeClass('active');
+        $(this).addClass('active');
+      }
+    });
+
+    $('#sample1').click();
 
   });

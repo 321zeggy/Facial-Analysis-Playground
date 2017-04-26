@@ -1,14 +1,11 @@
-var Microsoft = function(api_key_1, api_key_2) {
-    this.api_key_1 = api_key_1;
-    this.api_key_2 = api_key_2;
-    this.api_host = 'https://westus.api.cognitive.microsoft.com/face/v1.0/';
+var Microsoft = {
+    api_key: config.MICROSOFT_KEY_1,
+    api_host: 'https://westus.api.cognitive.microsoft.com/face/v1.0/'
 };
 
-Microsoft.prototype.detect = function(image_data, callback, options, is_url) {
-    var url = this.api_host + 'detect';
-    if (options) { url += '?' + options; }
+Microsoft.detect = function(image_data, callback, is_url) {
     var data;
-    var header_settings = { 'Ocp-Apim-Subscription-Key': this.api_key_1 };
+    var header_settings = { 'Ocp-Apim-Subscription-Key': this.api_key };
     if (is_url) {
         header_settings['Content-type'] = 'application/json';
         data = JSON.stringify({ 'url': image_data });
@@ -17,7 +14,8 @@ Microsoft.prototype.detect = function(image_data, callback, options, is_url) {
         data = image_data;
     }
 
-    $.ajax(url, {
+    $.ajax({
+        url: this.api_host + 'detect?returnFaceAttributes=age,gender',
         headers: header_settings,
         type: 'POST',
         data: data,

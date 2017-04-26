@@ -1,19 +1,16 @@
-var Kairos = function(api_id, api_key) {
-    this.api_id = api_id;
-    this.api_key = api_key;
-    this.api_host = 'https://api.kairos.com/';
+var Kairos = {
+    api_id: config.KAIROS_API_ID,
+    api_key: config.KAIROS_API_KEY,
+    api_host: 'https://api.kairos.com/'
 };
 
 /* Detect faces in an image */
-Kairos.prototype.detect = function(image_data, callback) {
-    var url = this.api_host + 'detect';
-    var data = { 'image': image_data };
-    var header_settings = { 'app_id': this.api_id, 'app_key': this.api_key };
-
-    $.ajax(url, {
-        headers: header_settings,
+Kairos.detect = function(image_data, callback) {
+    $.ajax({
+        url: this.api_host + 'detect',
+        headers:  {'app_id': this.api_id, 'app_key': this.api_key},
         type: 'POST',
-        data: JSON.stringify(data),
+        data: JSON.stringify({'image': image_data}),
         dataType: 'raw', // format of data returned by server
         success: callback,
         error: callback,

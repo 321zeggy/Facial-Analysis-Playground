@@ -25,9 +25,8 @@
 
 <body>
     <div class="container">
-        <h1 class="display-4">Facial Analysis Playground</h1>
-        <br/>
-        <div class="row" style="height: 350">
+        <h1 class="display-4 mb-4">Facial Analysis Playground</h1>
+        <div class="row">
             <div class="col-md-4">
                 <div class="row">
                     <img src="images/loading.svg" id="loading">
@@ -44,7 +43,6 @@
                         </div>
                     </form>
                     <form>
-                        <!-- <div> -->
                         <div class="input-group">
                             <label></label>
                             <input type="text" id="photo_url" class="form-control" placeholder="Image URL...">
@@ -52,11 +50,10 @@
                                 <button class="btn btn-secondary" id="submit_photo_url">Submit</button>
                             </span>
                         </div>
-                        <!-- </div> -->
                     </form>
                 </div>
             </div>
-            <div class="col-md-3 offset-md-1">
+            <div class="col-md-2 offset-md-1">
                 <div class="list-group">
                     <a id="kairos-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseKairos" aria-expanded="false">Kairos</a>
                     <a id="microsoft-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseMicrosoft" aria-expanded="false">Microsoft</a>
@@ -109,15 +106,21 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-2 col-md-offset-1"><img src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg" class="img-fluid sample-img" id="sample1" data-url="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg"></div>
-                <div class="col-md-2"><img src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ5MDE4Mzk5MV5BMl5BanBnXkFtZTgwNDI0ODIwMTE@._V1_UX214_CR0,0,214,317_AL_.jpg" class="img-fluid sample-img" id="sample2" data-url="https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ5MDE4Mzk5MV5BMl5BanBnXkFtZTgwNDI0ODIwMTE@._V1_UX214_CR0,0,214,317_AL_.jpg"></div>
-                <div class="col-md-2"><img src="http://media.extratv.com/archive/images/news/0630eddie.jpg" class="img-fluid sample-img" id="sample3" data-url="http://media.extratv.com/archive/images/news/0630eddie.jpg"></div>
-                <div class="col-md-2"><img src="http://starsignstyle.com/wp-content/uploads/2015/12/taylor-swift-astrology.jpg" class="img-fluid sample-img" id="sample4" data-url="http://starsignstyle.com/wp-content/uploads/2015/12/taylor-swift-astrology.jpg"></div>
-                <div class="col-md-2"><img src="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg" class="img-fluid sample-img" id="sample5" data-url="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg"></div>
+            <div class="row mb-3">
+                <div class="col-md-2 col-md-offset-1"><img src="images/sample1.jpg" class="img-fluid sample-img" id="sample1" data-url="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg"></div>
+                <div class="col-md-2"><img src="images/sample2.jpg" class="img-fluid sample-img" id="sample2" data-url="http://festival.sdaff.org/2014/files/2014/10/Anna-Akana-2-480x433.jpg"></div>
+                <div class="col-md-2"><img src="images/sample3.jpg" class="img-fluid sample-img" id="sample3" data-url="https://a.dilcdn.com/bl/wp-content/uploads/sites/28/2016/09/54987d65cb86f.jpg"></div>
+                <div class="col-md-2"><img src="images/sample4.jpg" class="img-fluid sample-img" id="sample4" data-url="http://starsignstyle.com/wp-content/uploads/2015/12/taylor-swift-astrology.jpg"></div>
+                <div class="col-md-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5" data-url="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg"></div>
             </div>
         </div>
+
+
+
+        
+
         <!-- Modal -->
+
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -129,19 +132,16 @@
                     </div>
                     <div class="modal-body">
                         <div id="scorecard" class="card card-outline-info">
-                        <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
-                        <div class="card-img-overlay">
-                            
-                            <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
-                                <dt class="col-sm-5">Gender: </dt>
-                                <dd class="col-sm-3" id="actual_gender"></dd>
-                                
-                                <dt class="col-sm-5">Age: </dt>
-                                <dd class="col-sm-3" id="actual_age"></dd>
-
-                                <dt class="col-sm-5">Ethnicity: </dt>
-                                <dd class="col-sm-3" id="actual_ethnicity"></dd>
-                            </dl> 
+                            <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
+                            <div class="card-img-overlay">
+                                <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
+                                    <dt class="col-sm-5">Gender: </dt>
+                                    <dd class="col-sm-3" id="actual_gender"></dd>
+                                    <dt class="col-sm-5">Age: </dt>
+                                    <dd class="col-sm-3" id="actual_age"></dd>
+                                    <dt class="col-sm-5">Ethnicity: </dt>
+                                    <dd class="col-sm-3" id="actual_ethnicity"></dd>
+                                </dl>
                             </div>
                             <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
                             <div class="card-block">
@@ -196,7 +196,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <table class="table" hidden>
+                        </div>
+                        <div>
+                            <table id="comparison_table" class="table" hidden>
                                 <thead>
                                     <tr>
                                         <th>Results</th>
@@ -226,53 +228,54 @@
                                 </tr>
                             </table>
                             <!-- <div class="alert alert-info" role="alert">
-                                <strong>Google omitted - </strong>API does not estimate age or gender
-                            </div> -->
-                            <div id="questions" hidden>
-                                <fieldset class="form-group row">
-                                    <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
-                                    <div class="col-sm-10">
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked> Age and Gender
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"> Only Age
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"> Only Gender
-                                            </label>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                    <strong>Google omitted - </strong>API does not estimate age or gender
+                                </div> -->
+                        </div>
+                        <div id="questions" hidden>
+                            <fieldset class="form-group row">
+                                <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
                                 <div class="col-sm-10">
-                                    <label>Actual Age:</label>
-                                    <input type="number" min="0">
-                                    <label>Actual Gender:</label>
-                                    <!-- <div class="col-sm-10"> -->
-                                    <div class="form-check form-check-inline">
+                                    <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Female
+                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked> Age and Gender
                                         </label>
                                     </div>
-                                    <div class="form-check form-check-inline">
+                                    <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Male
+                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"> Only Age
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"> Only Gender
                                         </label>
                                     </div>
                                 </div>
+                            </fieldset>
+                            <div class="col-sm-10">
+                                <label>Actual Age:</label>
+                                <input type="number" min="0">
+                                <label>Actual Gender:</label>
+                                <!-- <div class="col-sm-10"> -->
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Female
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Male
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary">Share Scorecard</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Share Scorecard</button>
                     </div>
                 </div>
             </div>
+        </div>
 </body>
 
 </html>
