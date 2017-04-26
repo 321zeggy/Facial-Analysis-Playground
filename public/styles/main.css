@@ -38,3 +38,60 @@ a.disabled {
 	font-size: 2.3rem;
 	padding: 0.7em;
 }
+
+
+
+
+#actual_values_form .reveal-if-active {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  font-size: 16px;
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+.question {
+  display: block;
+  margin: 0 0 3px 0;
+}
+#actual_values_form .reveal-if-active input[type=text] {
+  width: 100%;
+}
+#actual_values_form .revealed {
+  opacity: 1;
+  max-height: 100px;
+  padding: 10px 20px;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  overflow: visible;
+}
+
+#actual_values_form {
+  max-width: 500px;
+  margin: 20px auto;
+}
+#actual_values_form > div {
+  margin: 0 0 20px 0;
+}
+#actual_values_form > div label {
+  font-weight: bold;
+}
+#actual_values_form > div > div {
+  padding: 5px;
+}
+#actual_values_form > h4 {
+  color: green;
+  font-size: 24px;
+  margin: 0 0 10px 0;
+  border-bottom: 2px solid green;
+}
+
+#actual_values_form  {
+  font-size: 20px;
+}
+
+#actual_values_form * {
+  box-sizing: border-box;
+}

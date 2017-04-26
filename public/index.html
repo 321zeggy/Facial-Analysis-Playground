@@ -114,13 +114,7 @@
                 <div class="col-md-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5" data-url="http://static.tvgcdn.net/mediabin/galleries/celebrities/a_f/aq_az/aziz_ansari/crops/aziz-ansari01.jpg"></div>
             </div>
         </div>
-
-
-
-        
-
         <!-- Modal -->
-
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -131,7 +125,66 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="scorecard" class="card card-outline-info">
+                        <form id="actual_values_form" class="form-group" method="post" action="#">
+                            <h4>Attributes to Include on Scorecard</h4>
+                            <div>
+                                <div>
+                                    <label for="choice-attributes-both" class="custom-control custom-radio">
+                                        <input type="radio" name="choice-attributes" id="choice-attributes-both" class="choice-gender choice-age custom-control-input" required>
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Gender and Age</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="choice-attributes-gender" class="custom-control custom-radio">
+                                        <input type="radio" name="choice-attributes" id="choice-attributes-gender" class="choice-gender custom-control-input" required>
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Gender</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="choice-attributes-age" class="custom-control custom-radio">
+                                        <input type="radio" name="choice-attributes" id="choice-attributes-age" class="choice-age custom-control-input" required>
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Age</span>
+                                    </label>
+                                </div>
+                                <div class="reveal-if-active">
+                                    <label class="question" for="actual-gender">What's the gender of the person in the photo?</label>
+                                    <label class="custom-control custom-radio">
+                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Male</span>
+                                    </label>
+                                    <label class="custom-control custom-radio">
+                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Female</span>
+                                    </label>
+                                </div>
+                                <div class="reveal-if-active">
+                                    <label class="question" for="actual-age">What's the age of the person in the photo?</label>
+                                    <input type="number" id="actual-age" name="actual-age" class="require-if-active form-control" data-require-pair=".choice-age">
+                                </div>
+                            </div>
+                            <!-- <div>
+                                    <input type="radio" name="choice-attributes" id="choice-attributes-gender">
+                                    <label for="choice-attributes-gender">Gender</label>
+                                    <div class="reveal-if-active">
+                                        <label for="actual-gender">What's the gender of the person in the photo?</label>
+                                        <input type="text" id="actual-gender" name="actual-gender" class="require-if-active" data-require-pair="#choice-attributes-gender">
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="radio" name="choice-attributes" id="choice-attributes-age">
+                                    <label for="choice-attributes-age">Age</label>
+                                    <div class="reveal-if-active">
+                                        <label for="actual-age">What's the gender of the person in the photo?</label>
+                                        <input type="text" id="actual-age" name="actual-age" class="require-if-active" data-require-pair="#choice-attributes-age">
+                                    </div>
+                                </div> -->
+                        </form>
+                        <div id="scorecard" class="card card-outline-info" hidden>
                             <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
                             <div class="card-img-overlay">
                                 <dl class="row" style="margin-left: 10em; font-size: 1.2em;">

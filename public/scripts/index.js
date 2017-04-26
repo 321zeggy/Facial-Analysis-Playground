@@ -383,27 +383,27 @@
 
 
     $('#file').change(function(evt) {
-      if ($("#file").val !== '') { 
+      if ($("#file").val !== '') {
         handleFileSelect(evt);
       }
     });
     $('#submit_photo_url').click(function(evt) {
       jQuery.urlShortener({
-          longUrl: $("#photo_url").val(),
-          success: function(shortUrl) {
-            $("#photo_url").val('');
-            handleURLSelect(shortUrl);
-          },
-          error: console.log
-        });
-        return false;
+        longUrl: $("#photo_url").val(),
+        success: function(shortUrl) {
+          $("#photo_url").val('');
+          handleURLSelect(shortUrl);
+        },
+        error: console.log
       });
+      return false;
+    });
 
     $('.sample-img').click(function(evt) {
-        var url = $(this).data("url");
-        // var url = $(this).attr('src');
-        handleURLSelect(url);
-        return false;
+      var url = $(this).data("url");
+      // var url = $(this).attr('src');
+      handleURLSelect(url);
+      return false;
     });
 
     $('.collapse').on('show.bs.collapse', function() {
@@ -440,5 +440,35 @@
     });
 
     $('#sample1').click();
+
+    var FormStuff = {
+
+      init: function() {
+        this.applyConditionalRequired();
+        this.bindUIActions();
+      },
+
+      bindUIActions: function() {
+        $("input[type='radio'], input[type='checkbox']").on("change", this.applyConditionalRequired);
+      },
+
+      applyConditionalRequired: function() {
+
+        $(".require-if-active").each(function() {
+          var el = $(this);
+          if ($(el.data("require-pair")).is(":checked")) {
+            el.prop("required", true);
+            el.parents('.reveal-if-active').addClass('revealed');
+          } else {
+            el.prop("required", false);
+            el.parents('.reveal-if-active').removeClass('revealed');
+          }
+        });
+
+      }
+
+    };
+
+    FormStuff.init();
 
   });
