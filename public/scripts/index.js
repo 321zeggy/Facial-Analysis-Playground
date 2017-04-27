@@ -19,10 +19,6 @@
         scorecard.setFaceImage(global_image_data);
         $("#results-button").prop('disabled', false);
         console.log(scorecard);
-        scorecard.setGender('Female');
-        scorecard.setAge(22);
-        scorecard.setEthnicity('Black');
-        scorecard.updateTotalScore('F', 22);
       }
     }
 
@@ -273,6 +269,11 @@
 
     function reset() {
       scorecard = new ScoreCard();
+      $('.modal-1').show();
+      $('.modal-2').hide();
+      $('.modal-3').hide();
+
+
       responsesCount = 0;
 
       global_image_data = null;
@@ -380,6 +381,36 @@
       imageObj.src = image_url;
     }
 
+    var FormStuff = {
+
+      init: function() {
+        this.applyConditionalRequired();
+        this.bindUIActions();
+      },
+
+      bindUIActions: function() {
+        $("input[type='radio'], input[type='checkbox']").on("change", this.applyConditionalRequired);
+      },
+
+      applyConditionalRequired: function() {
+
+        $(".require-if-active").each(function() {
+          var el = $(this);
+          if ($(el.data("require-pair")).is(":checked")) {
+            el.prop("required", true);
+            el.parents('.reveal-if-active').addClass('revealed');
+          } else {
+            el.prop("required", false);
+            el.parents('.reveal-if-active').removeClass('revealed');
+          }
+        });
+
+      }
+
+    };
+
+    FormStuff.init();
+
 
 
     $('#file').change(function(evt) {
@@ -439,36 +470,32 @@
       }
     });
 
-    $('#sample1').click();
+    $('.modal-2').hide();
+    $('.modal-3').hide();
 
-    var FormStuff = {
+    $('button.modal-1').click(function() {
+      $('.modal-1').hide();
+      $('.modal-2').show();
+    });
 
-      init: function() {
-        this.applyConditionalRequired();
-        this.bindUIActions();
-      },
+    $('input.modal-2').click(function() {
+      $('.modal-2').hide();
+      $('.modal-3').show();
+    });
 
-      bindUIActions: function() {
-        $("input[type='radio'], input[type='checkbox']").on("change", this.applyConditionalRequired);
-      },
-
-      applyConditionalRequired: function() {
-
-        $(".require-if-active").each(function() {
-          var el = $(this);
-          if ($(el.data("require-pair")).is(":checked")) {
-            el.prop("required", true);
-            el.parents('.reveal-if-active').addClass('revealed');
-          } else {
-            el.prop("required", false);
-            el.parents('.reveal-if-active').removeClass('revealed');
-          }
-        });
-
+    $('#actual_values_form').submit(function(){
+      var gender, age;
+      if ($('input.choice-gender[name=choice-attributes]:checked').size() >= 0) {
+        gender = $('input[name=gender]:checked').val();
       }
+      if ($('input.choice-age[name=choice-attributes]:checked').size() >= 0) {
+        age = $('input[name=age]').val();
+      }
+      scorecard.updateTotalScore(gender, age);
+      return false;
+    });
 
-    };
+    // $('#actual_values_form').submit(function(){return false;});
 
-    FormStuff.init();
-
+    $('#sample1').click();
   });

@@ -125,7 +125,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="actual_values_form" class="form-group" method="post" action="#">
+                        <form id="actual_values_form" class="form-group modal-2" method="post" action="#">
                             <h4>Attributes to Include on Scorecard</h4>
                             <div>
                                 <div>
@@ -152,39 +152,24 @@
                                 <div class="reveal-if-active">
                                     <label class="question" for="actual-gender">What's the gender of the person in the photo?</label>
                                     <label class="custom-control custom-radio">
-                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender">
+                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender" value="Male">
                                         <span class="custom-control-indicator"></span>
                                         <span class="custom-control-description">Male</span>
                                     </label>
                                     <label class="custom-control custom-radio">
-                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender">
+                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender" value="Female">
                                         <span class="custom-control-indicator"></span>
                                         <span class="custom-control-description">Female</span>
                                     </label>
                                 </div>
                                 <div class="reveal-if-active">
                                     <label class="question" for="actual-age">What's the age of the person in the photo?</label>
-                                    <input type="number" id="actual-age" name="actual-age" class="require-if-active form-control" data-require-pair=".choice-age">
+                                    <input type="number" id="actual-age" name="age" class="require-if-active form-control" data-require-pair=".choice-age">
                                 </div>
                             </div>
-                            <!-- <div>
-                                    <input type="radio" name="choice-attributes" id="choice-attributes-gender">
-                                    <label for="choice-attributes-gender">Gender</label>
-                                    <div class="reveal-if-active">
-                                        <label for="actual-gender">What's the gender of the person in the photo?</label>
-                                        <input type="text" id="actual-gender" name="actual-gender" class="require-if-active" data-require-pair="#choice-attributes-gender">
-                                    </div>
-                                </div>
-                                <div>
-                                    <input type="radio" name="choice-attributes" id="choice-attributes-age">
-                                    <label for="choice-attributes-age">Age</label>
-                                    <div class="reveal-if-active">
-                                        <label for="actual-age">What's the gender of the person in the photo?</label>
-                                        <input type="text" id="actual-age" name="actual-age" class="require-if-active" data-require-pair="#choice-attributes-age">
-                                    </div>
-                                </div> -->
+                            <input type="submit" class="btn btn-primary modal-2" value="View Scorecard">
                         </form>
-                        <div id="scorecard" class="card card-outline-info" hidden>
+                        <div id="scorecard" class="card card-outline-info modal-3">
                             <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
                             <div class="card-img-overlay">
                                 <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
@@ -192,8 +177,8 @@
                                     <dd class="col-sm-3" id="actual_gender"></dd>
                                     <dt class="col-sm-5">Age: </dt>
                                     <dd class="col-sm-3" id="actual_age"></dd>
-                                    <dt class="col-sm-5">Ethnicity: </dt>
-                                    <dd class="col-sm-3" id="actual_ethnicity"></dd>
+                                    <!-- <dt class="col-sm-5">Ethnicity: </dt>
+                                    <dd class="col-sm-3" id="actual_ethnicity"></dd> -->
                                 </dl>
                             </div>
                             <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
@@ -250,8 +235,8 @@
                                 </table>
                             </div>
                         </div>
-                        <div>
-                            <table id="comparison_table" class="table" hidden>
+                        <div class="modal-1">
+                            <table id="comparison_table" class="table">
                                 <thead>
                                     <tr>
                                         <th>Results</th>
@@ -284,48 +269,12 @@
                                     <strong>Google omitted - </strong>API does not estimate age or gender
                                 </div> -->
                         </div>
-                        <div id="questions" hidden>
-                            <fieldset class="form-group row">
-                                <legend class="col-form-legend col-sm-8">Attributes to Analyze</legend>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked> Age and Gender
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"> Only Age
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"> Only Gender
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <div class="col-sm-10">
-                                <label>Actual Age:</label>
-                                <input type="number" min="0">
-                                <label>Actual Gender:</label>
-                                <!-- <div class="col-sm-10"> -->
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Female
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Male
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Share Scorecard</button>
-                    </div>
+                        <button type="button" class="btn btn-primary modal-1">Create Scorecard</button>
+                        <!-- <button type="submit" class="btn btn-primary modal-2">View Scorecard</button> -->
+                        <button type="button" class="btn btn-primary modal-3">Share Scorecard</button>
+                    </div> 
                 </div>
             </div>
         </div>

@@ -15,6 +15,10 @@ var ScoreCard = function() {
 	this.kairos_face_detected = undefined;
 	this.google_face_detected = undefined;
 
+	this.actual_gender = undefined;
+	this.actual_age = undefined;
+	this.actual_ethnicity = undefined;
+
 	// SET SCORECARD HEADER CONTENT //
 	this.setFaceImage = function(image) {
 		this.face_image = image;
@@ -52,7 +56,7 @@ var ScoreCard = function() {
 				$(selecter).html('No Face Detected').addClass('bg-danger');
 			}
 		}
-		$('#gender_score').html(total_correct + '/4');
+		$('#gender_score').html(total_correct + '/' + apis.length);
 		return total_correct;
 	};
 	this.updateAgeScores = function(true_age) {
@@ -62,6 +66,7 @@ var ScoreCard = function() {
 			var className = apis[i] + '_age';
 			var selecter = '#scorecard .' + className;
 			$(selecter).replaceWith('<td class="' + className + ' text-white"></td');
+			console.log(Math.abs(this[className] - true_age));
 			if (this[apis[i] + '_face_detected']) {
 				if (apis[i] == 'ibm' && this.ibm_age_range) {
 					if (true_age >= this.ibm_age_range[0] && true_age <= this.ibm_age_range[1])	{
@@ -81,7 +86,7 @@ var ScoreCard = function() {
 				$(selecter).html('No Face Detected').addClass('bg-danger');
 			}
 		}
-		$('#age_score').html(total_correct + '/4');
+		$('#age_score').html(total_correct + '/' + apis.length);
 		return total_correct;
 		
 	};
@@ -100,13 +105,21 @@ var ScoreCard = function() {
 					'<td class="' + className + ' bg-danger text-white"><i class="fa fa-2x fa-times"></i></td>');
 			}
 		}
-		$('#detected_score').html(total_correct + '/4');
+		$('#detected_score').html(total_correct + '/' + apis.length);
 		return total_correct;
 	};
 
 
 	this.updateTotalScore = function(true_gender, true_age) {
-		var total_correct = this.updateGenderScores(true_gender) + this.updateAgeScores(true_age) + this.updateFaceDetectedScores();
+		this.true_gender = true_gender;
+		this.true_age = true_age;
+		if (true_gender) {
+			$('#actual_gender').html(true_gender);
+		}
+		if (true_age) {
+			$('#actual_age').html(true_age);
+		}
+		var total_correct = this.updateGenderScores(true_gender[0]) + this.updateAgeScores(true_age) + this.updateFaceDetectedScores();
 		$('#total_score').html(total_correct + '/13');
 	};
 	this.setMicrosoftGender = function(gender) {
