@@ -485,17 +485,16 @@
 
     $('#actual_values_form').submit(function(){
       var gender, age;
-      if ($('input.choice-gender[name=choice-attributes]:checked').size() >= 0) {
+      if ($('input.choice-gender[name=choice-attributes]:checked').length > 0) {
+        console.log($('input.choice-gender[name=choice-attributes]:checked'));
         gender = $('input[name=gender]:checked').val();
       }
-      if ($('input.choice-age[name=choice-attributes]:checked').size() >= 0) {
+      if ($('input.choice-age[name=choice-attributes]:checked').length > 0) {
         age = $('input[name=age]').val();
       }
       scorecard.updateTotalScore(gender, age);
       return false;
     });
-
-    // $('#actual_values_form').submit(function(){return false;});
 
     $('#sample1').click();
   });

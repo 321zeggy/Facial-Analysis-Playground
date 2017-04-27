@@ -119,8 +119,24 @@ var ScoreCard = function() {
 		if (true_age) {
 			$('#actual_age').html(true_age);
 		}
-		var total_correct = this.updateGenderScores(true_gender[0]) + this.updateAgeScores(true_age) + this.updateFaceDetectedScores();
-		$('#total_score').html(total_correct + '/13');
+		var total_correct = 0;
+		var total_overall = 5;
+		if (true_gender) {
+			$('#scorecard .gender').show();
+			total_correct += this.updateGenderScores(true_gender[0]); 
+			total_overall += 4;
+		} else {
+			$('#scorecard .gender').hide();
+		}
+		if (true_age) { 
+			$('#scorecard .age').show();
+			total_correct += this.updateAgeScores(true_age);
+			total_overall += 4; 
+		} else {
+			$('#scorecard .age').hide();
+		}
+		total_correct += this.updateFaceDetectedScores();
+		$('#total_score').html(total_correct + '/' + total_overall);
 	};
 	this.setMicrosoftGender = function(gender) {
 		this.microsoft_gender = gender;

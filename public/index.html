@@ -173,10 +173,10 @@
                             <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
                             <div class="card-img-overlay">
                                 <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
-                                    <dt class="col-sm-5">Gender: </dt>
-                                    <dd class="col-sm-3" id="actual_gender"></dd>
-                                    <dt class="col-sm-5">Age: </dt>
-                                    <dd class="col-sm-3" id="actual_age"></dd>
+                                    <dt class="col-sm-5 gender">Gender: </dt>
+                                    <dd class="col-sm-3 gender" id="actual_gender"></dd>
+                                    <dt class="col-sm-5 age">Age: </dt>
+                                    <dd class="col-sm-3 age" id="actual_age"></dd>
                                     <!-- <dt class="col-sm-5">Ethnicity: </dt>
                                     <dd class="col-sm-3" id="actual_ethnicity"></dd> -->
                                 </dl>
@@ -187,48 +187,48 @@
                                     <thead>
                                         <tr>
                                             <td></td>
-                                            <th scope="col">Gender</th>
-                                            <th scope="col">Age</th>
+                                            <th scope="col" class="gender">Gender</th>
+                                            <th scope="col" class="age">Age</th>
                                             <th scope="col">Detected</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th scope="row">Score</th>
-                                            <th scope="col" id="gender_score"></th>
-                                            <th scope="col" id="age_score"></th>
+                                            <th scope="col" id="gender_score" class="gender"></th>
+                                            <th scope="col" id="age_score" class="age"></th>
                                             <th scope="col" id="detected_score"></th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/2abdd1401c124e4aa5b660b22da3e964.png"></th>
-                                            <td class="microsoft_gender"></td>
-                                            <td class="microsoft_age"></td>
+                                            <td class="microsoft_gender gender"></td>
+                                            <td class="microsoft_age age"></td>
                                             <td class="microsoft_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/ibm_logo.png"></th>
-                                            <td class="ibm_gender"></td>
-                                            <td class="ibm_age"></td>
+                                            <td class="ibm_gender gender"></td>
+                                            <td class="ibm_age age"></td>
                                             <td class="ibm_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/faceplusplus_logo.png"></th>
-                                            <td class="faceplusplus_gender"></td>
-                                            <td class="faceplusplus_age"></td>
+                                            <td class="faceplusplus_gender gender"></td>
+                                            <td class="faceplusplus_age age"></td>
                                             <td class="faceplusplus_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/kairos_logo.png"></th>
-                                            <td class="kairos_gender"></td>
-                                            <td class="kairos_age"></td>
+                                            <td class="kairos_gender gender"></td>
+                                            <td class="kairos_age age"></td>
                                             <td class="kairos_face_detected"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><img class="img-fluid" src="images/google_logo.png"></th>
-                                            <td class="google_gender bg-faded">NA</td>
-                                            <td class="google_age bg-faded">NA</td>
+                                            <td class="google_gender gender bg-faded">NA</td>
+                                            <td class="google_age age bg-faded">NA</td>
                                             <td class="google_face_detected bg-success text-white"></td>
                                         </tr>
                                     </tbody>
