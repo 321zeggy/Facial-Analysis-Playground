@@ -272,6 +272,7 @@
       $('.modal-1').show();
       $('.modal-2').hide();
       $('.modal-3').hide();
+      document.getElementById('actual_values_form').reset();
 
 
       responsesCount = 0;
@@ -483,7 +484,7 @@
       $('.modal-3').show();
     });
 
-    $('#actual_values_form').submit(function(){
+    $('#actual_values_form').submit(function() {
       var gender, age;
       if ($('input.choice-gender[name=choice-attributes]:checked').length > 0) {
         console.log($('input.choice-gender[name=choice-attributes]:checked'));
@@ -495,6 +496,15 @@
       scorecard.updateTotalScore(gender, age);
       return false;
     });
+
+    $('#results-button').click(function() {
+      $('.modal-1').show();
+      $('.modal-2').hide();
+      $('.modal-3').hide();
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
+
 
     $('#sample1').click();
   });

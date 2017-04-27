@@ -150,7 +150,11 @@
                                     </label>
                                 </div>
                                 <div class="reveal-if-active">
-                                    <label class="question" for="actual-gender">What's the gender of the person in the photo?</label>
+                                    <label class="question" for="actual-gender">What's the gender of the person in the photo?
+                                        <button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" title='Only binary options available, for now. Sorry!'>
+                                            <i class="fa fa-question-circle"></i>
+                                        </button>
+                                    </label>
                                     <label class="custom-control custom-radio">
                                         <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender" value="Male">
                                         <span class="custom-control-indicator"></span>
@@ -163,8 +167,8 @@
                                     </label>
                                 </div>
                                 <div class="reveal-if-active">
-                                    <label class="question" for="actual-age">What's the age of the person in the photo?</label>
-                                    <input type="number" id="actual-age" name="age" class="require-if-active form-control" data-require-pair=".choice-age">
+                                    <label class="question" for="actual-age">How old is the person in the photo?</label>
+                                    <input type="number" id="actual-age" name="age" class="require-if-active form-control" data-require-pair=".choice-age" min="0" max="200">
                                 </div>
                             </div>
                             <input type="submit" class="btn btn-primary modal-2" value="View Scorecard">
@@ -188,7 +192,7 @@
                                         <tr>
                                             <td></td>
                                             <th scope="col" class="gender">Gender</th>
-                                            <th scope="col" class="age">Age</th>
+                                            <th scope="col" class="age">Age*</th>
                                             <th scope="col">Detected</th>
                                         </tr>
                                     </thead>
@@ -233,6 +237,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                <div class="alert alert-info" role="alert"><strong>*</strong>
+                                    correct if within &plusmn;5 years of actual age
+                                </div>
                             </div>
                         </div>
                         <div class="modal-1">
@@ -265,16 +272,16 @@
                                     <td class="kairos_age">?</td>
                                 </tr>
                             </table>
-                            <!-- <div class="alert alert-info" role="alert">
-                                    <strong>Google omitted - </strong>API does not estimate age or gender
-                                </div> -->
+                            <div class="alert alert-info" role="alert">
+                                <strong>Google omitted - </strong>API does not estimate age or gender
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary modal-1">Create Scorecard</button>
                         <!-- <button type="submit" class="btn btn-primary modal-2">View Scorecard</button> -->
                         <button type="button" class="btn btn-primary modal-3">Share Scorecard</button>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
