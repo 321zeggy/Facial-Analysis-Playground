@@ -284,6 +284,8 @@
       $('.toggle.active').click();
       $("#results-button").prop('disabled', true);
 
+      $('#camera').hide();
+
       $("#photoCanvas").hide();
       $("#loading").show();
 
@@ -484,10 +486,12 @@
       $('.modal-3').show();
     });
 
+    $('#loading').hide();
+    $('#photoCanvas').hide();
+
     $('#actual_values_form').submit(function() {
       var gender, age;
       if ($('input.choice-gender[name=choice-attributes]:checked').length > 0) {
-        console.log($('input.choice-gender[name=choice-attributes]:checked'));
         gender = $('input[name=gender]:checked').val();
       }
       if ($('input.choice-age[name=choice-attributes]:checked').length > 0) {
@@ -505,6 +509,14 @@
 
     $('[data-toggle="tooltip"]').tooltip();
 
+    var camera = new JpegCamera("#camera");
+    camera.show_stream();
 
-    $('#sample1').click();
+    $('#camera-button').click(function() {
+      camera.show_stream();
+      $('#loading').hide();
+      $('#photoCanvas').hide();
+      $('#camera').show();
+    });
+
   });

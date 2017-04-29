@@ -66,12 +66,15 @@ var ScoreCard = function() {
 			var className = apis[i] + '_age';
 			var selecter = '#scorecard .' + className;
 			$(selecter).replaceWith('<td class="' + className + ' text-white"></td');
-			console.log(Math.abs(this[className] - true_age));
 			if (this[apis[i] + '_face_detected']) {
 				if (apis[i] == 'ibm' && this.ibm_age_range) {
 					if (true_age >= this.ibm_age_range[0] && true_age <= this.ibm_age_range[1])	{
 						total_correct += 1;
 						$(selecter).html(this[className]).addClass('bg-success');
+						$(selecter).append('<sup><button type="button" class="btn btn-link" style="padding:0;" data-toggle="tooltip" data-placement="right"' +
+							'title="This value is the average of the range ' + this.ibm_age_range[0] + '-' + this.ibm_age_range[1] + ' estimated by IBM">' + 
+							'<i class="fa fa-question-circle"></i></button></sup>');
+						$('[data-toggle="tooltip"]').tooltip();
 					} else {
 						$(selecter).html(this[className]).addClass('bg-danger');
 					}

@@ -12,6 +12,7 @@
     <!-- bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script src="scripts/jquery.urlshortener.min.js" type="text/javascript"></script>
+    <script src="/jpeg_camera/jpeg_camera_with_dependencies.min.js" type="text/javascript"></script>
     <script src="https://use.fontawesome.com/f748178fc1.js"></script>
     <script src="scripts/config.js"></script>
     <script src="scripts/scorecard.js"></script>
@@ -29,13 +30,15 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="row">
+                    <div id="camera" style="width: 350px; height: 350px;"></div>
                     <img src="images/loading.svg" id="loading">
                     <canvas id="photoCanvas" width="350" height="350"></canvas>
-                    <button id="results-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="width: 350px" disabled>
+                    <button id="results-button" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="width: 350px" disabled>
                         Compare Results
                     </button>
                 </div>
                 <div class="row">
+                    <button id='camera-button' type="button" class="btn btn-primary btn-block btn-lg mt-3">Take Webcam Photo</button>
                     <form class="form file-input-form">
                         <div>
                             <label></label>
@@ -62,7 +65,7 @@
                     <a id="faceplusplus-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFacePlusPlus" aria-expanded="false">Face++</a>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div id="accordion" aria-multiselectable="true">
                     <div class="card response-card kairos-card">
                         <div class="card-header" role="tab" id="headingKairos">
@@ -119,7 +122,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Compare Results</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Scorecard</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -175,7 +178,7 @@
                         </form>
                         <div id="scorecard" class="card card-outline-info modal-3">
                             <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
-                            <div class="card-img-overlay">
+                            <div class="card-img-overlay" style="height: 180px;">
                                 <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
                                     <dt class="col-sm-5 gender">Gender: </dt>
                                     <dd class="col-sm-3 gender" id="actual_gender"></dd>
