@@ -534,6 +534,15 @@
       $('#camera').show();
     });
 
+    $('#camera').click(function() {
+      var snapshot = camera.capture();
+      snapshot.show();
+      snapshot.get_blob(function(blob) {
+        blob.name = 'snapshot.png';
+        handleFileSelect(blob);
+      });
+    });
+
     $('#sample1').click();
 
   });
