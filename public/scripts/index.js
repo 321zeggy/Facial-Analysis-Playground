@@ -106,7 +106,7 @@
       var microsoftJSON = JSON.parse(response.responseText);
       if (!microsoftJSON[0]) {
         $("#microsoft_response").html('No faces detected');
-
+        console.log('no images in Microsoft face response');
         $("#comparison_table .microsoft_gender").html('No faces detected');
         $("#comparison_table .microsoft_age").html('No faces detected');
         scorecard.setMicrosoftFaceDetected(false);
@@ -129,13 +129,14 @@
         };
         $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
       }
-      $("#microsoft-toggle").removeClass('disabled');
+      $('a[href="#microsoft_response"]').removeClass('disabled');
       incrementResponsesCount();
     }
 
     function ibmDetectCallback(response) {
       var ibmJSON = JSON.parse(response.responseText);
       if (!ibmJSON.images[0].faces[0]) {
+        console.log('no images in IBM face response');
         $("#ibm_response").html('No faces detected');
 
         $("#comparison_table .ibm_gender").html('No faces detected');
@@ -173,7 +174,8 @@
         };
         $("#ibm_response").html(JSON.stringify(attributes, null, 4));
       }
-      $("#ibm-toggle").removeClass('disabled');
+      $('a[href="#ibm_response"]').removeClass('disabled').click();
+      drawBoundingBox(ibmBoundingBox, 'red');
       incrementResponsesCount();
     }
 
@@ -181,7 +183,7 @@
     function kairosDetectCallback(response) {
       var kairosJSON = JSON.parse(response.responseText);
       if ('Errors' in kairosJSON) {
-        console.log('no images in face response');
+        console.log('no images in Kairos face response');
         $("#kairos_response").html('No faces detected');
 
         $("#comparison_table .kairos_gender").html('No faces detected');
@@ -206,14 +208,14 @@
         };
         $("#kairos_response").html(JSON.stringify(attributes, null, 4));
       }
-      $("#kairos-toggle").removeClass('disabled');
-      $('#kairos-toggle').click();
+      $('a[href="#kairos_response"]').removeClass('disabled');
       incrementResponsesCount();
     }
 
     function googleDetectCallback(response) {
       var googleJSON = JSON.parse(response.responseText);
       if (!('faceAnnotations' in googleJSON.responses[0])) {
+        console.log('no images in Google face response');
         $("#google_response").html('No faces detected');
         scorecard.setGoogleFaceDetected(false);
       } else {
@@ -232,14 +234,14 @@
         $("#google_response").html(JSON.stringify(attributes, null, 4));
         scorecard.setGoogleFaceDetected(true);
       }
-      $("#google-toggle").removeClass('disabled');
+      $('a[href="#google_response"]').removeClass('disabled');
       incrementResponsesCount();
     }
 
     function facePlusPlusDetectCallback(response) {
       var facePlusPlusJSON = response;
       if (!facePlusPlusJSON.faces[0]) {
-        console.log('no images in face response');
+        console.log('no images in Face++ face response');
         $("#faceplusplus_response").html('No faces detected');
         $("#comparison_table .faceplusplus_gender").html('No faces detected');
         $(".faceplusplus_age").html('No faces detected');
@@ -263,7 +265,7 @@
         };
         $("#faceplusplus_response").html(JSON.stringify(attributes, null, 4));
       }
-      $("#faceplusplus-toggle").removeClass('disabled');
+      $('a[href="#faceplusplus_response"]').removeClass('disabled');
       incrementResponsesCount();
     }
 
@@ -280,8 +282,7 @@
       global_image_data = null;
       global_ratio = null;
 
-      $('.toggle').addClass('disabled');
-      $('.toggle.active').click();
+      $('.nav-link').addClass('disabled');
       $("#results-button").prop('disabled', true);
 
       $('#camera').hide();
@@ -319,7 +320,7 @@
           context.clearRect(0, 0, canvas.width, canvas.height);
           var imageObj = new Image();
           imageObj.onload = function() {
-            var ratio = getConversionRatio(imageObj, 350, 350);
+            var ratio = getConversionRatio(imageObj, 400, 400);
             if (!global_ratio) {
               global_ratio = ratio;
               imageObj.src = imageToDataUri(imageObj, imageObj.width, imageObj.height);
@@ -370,7 +371,7 @@
       var imageObj = new Image();
 
       imageObj.onload = function() {
-        var ratio = getConversionRatio(imageObj, 350, 350);
+        var ratio = getConversionRatio(imageObj, 400, 400);
         context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
         global_image_data = imageObj.src;
         global_ratio = ratio;
@@ -440,38 +441,23 @@
       return false;
     });
 
-    $('.collapse').on('show.bs.collapse', function() {
-      $(this).parent().show();
-    });
-    $('.collapse').on('hide.bs.collapse', function() {
-      $(this).parent().hide();
-    });
 
-    $('#collapseKairos').on('show.bs.collapse', function() {
-      drawBoundingBox(kairosBoundingBox, 'blue');
-    });
-    $('#collapseMicrosoft').on('show.bs.collapse', function() {
-      drawBoundingBox(microsoftBoundingBox, 'green');
-    });
-    $('#collapseIBM').on('show.bs.collapse', function() {
+    $('a[href="#ibm_response"]').on('show.bs.tab', function() {
       drawBoundingBox(ibmBoundingBox, 'red');
     });
-    $('#collapseGoogle').on('show.bs.collapse', function() {
-      drawGoogleBoundingBox(googleBoundingBox, 'yellow');
+    $('a[href="#microsoft_response"]').on('show.bs.tab', function() {
+      drawBoundingBox(microsoftBoundingBox, 'green');
     });
-    $('#collapseFacePlusPlus').on('show.bs.collapse', function() {
+    $('a[href="#faceplusplus_response"]').on('show.bs.tab', function() {
       drawBoundingBox(facePlusPlusBoundingBox, 'purple');
     });
-
-    $('.toggle').click(function() {
-      if ($(this).hasClass('active')) {
-        drawBoundingBox();
-        $(this).removeClass('active');
-      } else {
-        $('.active').removeClass('active');
-        $(this).addClass('active');
-      }
+    $('a[href="#google_response"]').on('show.bs.tab', function() {
+      drawGoogleBoundingBox(googleBoundingBox, 'yellow');
     });
+    $('a[href="#kairos_response"]').on('show.bs.tab', function() {
+      drawBoundingBox(kairosBoundingBox, 'blue');
+    });
+    
 
     $('.modal-2').hide();
     $('.modal-3').hide();
@@ -510,7 +496,6 @@
     $('[data-toggle="tooltip"]').tooltip();
 
     var camera = new JpegCamera("#camera");
-    camera.show_stream();
 
     $('#camera-button').click(function() {
       camera.show_stream();
@@ -518,5 +503,7 @@
       $('#photoCanvas').hide();
       $('#camera').show();
     });
+
+    $('#sample1').click();
 
   });

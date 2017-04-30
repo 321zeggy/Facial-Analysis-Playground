@@ -28,17 +28,17 @@
     <div class="container">
         <h1 class="display-4 mb-4">Facial Analysis Playground</h1>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="row">
-                    <div id="camera" style="width: 350px; height: 350px;"></div>
+                    <div id="camera" style="width: 400px; height: 400px;"></div>
                     <img src="images/loading.svg" id="loading">
-                    <canvas id="photoCanvas" width="350" height="350"></canvas>
-                    <button id="results-button" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="width: 350px" disabled>
+                    <canvas id="photoCanvas" width="400" height="400"></canvas>
+                </div>
+                <button id='camera-button' type="button" class="btn btn-primary btn-block btn-lg mb-3">Take Webcam Photo</button>
+                <div class="row">
+                    <button id="results-button" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="width: 400px" disabled>
                         Compare Results
                     </button>
-                </div>
-                <div class="row">
-                    <button id='camera-button' type="button" class="btn btn-primary btn-block btn-lg mt-3">Take Webcam Photo</button>
                     <form class="form file-input-form">
                         <div>
                             <label></label>
@@ -56,57 +56,32 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-2 offset-md-1">
-                <div class="list-group">
-                    <a id="kairos-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseKairos" aria-expanded="false">Kairos</a>
-                    <a id="microsoft-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseMicrosoft" aria-expanded="false">Microsoft</a>
-                    <a id="ibm-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseIBM" aria-expanded="false">IBM</a>
-                    <a id="google-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseGoogle" aria-expanded="false">Google</a>
-                    <a id="faceplusplus-toggle" class="list-group-item list-group-item-action toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFacePlusPlus" aria-expanded="false">Face++</a>
-                </div>
-            </div>
             <div class="col-md-5">
-                <div id="accordion" aria-multiselectable="true">
-                    <div class="card response-card kairos-card">
-                        <div class="card-header" role="tab" id="headingKairos">
-                            <h5 class="mb-0">Kairos Results</h5>
-                        </div>
-                        <div id="collapseKairos" class="collapse" role="tabpanel" aria-labelledby="headingKairos">
-                            <div class="card-block responses" id="kairos_response"><i>(Kairos response will appear here)</i></div>
-                        </div>
-                    </div>
-                    <div class="card response-card microsoft-card">
-                        <div class="card-header" role="tab" id="headingMicrosoft">
-                            <h5 class="mb-0">Microsoft Results</h5>
-                        </div>
-                        <div id="collapseMicrosoft" class="collapse" role="tabpanel" aria-labelledby="headingMicrosoft">
-                            <div class="card-block responses" id="microsoft_response"><i>(Microsoft response will appear here)</i></div>
-                        </div>
-                    </div>
-                    <div class="card response-card ibm-card">
-                        <div class="card-header" role="tab" id="headingIBM">
-                            <h5 class="mb-0">IBM Results</h5>
-                        </div>
-                        <div id="collapseIBM" class="collapse" role="tabpanel" aria-labelledby="headingIBM">
-                            <div class="card-block responses" id="ibm_response"><i>(IBM response will appear here)</i></div>
-                        </div>
-                    </div>
-                    <div class="card response-card google-card">
-                        <div class="card-header" role="tab" id="headingGoogle">
-                            <h5 class="mb-0">Google Results</h5>
-                        </div>
-                        <div id="collapseGoogle" class="collapse" role="tabpanel" aria-labelledby="headingGoogle">
-                            <div class="card-block responses" id="google_response"><i>(Google response will appear here)</i></div>
-                        </div>
-                    </div>
-                    <div class="card response-card faceplusplus-card">
-                        <div class="card-header" role="tab" id="headingFacePlusPlus">
-                            <h5 class="mb-0">Face++ Results</h5>
-                        </div>
-                        <div id="collapseFacePlusPlus" class="collapse" role="tabpanel" aria-labelledby="headingFacePlusPlus">
-                            <div class="card-block responses" id="faceplusplus_response"><i>(Face++ response will appear here)</i></div>
-                        </div>
-                    </div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#ibm_response" role="tab">IBM</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#microsoft_response" role="tab">Microsoft</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#faceplusplus_response" role="tab">Face++</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#google_response" role="tab">Google</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#kairos_response" role="tab">Kairos</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content mt-2">
+                    <div class="tab-pane fade show active responses" id="ibm_response" role="tabpanel"><i>(IBM response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="microsoft_response" role="tabpanel"><i>(Microsoft response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="faceplusplus_response" role="tabpanel"><i>(Face++ response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="google_response" role="tabpanel"><i>(IBM response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="kairos_response" role="tabpanel"><i>(Kairos response will appear here)</i></div>
                 </div>
             </div>
             <div class="row mb-3">
@@ -240,8 +215,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="alert alert-info" role="alert"><strong>*</strong>
-                                    correct if within &plusmn;5 years of actual age
+                                <div class="alert alert-info" role="alert"><strong>*</strong> correct if within &plusmn;5 years of actual age
                                 </div>
                             </div>
                         </div>
