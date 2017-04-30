@@ -309,9 +309,9 @@
     }
 
 
-    function handleFileSelect(evt) {
+    function handleFileSelect(file) {
       reset();
-      var file = evt.target.files[0];
+      console.log(file);
       if (file.type.match('image.*')) { // Only process image files
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -419,7 +419,8 @@
 
     $('#file').change(function(evt) {
       if ($("#file").val !== '') {
-        handleFileSelect(evt);
+        var file = evt.target.files[0];
+        handleFileSelect(file);
       }
     });
     $('#submit_photo_url').click(function(evt) {
@@ -434,10 +435,39 @@
       return false;
     });
 
+    function dataURItoBlob(dataURI) {
+      // convert base64/URLEncoded data component to raw binary data held in a string
+      var byteString;
+      if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+      else
+        byteString = unescape(dataURI.split(',')[1]);
+
+      // separate out the mime component
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+      // write the bytes of the string to a typed array
+      var ia = new Uint8Array(byteString.length);
+      for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      return new Blob([ia], {
+        type: mimeString
+      });
+    }
+
     $('.sample-img').click(function(evt) {
-      var url = $(this).data("url");
-      // var url = $(this).attr('src');
-      handleURLSelect(url);
+      // var url = $(this).data("url");
+      var url = $(this).attr('src');
+      var imageObj = new Image();
+      imageObj.onload = function() {
+        var blob = dataURItoBlob(imageToDataUri(imageObj, imageObj.width, imageObj.height));
+        blob.name = 'blob.png';
+        handleFileSelect(blob);
+      };
+      imageObj.src = url;
+
       return false;
     });
 
@@ -457,7 +487,7 @@
     $('a[href="#kairos_response"]').on('show.bs.tab', function() {
       drawBoundingBox(kairosBoundingBox, 'blue');
     });
-    
+
 
     $('.modal-2').hide();
     $('.modal-3').hide();
