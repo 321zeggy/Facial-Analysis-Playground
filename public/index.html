@@ -29,14 +29,11 @@
         <h1 class="display-4 mb-4">Facial Analysis Playground</h1>
         <div class="row">
             <div class="col-md-5">
-                <!-- <div class="row"> -->
+                <div class="row">
                     <div id="camera" style="width: 400px; height: 400px;"></div>
                     <img src="images/loading.svg" id="loading">
                     <canvas id="photoCanvas" width="400" height="400"></canvas>
-                <!-- </div> -->
-                <!-- <div class="row">
-                    
-                </div> -->
+                </div>
                 <div class="row">
                     <button id="results-button" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="width: 400px" disabled>
                         Compare Results
@@ -95,176 +92,177 @@
                 <div class="col-md-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5"></div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Scorecard</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="actual_values_form" class="form-group modal-2" method="post" action="#">
-                            <h4>Attributes to Include on Scorecard</h4>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Scorecard</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="actual_values_form" class="form-group modal-2" method="post" action="#">
+                        <h4>Attributes to Include on Scorecard</h4>
+                        <div>
                             <div>
-                                <div>
-                                    <label for="choice-attributes-both" class="custom-control custom-radio">
-                                        <input type="radio" name="choice-attributes" id="choice-attributes-both" class="choice-gender choice-age custom-control-input" required>
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Gender and Age</span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <label for="choice-attributes-gender" class="custom-control custom-radio">
-                                        <input type="radio" name="choice-attributes" id="choice-attributes-gender" class="choice-gender custom-control-input" required>
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Gender</span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <label for="choice-attributes-age" class="custom-control custom-radio">
-                                        <input type="radio" name="choice-attributes" id="choice-attributes-age" class="choice-age custom-control-input" required>
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Age</span>
-                                    </label>
-                                </div>
-                                <div class="reveal-if-active">
-                                    <label class="question" for="actual-gender">What's the gender of the person in the photo?
-                                        <button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" title='Only binary options available, for now. Sorry!'>
-                                            <i class="fa fa-question-circle"></i>
-                                        </button>
-                                    </label>
-                                    <label class="custom-control custom-radio">
-                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender" value="Male">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Male</span>
-                                    </label>
-                                    <label class="custom-control custom-radio">
-                                        <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender" value="Female">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Female</span>
-                                    </label>
-                                </div>
-                                <div class="reveal-if-active">
-                                    <label class="question" for="actual-age">How old is the person in the photo?</label>
-                                    <input type="number" id="actual-age" name="age" class="require-if-active form-control" data-require-pair=".choice-age" min="0" max="200">
-                                </div>
+                                <label for="choice-attributes-both" class="custom-control custom-radio">
+                                    <input type="radio" name="choice-attributes" id="choice-attributes-both" class="choice-gender choice-age custom-control-input" required>
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Gender and Age</span>
+                                </label>
                             </div>
-                            <input type="submit" class="btn btn-primary modal-2" value="View Scorecard">
-                        </form>
-                        <div id="scorecard" class="card card-outline-info modal-3">
-                            <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
-                            <div class="card-img-overlay" style="height: 180px;">
-                                <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
-                                    <dt class="col-sm-5 gender">Gender: </dt>
-                                    <dd class="col-sm-3 gender" id="actual_gender"></dd>
-                                    <dt class="col-sm-5 age">Age: </dt>
-                                    <dd class="col-sm-3 age" id="actual_age"></dd>
-                                    <!-- <dt class="col-sm-5">Ethnicity: </dt>
-                                    <dd class="col-sm-3" id="actual_ethnicity"></dd> -->
-                                </dl>
+                            <div>
+                                <label for="choice-attributes-gender" class="custom-control custom-radio">
+                                    <input type="radio" name="choice-attributes" id="choice-attributes-gender" class="choice-gender custom-control-input" required>
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Gender</span>
+                                </label>
                             </div>
-                            <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
-                            <div class="card-block">
-                                <table id="scorecard-table" class="table table-bordered table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                            <th scope="col" class="gender">Gender</th>
-                                            <th scope="col" class="age">Age*</th>
-                                            <th scope="col">Detected</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th scope="row">Score</th>
-                                            <th scope="col" id="gender_score" class="gender"></th>
-                                            <th scope="col" id="age_score" class="age"></th>
-                                            <th scope="col" id="detected_score"></th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row"><img class="img-fluid" src="images/2abdd1401c124e4aa5b660b22da3e964.png"></th>
-                                            <td class="microsoft_gender gender"></td>
-                                            <td class="microsoft_age age"></td>
-                                            <td class="microsoft_face_detected"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><img class="img-fluid" src="images/ibm_logo.png"></th>
-                                            <td class="ibm_gender gender"></td>
-                                            <td class="ibm_age age"></td>
-                                            <td class="ibm_face_detected"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><img class="img-fluid" src="images/faceplusplus_logo.png"></th>
-                                            <td class="faceplusplus_gender gender"></td>
-                                            <td class="faceplusplus_age age"></td>
-                                            <td class="faceplusplus_face_detected"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><img class="img-fluid" src="images/kairos_logo.png"></th>
-                                            <td class="kairos_gender gender"></td>
-                                            <td class="kairos_age age"></td>
-                                            <td class="kairos_face_detected"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><img class="img-fluid" src="images/google_logo.png"></th>
-                                            <td class="google_gender gender bg-faded">NA</td>
-                                            <td class="google_age age bg-faded">NA</td>
-                                            <td class="google_face_detected bg-success text-white"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="alert alert-info" role="alert"><strong>*</strong> correct if within &plusmn;5 years of actual age
-                                </div>
+                            <div>
+                                <label for="choice-attributes-age" class="custom-control custom-radio">
+                                    <input type="radio" name="choice-attributes" id="choice-attributes-age" class="choice-age custom-control-input" required>
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Age</span>
+                                </label>
+                            </div>
+                            <div class="reveal-if-active">
+                                <label class="question" for="actual-gender">What's the gender of the person in the photo?
+                                    <button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" title='Only binary options available, for now. Sorry!'>
+                                        <i class="fa fa-question-circle"></i>
+                                    </button>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender" value="Male">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Male</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input name="gender" type="radio" class="custom-control-input require-if-active" data-require-pair=".choice-gender" value="Female">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Female</span>
+                                </label>
+                            </div>
+                            <div class="reveal-if-active">
+                                <label class="question" for="actual-age">How old is the person in the photo?</label>
+                                <input type="number" id="actual-age" name="age" class="require-if-active form-control" data-require-pair=".choice-age" min="0" max="200">
                             </div>
                         </div>
-                        <div class="modal-1">
-                            <table id="comparison_table" class="table">
+                        <input type="submit" class="btn btn-primary modal-2" value="View Scorecard">
+                    </form>
+                    <div id="scorecard" class="card card-outline-info modal-3">
+                        <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
+                        <div class="card-img-overlay" style="height: 180px;">
+                            <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
+                                <dt class="col-sm-5 gender">Gender: </dt>
+                                <dd class="col-sm-3 gender" id="actual_gender"></dd>
+                                <dt class="col-sm-5 age">Age: </dt>
+                                <dd class="col-sm-3 age" id="actual_age"></dd>
+                                <!-- <dt class="col-sm-5">Ethnicity: </dt>
+                                    <dd class="col-sm-3" id="actual_ethnicity"></dd> -->
+                            </dl>
+                        </div>
+                        <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
+                        <div class="card-block">
+                            <table id="scorecard-table" class="table table-bordered table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Results</th>
-                                        <th>Gender</th>
-                                        <th>Age</th>
+                                        <td></td>
+                                        <th scope="col" class="gender">Gender</th>
+                                        <th scope="col" class="age">Age*</th>
+                                        <th scope="col">Detected</th>
                                     </tr>
                                 </thead>
-                                <tr>
-                                    <th scope="row">Microsoft</th>
-                                    <td class="microsoft_gender">?</td>
-                                    <td class="microsoft_age">?</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">IBM</th>
-                                    <td class="ibm_gender">?</td>
-                                    <td class="ibm_age">?</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Face++</th>
-                                    <td class="faceplusplus_gender">?</td>
-                                    <td class="faceplusplus_age">?</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Kairos</th>
-                                    <td class="kairos_gender">?</td>
-                                    <td class="kairos_age">?</td>
-                                </tr>
+                                <tfoot>
+                                    <tr>
+                                        <th scope="row">Score</th>
+                                        <th scope="col" id="gender_score" class="gender"></th>
+                                        <th scope="col" id="age_score" class="age"></th>
+                                        <th scope="col" id="detected_score"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><img class="img-fluid" src="images/2abdd1401c124e4aa5b660b22da3e964.png"></th>
+                                        <td class="microsoft_gender gender"></td>
+                                        <td class="microsoft_age age"></td>
+                                        <td class="microsoft_face_detected"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><img class="img-fluid" src="images/ibm_logo.png"></th>
+                                        <td class="ibm_gender gender"></td>
+                                        <td class="ibm_age age"></td>
+                                        <td class="ibm_face_detected"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><img class="img-fluid" src="images/faceplusplus_logo.png"></th>
+                                        <td class="faceplusplus_gender gender"></td>
+                                        <td class="faceplusplus_age age"></td>
+                                        <td class="faceplusplus_face_detected"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><img class="img-fluid" src="images/kairos_logo.png"></th>
+                                        <td class="kairos_gender gender"></td>
+                                        <td class="kairos_age age"></td>
+                                        <td class="kairos_face_detected"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><img class="img-fluid" src="images/google_logo.png"></th>
+                                        <td class="google_gender gender bg-faded">NA</td>
+                                        <td class="google_age age bg-faded">NA</td>
+                                        <td class="google_face_detected bg-success text-white"></td>
+                                    </tr>
+                                </tbody>
                             </table>
-                            <div class="alert alert-info" role="alert">
-                                <strong>Google omitted - </strong>API does not estimate age or gender
+                            <div class="alert alert-info" role="alert"><strong>*</strong> correct if within &plusmn;5 years of actual age
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary modal-1">Create Scorecard</button>
-                        <!-- <button type="submit" class="btn btn-primary modal-2">View Scorecard</button> -->
-                        <button type="button" class="btn btn-primary modal-3">Share Scorecard</button>
+                    <div class="modal-1">
+                        <table id="comparison_table" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Results</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">Microsoft</th>
+                                <td class="microsoft_gender">?</td>
+                                <td class="microsoft_age">?</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IBM</th>
+                                <td class="ibm_gender">?</td>
+                                <td class="ibm_age">?</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Face++</th>
+                                <td class="faceplusplus_gender">?</td>
+                                <td class="faceplusplus_age">?</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Kairos</th>
+                                <td class="kairos_gender">?</td>
+                                <td class="kairos_age">?</td>
+                            </tr>
+                        </table>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Google omitted - </strong>API does not estimate age or gender
+                        </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary modal-1">Create Scorecard</button>
+                    <!-- <button type="submit" class="btn btn-primary modal-2">View Scorecard</button> -->
+                    <button type="button" class="btn btn-primary modal-3">Share Scorecard</button>
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

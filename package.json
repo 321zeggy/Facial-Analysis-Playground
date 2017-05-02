@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/321zeggy/Facial-Analysis-Playground#readme",
   "dependencies": {
-    "express": "4.14.1",
-    "httpdispatcher": "2.0.1"
+    "express": "4.14.1"
   }
 }
