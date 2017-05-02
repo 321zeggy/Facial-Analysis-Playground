@@ -497,17 +497,22 @@
       $('.modal-2').show();
     });
 
-    // $('input.modal-2').click(function() {
-    //   $('.modal-2').hide();
-    //   $('.modal-3').show();
-    // });
-
     $('#loading').hide();
     $('#photoCanvas').hide();
 
-    $('input.modal-2').click(function() {
+    $('input.modal-2.btn-primary').click(function() {
       $('#actual_values_form').submit();
     });
+
+    $('button.modal-2.btn-secondary').click(function() {
+      $('.modal-2').hide();
+      $('.modal-1').show();
+    });
+
+    $('button.modal-3.btn-secondary').click(function() {
+      $('.modal-3').hide();
+      $('.modal-2').show();
+    });    
 
     $('#actual_values_form').submit(function() {
       var gender, age;
