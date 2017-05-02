@@ -497,23 +497,38 @@
       $('.modal-2').show();
     });
 
-    $('input.modal-2').click(function() {
-      $('.modal-2').hide();
-      $('.modal-3').show();
-    });
+    // $('input.modal-2').click(function() {
+    //   $('.modal-2').hide();
+    //   $('.modal-3').show();
+    // });
 
     $('#loading').hide();
     $('#photoCanvas').hide();
 
+    $('input.modal-2').click(function() {
+      $('#actual_values_form').submit();
+    });
+
     $('#actual_values_form').submit(function() {
       var gender, age;
-      if ($('input.choice-gender[name=choice-attributes]:checked').length > 0) {
-        gender = $('input[name=gender]:checked').val();
+      if ($('.choice-gender[name="choice-attributes"]:checked').length > 0) {
+        if ($('input[name="gender"]:checked').length == 1) {
+          gender = $('input[name="gender"]:checked').val();
+        } else {
+          return false;
+        }
       }
-      if ($('input.choice-age[name=choice-attributes]:checked').length > 0) {
-        age = $('input[name=age]').val();
+      if ($('.choice-age[name="choice-attributes"]:checked').length > 0) {
+        var $age = $('input[name="age"]');
+        if ($.isNumeric($age.val()) && Number($age.attr('min')) <= $age.val() && Number($age.attr('max')) >= $age.val()) {
+          age = $age.val();
+        } else {
+          return false;
+        }
       }
       scorecard.updateTotalScore(gender, age);
+      $('.modal-2').hide();
+      $('.modal-3').show();
       return false;
     });
 
