@@ -71,13 +71,13 @@ var ScoreCard = function() {
 					if (true_age >= this.ibm_age_range[0] && true_age <= this.ibm_age_range[1])	{
 						total_correct += 1;
 						$(selecter).html(this[className]).addClass('bg-success');
-						$(selecter).append('<sup><button type="button" class="btn btn-link" style="padding:0;" data-toggle="tooltip" data-placement="right"' +
-							'title="This value is the average of the range ' + this.ibm_age_range[0] + '-' + this.ibm_age_range[1] + ' estimated by IBM">' + 
-							'<i class="fa fa-question-circle"></i></button></sup>');
-						$('[data-toggle="tooltip"]').tooltip();
 					} else {
 						$(selecter).html(this[className]).addClass('bg-danger');
 					}
+					$(selecter).append('<sup><button type="button" class="btn btn-link" style="padding:0;" data-toggle="tooltip" data-animation="false"' + 
+						'data-placement="right" title="This value is the average of the range ' + this.ibm_age_range[0] + '-' + this.ibm_age_range[1] + 
+						' estimated by IBM"><i class="fa fa-question-circle"></i></button></sup>');
+					$('[data-toggle="tooltip"]').tooltip();
 				}
 				else if (Math.abs(this[className] - true_age) <= 5) {
 					total_correct += 1;
@@ -113,27 +113,19 @@ var ScoreCard = function() {
 	};
 
 
-	this.updateTotalScore = function(true_gender, true_age) {
-		this.true_gender = true_gender;
-		this.true_age = true_age;
-		if (true_gender) {
-			$('#actual_gender').html(true_gender);
-		}
-		if (true_age) {
-			$('#actual_age').html(true_age);
-		}
+	this.updateTotalScore = function() {
 		var total_correct = 0;
 		var total_overall = 5;
-		if (true_gender) {
+		if (this.actual_gender) {
 			$('#scorecard .gender').show();
-			total_correct += this.updateGenderScores(true_gender[0]); 
+			total_correct += this.updateGenderScores(this.actual_gender[0]); 
 			total_overall += 4;
 		} else {
 			$('#scorecard .gender').hide();
 		}
-		if (true_age) { 
+		if (this.actual_age) {
 			$('#scorecard .age').show();
-			total_correct += this.updateAgeScores(true_age);
+			total_correct += this.updateAgeScores(this.actual_age);
 			total_overall += 4; 
 		} else {
 			$('#scorecard .age').hide();

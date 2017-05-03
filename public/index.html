@@ -35,7 +35,7 @@
                     <canvas id="photoCanvas" width="400" height="400"></canvas>
                 </div>
                 <div class="row">
-                    <button id="results-button" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="width: 400px" disabled>
+                    <button id="results-button" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" data-animation="false" style="width: 400px" disabled>
                         Compare Results
                     </button>
                     <form class="form file-input-form">
@@ -85,11 +85,11 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-2 col-md-offset-1"><img src="images/sample1.jpg" class="img-fluid sample-img" id="sample1"></div>
-                <div class="col-md-2"><img src="images/sample2.jpg" class="img-fluid sample-img" id="sample2"></div>
-                <div class="col-md-2"><img src="images/sample3.jpg" class="img-fluid sample-img" id="sample3"></div>
-                <div class="col-md-2"><img src="images/sample4.jpg" class="img-fluid sample-img" id="sample4"></div>
-                <div class="col-md-2"><img src="images/sample5.jpg" class="img-fluid sample-img" id="sample5"></div>
+                <div class="col-md-2 col-md-offset-1"><img src="images/Joy Buolamwini-gender_Female-age_22-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample1"></div>
+                <div class="col-md-2"><img src="images/Anna Akana-gender_Female-age_25-ethnicity_Asian.jpg" class="img-fluid sample-img" id="sample2"></div>
+                <div class="col-md-2"><img src="images/Mike Colter-gender_Male-age_37-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample3"></div>
+                <div class="col-md-2"><img src="images/Taylor Swift-gender_Female-age_26-ethnicity_White.jpg" class="img-fluid sample-img" id="sample4"></div>
+                <div class="col-md-2"><img src="images/Aziz Ansari-gender_Male-age_25-ethnicity_Indian.jpg" class="img-fluid sample-img" id="sample5"></div>
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="reveal-if-active">
                                 <label class="question" for="actual-gender">What's the gender of the person in the photo?
-                                    <button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" title='Only binary options available, for now. Sorry!'>
+                                    <button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-animation="false" title="Only binary options available, for now. Sorry!">
                                         <i class="fa fa-question-circle"></i>
                                     </button>
                                 </label>
@@ -249,14 +249,16 @@
                     </div>
                 </div>
                 <div class="modal-footer modal-1">
-                    <button type="button" class="btn btn-primary modal-1">Create Scorecard</button>
+                    <button type="button" class="btn btn-primary modal-1 usr-img-modal">Create Scorecard</button>
+                    <button type="button" class="btn btn-primary modal-1 sample-img-modal">View Scorecard</button>
                 </div>
                 <div class="modal-footer modal-2">
                     <!-- <button type="submit" class="btn btn-primary modal-2">View Scorecard</button> -->
                     <button type="button" class="btn btn-secondary modal-2">Back</button>
                 </div>
                 <div class="modal-footer modal-3">
-                    <button type="button" class="btn btn-secondary modal-3">Back</button>
+                    <button type="button" class="btn btn-secondary modal-3 usr-img-modal">Back</button>
+                    <button type="button" class="btn btn-secondary modal-3 sample-img-modal">Back</button>
                     <button type="button" class="btn btn-primary modal-3">Share Scorecard</button>
                 </div>
             </div>

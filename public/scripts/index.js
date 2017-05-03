@@ -4,6 +4,7 @@
 
     var global_image_data;
     var global_ratio;
+    var global_is_sample;
 
     var kairosBoundingBox;
     var microsoftBoundingBox;
@@ -151,6 +152,7 @@
         };
         scorecard.setIBMGender(getGender(attributes.gender.gender));
         $("#comparison_table .ibm_gender").html(getGender(attributes.gender.gender));
+        console.log(attributes.age);
         if ('min' in attributes.age) {
           if ('max' in attributes.age) {
             scorecard.setIBMAge(min_age = parseInt(attributes.age.min), max_age = parseInt(attributes.age.max));
@@ -270,7 +272,9 @@
     }
 
     function reset() {
-      scorecard = new ScoreCard();
+      if (! global_is_sample) {
+        scorecard = new ScoreCard();
+      }
       $('.modal-1').show();
       $('.modal-2').hide();
       $('.modal-3').hide();
@@ -311,7 +315,6 @@
 
     function handleFileSelect(file) {
       reset();
-      console.log(file);
       if (file.type.match('image.*')) { // Only process image files
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -419,11 +422,13 @@
 
     $('#file').change(function(evt) {
       if ($("#file").val !== '') {
+        global_is_sample = false;
         var file = evt.target.files[0];
         handleFileSelect(file);
       }
     });
     $('#submit_photo_url').click(function(evt) {
+      global_is_sample = false;
       jQuery.urlShortener({
         longUrl: $("#photo_url").val(),
         success: function(shortUrl) {
@@ -458,8 +463,27 @@
     }
 
     $('.sample-img').click(function(evt) {
-      // var url = $(this).data("url");
+      global_is_sample = true;
+      scorecard = new ScoreCard();
       var url = $(this).attr('src');
+      var attributes = url.substring(url.indexOf('-') + 1, url.indexOf('.')).split('-');
+      for (i = 0; i < attributes.length; i++) {
+        switch(attributes[i].split('_')[0]) {
+          case 'gender':
+            var actual_gender = attributes[i].split('_')[1];
+            scorecard.setGender(actual_gender);
+            break;
+          case 'age':
+            var actual_age = attributes[i].split('_')[1];
+            scorecard.setAge(actual_age);
+            break;
+          case 'ethnicity':
+            var actual_ethnicity = attributes[i].split('_')[1];
+            scorecard.setEthnicity(actual_ethnicity);
+            break;
+        }
+
+      }
       var imageObj = new Image();
       imageObj.onload = function() {
         var blob = dataURItoBlob(imageToDataUri(imageObj, imageObj.width, imageObj.height));
@@ -492,7 +516,12 @@
     $('.modal-2').hide();
     $('.modal-3').hide();
 
-    $('button.modal-1').click(function() {
+    $('button.modal-1.usr-img-modal').click(function() {
+      $('.modal-1').hide();
+      $('.modal-2').show();
+    });
+
+    $('button.modal-1.usr-img-modal').click(function() {
       $('.modal-1').hide();
       $('.modal-2').show();
     });
@@ -502,11 +531,13 @@
 
     $('input.modal-2.btn-primary').click(function() {
       $('#actual_values_form').submit();
+      $('.sample-img-modal').hide();
     });
 
     $('button.modal-2.btn-secondary').click(function() {
       $('.modal-2').hide();
       $('.modal-1').show();
+      $('sample-img-modal').hide();
     });
 
     $('button.modal-3.btn-secondary').click(function() {
@@ -517,8 +548,9 @@
     $('#actual_values_form').submit(function() {
       var gender, age;
       if ($('.choice-gender[name="choice-attributes"]:checked').length > 0) {
-        if ($('input[name="gender"]:checked').length == 1) {
-          gender = $('input[name="gender"]:checked').val();
+        var $gender = $('input[name="gender"]:checked');
+        if ($gender.length == 1) {
+          scorecard.setGender($gender.val());
         } else {
           return false;
         }
@@ -526,21 +558,37 @@
       if ($('.choice-age[name="choice-attributes"]:checked').length > 0) {
         var $age = $('input[name="age"]');
         if ($.isNumeric($age.val()) && Number($age.attr('min')) <= $age.val() && Number($age.attr('max')) >= $age.val()) {
-          age = $age.val();
+          scorecard.setAge($age.val());
         } else {
           return false;
         }
       }
-      scorecard.updateTotalScore(gender, age);
+      scorecard.updateTotalScore();
       $('.modal-2').hide();
       $('.modal-3').show();
       return false;
     });
 
-    $('#results-button').click(function() {
+    $('#results-button, button.modal-3.sample-img-modal').click(function() {
       $('.modal-1').show();
       $('.modal-2').hide();
       $('.modal-3').hide();
+      if (global_is_sample) {
+        $('.sample-img-modal').show();
+        $('.usr-img-modal').hide();
+      } else {
+        $('.sample-img-modal').hide();
+        $('.usr-img-modal').show();
+      }
+    });
+
+    $('button.modal-1.sample-img-modal').click(function() {
+      scorecard.updateTotalScore();
+      $('.modal-1').hide();
+      $('.modal-3').show();
+      
+      $('.sample-img-modal').show();
+      $('.usr-img-modal').hide();
     });
 
     $('[data-toggle="tooltip"]').tooltip();
