@@ -583,11 +583,16 @@
     $('button.modal-1.usr-img-modal').click(function() {
       $('.modal-1').hide();
       $('.modal-2').show();
+
+      $('.')
     });
 
     $('button.modal-1.usr-img-modal').click(function() {
       $('.modal-1').hide();
       $('.modal-2').show();
+
+      $('.sample-img-modal').hide();
+      $('.usr-img-modal').show();
     });
 
     $('#loading').hide();
@@ -622,6 +627,14 @@
         var $age = $('input[name="age"]');
         if ($.isNumeric($age.val()) && Number($age.attr('min')) <= $age.val() && Number($age.attr('max')) >= $age.val()) {
           scorecard.setAge($age.val());
+        } else {
+          return false;
+        }
+      }
+      if ($('.choice-ethnicity[name="choice-attributes"]:checked').length > 0) {
+        var $ethnicity = $('input[name="ethnicity"]');
+        if ($ethnicity.val() !== '') {
+          scorecard.setEthnicity($ethnicity.val());
         } else {
           return false;
         }

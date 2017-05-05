@@ -35,6 +35,7 @@ var ScoreCard = function() {
 	this.setEthnicity = function(ethnicity) {
 		this.ethnicity = ethnicity;
 		$('#actual_ethnicity').html(ethnicity);
+		$('#scorecard .ethnicity').show();
 	};
 
 
@@ -79,7 +80,7 @@ var ScoreCard = function() {
 					} else {
 						$(selecter).html(this[className]).addClass('bg-danger');
 					}
-					$(selecter).append('<sup>**</sup>');
+					$(selecter).append('<sup><strong>**</strong></sup>');
 					// $('[data-toggle="tooltip"]').tooltip();
 					$('.alert.ibm-range').html('<strong>**</strong> This value is the average of the age range ' + this.ibm_age_range[0] + '-' + this.ibm_age_range[1] + 
 						' estimated by IBM').show();

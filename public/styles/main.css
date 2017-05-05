@@ -29,6 +29,11 @@ a.disabled {
   max-height: 180px;
 }
 
+#scorecard-table {
+  font-weight: bold;
+  width: 100%;
+}
+
 #scorecard-table td, #scorecard-table thead th {
 	vertical-align: middle;
 	text-align: center;
