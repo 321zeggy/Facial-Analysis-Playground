@@ -707,6 +707,7 @@
         snapshot.show();
         snapshot.get_blob(function(blob) {
           blob.name = 'snapshot.png';
+          global_is_sample = false;
           handleFileSelect(blob);
         });
       }
