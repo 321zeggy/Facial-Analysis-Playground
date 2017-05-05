@@ -6,6 +6,7 @@ var ScoreCard = function() {
 
 	this.microsoft_age = undefined;
 	this.ibm_age = undefined;
+	this.ibm_age_range = undefined;
 	this.faceplusplus_age = undefined;
 	this.kairos_age = undefined;
 
@@ -25,17 +26,34 @@ var ScoreCard = function() {
 		$('#face_image').attr('src', image);
 	};
 	this.setGender = function(gender) {
-		this.actual_gender = gender[0];
-		$('#actual_gender').html(gender);
+		if (gender) {
+			this.actual_gender = gender;
+			$('#actual_gender').html(gender);
+			$('#scorecard .gender').show();
+		} else {
+			this.actual_gender = undefined;
+			$('#scorecard .gender').hide();
+		}
 	};
 	this.setAge = function(age) {
-		this.actual_age = age;
-		$('#actual_age').html(age);
+		if (age) {
+			this.actual_age = age;
+			$('#actual_age').html(age);
+			$('#scorecard .age').show();
+		} else {
+			this.actual_age = undefined;
+			$('#scorecard .age').hide();
+		}
 	};
 	this.setEthnicity = function(ethnicity) {
-		this.ethnicity = ethnicity;
-		$('#actual_ethnicity').html(ethnicity);
-		$('#scorecard .ethnicity').show();
+		if (ethnicity) {
+			this.ethnicity = ethnicity;
+			$('#actual_ethnicity').html(ethnicity);
+			$('#scorecard .ethnicity').show();
+		} else {
+			this.ethnicity = undefined;
+			$('#scorecard .ethnicity').hide();
+		}
 	};
 
 
@@ -65,7 +83,7 @@ var ScoreCard = function() {
 	this.updateAgeScores = function(true_age) {
 		var total_correct = 0;
 		var apis = ['microsoft', 'ibm', 'faceplusplus', 'kairos'];
-		if (this.ibm_age_range) {
+		if (! this.ibm_age_range) {
 			$('.alert.ibm-range').hide();
 		}
 		for (i = 0; i < apis.length; i++) {
@@ -125,18 +143,16 @@ var ScoreCard = function() {
 		var total_correct = 0;
 		var total_overall = 5;
 		if (this.actual_gender) {
-			$('#scorecard .gender').show();
+			// $('#scorecard .gender').show();
 			total_correct += this.updateGenderScores(this.actual_gender[0]); 
 			total_overall += 4;
-		} else {
-			$('#scorecard .gender').hide();
 		}
 		if (this.actual_age) {
-			$('#scorecard .age').show();
+			// $('#scorecard .age').show();
 			total_correct += this.updateAgeScores(this.actual_age);
 			total_overall += 4; 
 		} else {
-			$('#scorecard .age').hide();
+			$('.alert.ibm-range').hide();
 		}
 		total_correct += this.updateFaceDetectedScores();
 		$('#total_score').html(total_correct + '/' + total_overall);
@@ -161,8 +177,14 @@ var ScoreCard = function() {
 			if (max_age) {
 				this.ibm_age_range = [min_age, max_age];
 				this.ibm_age = Math.round((min_age + max_age) / 2);
-			} else this.ibm_age = min_age;
-		} else this.ibm_age = max_age;
+			} else { 
+				this.ibm_age_range = undefined;
+				this.ibm_age = min_age;
+			}
+		} else {
+			this.ibm_age_range = undefined;
+			this.ibm_age = max_age;
+		}
 	};
 	this.setFacePlusPlusAge = function(age) {
 		this.faceplusplus_age = age;

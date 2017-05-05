@@ -284,7 +284,7 @@
       responsesCount = 0;
 
       $('.modal-1').show();
-      $('.modal-2, .modal-3, #no-face-detected, #detected-values ').hide();
+      $('.modal-2, .modal-3, #no-face-detected, #detected-values').hide();
 
       global_image_data = null;
       global_ratio = null;
@@ -559,9 +559,13 @@
     $('.modal-2, .modal-3').hide();
 
     $('button.modal-1.usr-img-modal').click(function() {
+      $('.modal-2').show();
       $('.modal-1, .sample-img-modal').hide();
-      $('.modal-2, .usr-img-modal').show();
+    });
 
+    $('button.modal-1.sample-img-modal').click(function() {
+      $('.modal-3').show();
+      $('.modal-1, .usr-img-modal').hide();
     });
 
     $('input.modal-2.btn-primary').click(function() {
@@ -570,14 +574,19 @@
     });
 
     $('button.modal-2.btn-secondary').click(function() {
-      $('.modal-2').hide();
       $('.modal-1').show();
-      $('sample-img-modal').hide();
+      $('.modal-2, .sample-img-modal').hide();
     });
 
-    $('button.modal-3.btn-secondary').click(function() {
-      $('.modal-3').hide();
+    $('button.modal-3.usr-img-modal').click(function() {
+      console.log('HI!');
       $('.modal-2').show();
+      $('.modal-3, .sample-img-modal').hide();
+    });
+
+    $('button.modal-3.sample-img-modal').click(function() {
+      $('.modal-1').show();
+      $('.modal-3, .usr-img-modal').hide();
     });
 
     $('#actual_values_form').submit(function() {
@@ -589,6 +598,8 @@
         } else {
           return false;
         }
+      } else {
+        scorecard.setGender();
       }
       if ($('.choice-age[name="choice-attributes"]:checked').length > 0) {
         var $age = $('input[name="age"]');
@@ -597,6 +608,8 @@
         } else {
           return false;
         }
+      } else {
+        scorecard.setAge();
       }
       if ($('.choice-ethnicity[name="choice-attributes"]:checked').length > 0) {
         var $ethnicity = $('input[name="ethnicity"]');
@@ -605,23 +618,25 @@
         } else {
           return false;
         }
+      } else {
+        scorecard.setEthnicity();
       }
-      scorecard.updateTotalScore();
-      $('.modal-2').hide();
       $('.modal-3').show();
+      scorecard.updateTotalScore();
+      $('.modal-2, .sample-img-modal').hide();
       return false;
     });
 
     $('#results-button, button.modal-3.sample-img-modal').click(function() {
+      document.getElementById('actual_values_form').reset();
       $('.modal-1').show();
-      $('.modal-2').hide();
-      $('.modal-3').hide();
+      $('.modal-2, .modal-3').hide();
       if (global_is_sample) {
-        $('.sample-img-modal').show();
+        // $('.sample-img-modal').show();
         $('.usr-img-modal').hide();
       } else {
         $('.sample-img-modal').hide();
-        $('.usr-img-modal').show();
+        // $('.usr-img-modal').show();
       }
     });
 
@@ -630,7 +645,7 @@
       $('.modal-1').hide();
       $('.modal-3').show();
 
-      $('.sample-img-modal').show();
+      // $('.sample-img-modal').show();
       $('.usr-img-modal').hide();
     });
 
@@ -642,7 +657,6 @@
 
     $('#camera-button').click(function() {
       camera.show_stream();
-      $('#loading').hide();
       $('#photoCanvas').hide();
       $('#camera').show();
       $('#countdown').TimeCircles().restart().end().show();
