@@ -206,16 +206,16 @@
                         </div>
                         <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
                         <div class="card-block">
-                            <table id="scorecard-table" class="table table-bordered table-responsive">
-                                <thead>
+                            <table id="scorecard-table" class="table table-bordered table-responsive table-striped">
+                                <thead class="thead-inverse">
                                     <tr>
-                                        <td></td>
+                                        <th></th>
                                         <th scope="col" class="gender">Gender</th>
                                         <th scope="col" class="age">Age*</th>
                                         <th scope="col">Detected</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
+                                <tfoot class="thead-inverse text-white">
                                     <tr>
                                         <th scope="row">Score</th>
                                         <th scope="col" id="gender_score" class="gender"></th>
@@ -243,16 +243,16 @@
                                         <td class="faceplusplus_face_detected"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="row"><img class="img-fluid logo" src="images/google_logo.png"> Google</th>
-                                        <td class="google_gender gender bg-faded">NA</td>
-                                        <td class="google_age age bg-faded">NA</td>
-                                        <td class="google_face_detected bg-success text-white"></td>
-                                    </tr>
-                                    <tr>
                                         <th scope="row"><img class="img-fluid logo" src="images/kairos_logo.png"> Kairos</th>
                                         <td class="kairos_gender gender"></td>
                                         <td class="kairos_age age"></td>
                                         <td class="kairos_face_detected"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><img class="img-fluid logo" src="images/google_logo.png"> Google</th>
+                                        <td class="google_gender gender bg-faded">NA</td>
+                                        <td class="google_age age bg-faded">NA</td>
+                                        <td class="google_face_detected bg-success text-white"></td>
                                     </tr>
                                 </tbody>
                             </table>
