@@ -64,6 +64,9 @@ var ScoreCard = function() {
 	this.updateAgeScores = function(true_age) {
 		var total_correct = 0;
 		var apis = ['microsoft', 'ibm', 'faceplusplus', 'kairos'];
+		if (this.ibm_age_range) {
+			$('.alert.ibm-range').hide();
+		}
 		for (i = 0; i < apis.length; i++) {
 			var className = apis[i] + '_age';
 			var selecter = '#scorecard .' + className;
@@ -76,10 +79,10 @@ var ScoreCard = function() {
 					} else {
 						$(selecter).html(this[className]).addClass('bg-danger');
 					}
-					$(selecter).append('<sup><button type="button" class="btn btn-link" style="padding:0;" data-toggle="tooltip" data-animation="false"' + 
-						'data-placement="right" title="This value is the average of the range ' + this.ibm_age_range[0] + '-' + this.ibm_age_range[1] + 
-						' estimated by IBM"><i class="fa fa-question-circle"></i></button></sup>');
-					$('[data-toggle="tooltip"]').tooltip();
+					$(selecter).append('<sup>**</sup>');
+					// $('[data-toggle="tooltip"]').tooltip();
+					$('.alert.ibm-range').html('<strong>**</strong> This value is the average of the age range ' + this.ibm_age_range[0] + '-' + this.ibm_age_range[1] + 
+						' estimated by IBM').show();
 				}
 				else if (Math.abs(this[className] - true_age) <= 5) {
 					total_correct += 1;
