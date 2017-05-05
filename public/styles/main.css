@@ -29,7 +29,7 @@ a.disabled {
   max-height: 180px;
 }
 
-#scorecard-table td, #scorecard-table th {
+#scorecard-table td, #scorecard-table thead th {
 	vertical-align: middle;
 	text-align: center;
 }
@@ -44,6 +44,13 @@ a.disabled {
   height: 50%;
 }
 
+#scorecard tbody th {
+  font-size: 1.2em;
+}
+
+.logo {
+  height: 1em;
+}
 
 
 #actual_values_form .reveal-if-active {

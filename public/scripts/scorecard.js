@@ -53,7 +53,9 @@ var ScoreCard = function() {
 					$(selecter).html(this[className]).addClass('bg-danger');
 				}
 			} else {
-				$(selecter).html('No Face Detected').addClass('bg-danger');
+				// $(selecter).html('No Face Detected').addClass('bg-danger');
+				$(selecter).replaceWith(
+					'<td class="' + className + ' bg-danger text-white"><i class="fa fa-2x fa-times"></i></td>');
 			}
 		}
 		$('#gender_score').html(total_correct + '/' + apis.length);
@@ -86,7 +88,9 @@ var ScoreCard = function() {
 					$(selecter).html(this[className]).addClass('bg-danger');
 				}
 			} else {
-				$(selecter).html('No Face Detected').addClass('bg-danger');
+				// $(selecter).html('No Face Detected').addClass('bg-danger');
+				$(selecter).replaceWith(
+					'<td class="' + className + ' bg-danger text-white"><i class="fa fa-2x fa-times"></i></td>');
 			}
 		}
 		$('#age_score').html(total_correct + '/' + apis.length);
