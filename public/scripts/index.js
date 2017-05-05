@@ -3,8 +3,9 @@
     $('#photoCanvas, #camera').css('width', '82%');
     $('#photoCanvas, #camera').css('height', $('#photoCanvas').width());
 
-    $('#no-face-detected').hide();
-    $('#detected-values').hide();
+    $('#no-face-detected, #detected-values').hide();
+    $('#photoCanvas')[0].width = $('#photoCanvas').width();
+    $('#photoCanvas')[0].height = $('#photoCanvas').height();
 
     var scorecard;
 
@@ -30,7 +31,7 @@
     }
 
 
-    jQuery.urlShortener.settings.apiKey = 'AIzaSyDjW-G7go9ZMvuw0oBS6a_RGZgWKOGLxR8';
+    // jQuery.urlShortener.settings.apiKey = 'AIzaSyDjW-G7go9ZMvuw0oBS6a_RGZgWKOGLxR8';
 
     function imageToDataUri(img, width, height) {
       // create an off-screen canvas
@@ -52,10 +53,9 @@
     function drawBoundingBox(face, color) {
       var imageObj = new Image();
       imageObj.onload = function() {
-        $('#loading').show();
         var canvas = $('#photoCanvas')[0];
-        canvas.width = $('#photoCanvas').width();
-        canvas.height = $('#photoCanvas').height();
+        // canvas.width = $('#photoCanvas').width();
+        // canvas.height = $('#photoCanvas').height();
 
         var context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -74,7 +74,6 @@
           context.strokeStyle = color;
           context.stroke();
         }
-        $('#loading').hide();
         $('#photoCanvas').show();
       };
       imageObj.src = global_image_data;
@@ -83,11 +82,9 @@
     function drawGoogleBoundingBox(face, color) {
       var imageObj = new Image();
       imageObj.onload = function() {
-        $('#loading').show();
-
         var canvas = $('#photoCanvas')[0];
         var context = canvas.getContext('2d');
-        context.clearRect(0, 0, $('#photoCanvas').width(), $('#photoCanvas').height());
+        context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(imageObj, 0, 0, imageObj.width * global_ratio, imageObj.height * global_ratio);
 
         if (face) {
@@ -100,7 +97,6 @@
           context.lineTo(face[0].x * global_ratio, face[0].y * global_ratio);
           context.stroke();
         }
-        $('#loading').hide();
         $('#photoCanvas').show();
       };
       imageObj.src = global_image_data;
@@ -115,8 +111,7 @@
       if (!microsoftJSON[0]) {
         $("#microsoft_response").html('No face detected');
         console.log('no images in Microsoft face response');
-        $("#comparison_table .microsoft_gender").html('No face detected');
-        $("#comparison_table .microsoft_age").html('No face detected');
+        $("#comparison_table .microsoft_gender, #comparison_table .microsoft_age").html('No face detected');
         scorecard.setMicrosoftFaceDetected(false);
         $("#comparison_table .microsoft_face_detected").html('False');
       } else {
@@ -147,8 +142,7 @@
         console.log('no images in IBM face response');
         $("#ibm_response").html('No face detected');
 
-        $("#comparison_table .ibm_gender").html('No face detected');
-        $("#comparison_table .ibm_age").html('No face detected');
+        $("#comparison_table .ibm_gender, #comparison_table .ibm_age").html('No face detected');
         $("#comparison_table .ibm_face_detected").html('False');
 
         $('#no-face-detected').show();
@@ -162,7 +156,6 @@
         };
         scorecard.setIBMGender(getGender(attributes.gender.gender));
         $("#comparison_table .ibm_gender").html(getGender(attributes.gender.gender));
-        console.log(attributes.age);
         if ('min' in attributes.age) {
           if ('max' in attributes.age) {
             scorecard.setIBMAge(min_age = parseInt(attributes.age.min), max_age = parseInt(attributes.age.max));
@@ -202,8 +195,7 @@
         console.log('no images in Kairos face response');
         $("#kairos_response").html('No face detected');
 
-        $("#comparison_table .kairos_gender").html('No face detected');
-        $("#comparison_table .kairos_age").html('No face detected');
+        $("#comparison_table .kairos_gender, #comparison_table .kairos_age").html('No face detected');
         $("#comparison_table .kairos_face_detected").html('False');
         scorecard.setKairosFaceDetected(false);
       } else {
@@ -259,8 +251,7 @@
       if (!facePlusPlusJSON.faces[0]) {
         console.log('no images in Face++ face response');
         $("#faceplusplus_response").html('No face detected');
-        $("#comparison_table .faceplusplus_gender").html('No face detected');
-        $(".faceplusplus_age").html('No face detected');
+        $("#comparison_table .faceplusplus_gender, #comparison_table .faceplusplus_age").html('No face detected');
         $("#comparison_table .faceplusplus_face_detected").html('False');
         scorecard.setFacePlusPlusFaceDetected(false);
       } else {
@@ -289,13 +280,11 @@
       if (!global_is_sample) {
         scorecard = new ScoreCard();
       }
-      $('.modal-1').show();
-      $('.modal-2').hide();
-      $('.modal-3').hide();
       document.getElementById('actual_values_form').reset();
-
-
       responsesCount = 0;
+
+      $('.modal-1').show();
+      $('.modal-2, .modal-3, #no-face-detected, #detected-values ').hide();
 
       global_image_data = null;
       global_ratio = null;
@@ -303,16 +292,8 @@
       $('.nav-link').addClass('disabled');
       $("#results-button").prop('disabled', true);
 
-      $("#loading").show();
-
-      $("#kairos_response").html("<i>(Kairos response will appear here)</i>");
-      $("#microsoft_response").html("<i>(Microsoft response will appear here)</i>");
-      $("#ibm_response").html("<i>(IBM response will appear here)</i>");
-      $("#google_response").html("<i>(Google response will appear here)</i>");
-      $("#faceplusplus_response").html("<i>(Face++ response will appear here)</i>");
-
-      $('#no-face-detected').hide();
-      $('#detected-values').hide();
+      var spinner = '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>';
+      $("#kairos_response, #microsoft_response, #ibm_response, #google_response, #faceplusplus_response").html(spinner);
 
       kairosBoundingBox = null;
       microsoftBoundingBox = null;
@@ -333,10 +314,9 @@
         var reader = new FileReader();
         reader.onload = function(e) {
           var canvas = $('#photoCanvas')[0];
-          canvas.width = $('#photoCanvas').width();
-          canvas.height = $('#photoCanvas').height();
           var context = canvas.getContext('2d');
           context.clearRect(0, 0, canvas.width, canvas.height);
+
           var imageObj = new Image();
           imageObj.onload = function() {
             var ratio = getConversionRatio(imageObj, canvas.width, canvas.height);
@@ -385,8 +365,6 @@
     function handleURLSelect(image_url) {
       $("#file").val('');
       var canvas = $('#photoCanvas')[0];
-      canvas.width = $('#photoCanvas').width();
-      canvas.height = $('#photoCanvas').height();
       var context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       reset();
@@ -446,10 +424,11 @@
         handleFileSelect(file);
       }
     });
+
     $('#submit_photo_url').click(function(evt) {
       global_is_sample = false;
       handleURLSelect($("#photo_url").val());
-      $("#photo_url").val('')
+      $("#photo_url").val('');
         // jQuery.urlShortener({
         //   longUrl: $("#photo_url").val(),
         //   success: function(shortUrl) {
@@ -577,25 +556,13 @@
     });
 
 
-    $('.modal-2').hide();
-    $('.modal-3').hide();
+    $('.modal-2, .modal-3').hide();
 
     $('button.modal-1.usr-img-modal').click(function() {
-      $('.modal-1').hide();
-      $('.modal-2').show();
+      $('.modal-1, .sample-img-modal').hide();
+      $('.modal-2, .usr-img-modal').show();
 
-      $('.')
     });
-
-    $('button.modal-1.usr-img-modal').click(function() {
-      $('.modal-1').hide();
-      $('.modal-2').show();
-
-      $('.sample-img-modal').hide();
-      $('.usr-img-modal').show();
-    });
-
-    $('#loading').hide();
 
     $('input.modal-2.btn-primary').click(function() {
       $('#actual_values_form').submit();

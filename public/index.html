@@ -35,7 +35,7 @@
             <div class="col-md-5" style="position: relative;">
                 <div id="camera" style="z-index: 100; position: absolute;"></div>
                 <canvas id="photoCanvas" width="400" height="400" style="z-index: 100; position: absolute;"></canvas>
-                <img src="images/loading.svg" id="loading" style="z-index: 300; align-self: center; position: absolute;">
+                <!-- <img src="images/loading.svg" id="loading" style="z-index: 300; align-self: center; position: absolute;"> -->
                 <div id="countdown" data-timer="4" style="z-index: 300; align-self: center; position: absolute; vertical-align: middle;"></div>
                 <div id="gender-age-display" class="display-4 mb-2" style="position: absolute; bottom: 0; font-size:1rem; width: 82%; text-align: center;">
                     <div id="detected-values">
@@ -65,7 +65,8 @@
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content mt-2">
-                    <div class="tab-pane fade show active responses" id="ibm_response" role="tabpanel"><i>(IBM response will appear here)</i></div>
+                    <div class="tab-pane fade show active responses" id="ibm_response" role="tabpanel"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+<span class="sr-only">Loading...</span></div>
                     <div class="tab-pane fade responses" id="microsoft_response" role="tabpanel"><i>(Microsoft response will appear here)</i></div>
                     <div class="tab-pane fade responses" id="faceplusplus_response" role="tabpanel"><i>(Face++ response will appear here)</i></div>
                     <div class="tab-pane fade responses" id="google_response" role="tabpanel"><i>(IBM response will appear here)</i></div>
