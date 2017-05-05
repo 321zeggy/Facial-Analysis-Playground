@@ -13,6 +13,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script src="scripts/jquery.urlshortener.min.js" type="text/javascript"></script>
     <script src="/jpeg_camera/jpeg_camera_with_dependencies.min.js" type="text/javascript"></script>
+    
+    <script src="TimeCircles/inc/TimeCircles.js" type="text/javascript"></script>
+    <link href="TimeCircles/inc/TimeCircles.css" rel="stylesheet">
+    
     <script src="https://use.fontawesome.com/f748178fc1.js"></script>
     <script src="scripts/config.js"></script>
     <script src="scripts/scorecard.js"></script>
@@ -28,32 +32,16 @@
     <div class="container">
         <h1 class="display-4 mb-4">Facial Analysis Playground</h1>
         <div class="row">
-            <div class="col-md-5">
-                <div class="row">
-                    <div id="camera" style="width: 400px; height: 400px;"></div>
-                    <img src="images/loading.svg" id="loading">
-                    <canvas id="photoCanvas" width="400" height="400"></canvas>
-                </div>
-                <div class="row">
-                    <button id="results-button" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" data-animation="false" style="width: 400px" disabled>
-                        Compare Results
-                    </button>
-                    <form class="form file-input-form">
-                        <div>
-                            <label></label>
-                            <input type="file" id="file" class="form-control-file form-control-sm">
-                        </div>
-                    </form>
-                    <form>
-                        <div class="input-group">
-                            <label></label>
-                            <input type="text" id="photo_url" class="form-control" placeholder="Image URL...">
-                            <span class="input-group-btn">
-                                <button class="btn btn-secondary" id="submit_photo_url">Submit</button>
-                            </span>
-                        </div>
-                        <button id='camera-button' type="button" class="btn btn-primary btn-block btn-lg mt-2">Webcam</button>
-                    </form>
+            <div class="col-md-5" style="position: relative;">
+                <div id="camera" style="z-index: 100; position: absolute;"></div>
+                <canvas id="photoCanvas" width="400" height="400" style="z-index: 100; position: absolute;"></canvas>
+                <img src="images/loading.svg" id="loading" style="z-index: 300; align-self: center; position: absolute;">
+                <div id="countdown" data-timer="4" style="z-index: 300; align-self: center; position: absolute; vertical-align: middle;"></div>
+                <div id="gender-age-display" class="display-4 mb-2" style="position: absolute; bottom: 0; font-size:2rem;">
+                    <div id="detected-values">
+                        <span>Gender: </span><span id="gender-display"></span> | <span>Age: </span><span id="age-display"></span>
+                    </div>
+                    <span id="no-face-detected">No Face Detected</span>
                 </div>
             </div>
             <div class="col-md-5">
@@ -84,13 +72,38 @@
                     <div class="tab-pane fade responses" id="kairos_response" role="tabpanel"><i>(Kairos response will appear here)</i></div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col-md-2 col-md-offset-1"><img src="images/Joy Buolamwini-gender_Female-age_22-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample1"></div>
-                <div class="col-md-2"><img src="images/Anna Akana-gender_Female-age_25-ethnicity_Asian.jpg" class="img-fluid sample-img" id="sample2"></div>
-                <div class="col-md-2"><img src="images/Mike Colter-gender_Male-age_37-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample3"></div>
-                <div class="col-md-2"><img src="images/Taylor Swift-gender_Female-age_26-ethnicity_White.jpg" class="img-fluid sample-img" id="sample4"></div>
-                <div class="col-md-2"><img src="images/Aziz Ansari-gender_Male-age_25-ethnicity_Indian.jpg" class="img-fluid sample-img" id="sample5"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <button id='camera-button' type="button" class="btn btn-outline-success btn-block">Webcam</button>
+                <form class="form file-input-form">
+                    <div>
+                        <label></label>
+                        <input type="file" id="file" class="form-control-file form-control-sm">
+                    </div>
+                </form>
+                <form>
+                    <div class="input-group">
+                        <label></label>
+                        <input type="text" id="photo_url" class="form-control" placeholder="Image URL...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" id="submit_photo_url">Submit</button>
+                        </span>
+                    </div>
+                </form>
             </div>
+            <div class="col-md-5">
+                <button id="results-button" type="button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#myModal" data-animation="false" disabled>
+                    Compare Results
+                </button>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-2 col-md-offset-1"><img src="images/Joy Buolamwini-gender_Female-age_22-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample1"></div>
+            <div class="col-md-2"><img src="images/Anna Akana-gender_Female-age_25-ethnicity_Asian.jpg" class="img-fluid sample-img" id="sample2"></div>
+            <div class="col-md-2"><img src="images/Mike Colter-gender_Male-age_37-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample3"></div>
+            <div class="col-md-2"><img src="images/Taylor Swift-gender_Female-age_26-ethnicity_White.jpg" class="img-fluid sample-img" id="sample4"></div>
+            <div class="col-md-2"><img src="images/Aziz Ansari-gender_Male-age_25-ethnicity_Indian.jpg" class="img-fluid sample-img" id="sample5"></div>
         </div>
     </div>
     <!-- Modal -->
@@ -104,6 +117,40 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="modal-1">
+                        <table id="comparison_table" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Results</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">Microsoft</th>
+                                <td class="microsoft_gender">?</td>
+                                <td class="microsoft_age">?</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IBM</th>
+                                <td class="ibm_gender">?</td>
+                                <td class="ibm_age">?</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Face++</th>
+                                <td class="faceplusplus_gender">?</td>
+                                <td class="faceplusplus_age">?</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Kairos</th>
+                                <td class="kairos_gender">?</td>
+                                <td class="kairos_age">?</td>
+                            </tr>
+                        </table>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Google omitted - </strong>API does not estimate age or gender
+                        </div>
+                    </div>
                     <form id="actual_values_form" class="form-group modal-2" method="post" action="#">
                         <h4>Attributes to Include on Scorecard</h4>
                         <div>
@@ -211,40 +258,6 @@
                             </table>
                             <div class="alert alert-info age" role="alert"><strong>*</strong> correct if within &plusmn;5 years of actual age
                             </div>
-                        </div>
-                    </div>
-                    <div class="modal-1">
-                        <table id="comparison_table" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Results</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
-                                </tr>
-                            </thead>
-                            <tr>
-                                <th scope="row">Microsoft</th>
-                                <td class="microsoft_gender">?</td>
-                                <td class="microsoft_age">?</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">IBM</th>
-                                <td class="ibm_gender">?</td>
-                                <td class="ibm_age">?</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Face++</th>
-                                <td class="faceplusplus_gender">?</td>
-                                <td class="faceplusplus_age">?</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Kairos</th>
-                                <td class="kairos_gender">?</td>
-                                <td class="kairos_age">?</td>
-                            </tr>
-                        </table>
-                        <div class="alert alert-info" role="alert">
-                            <strong>Google omitted - </strong>API does not estimate age or gender
                         </div>
                     </div>
                 </div>
