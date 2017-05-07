@@ -1,5 +1,37 @@
 # Facial-Analysis-Playground
 ------------------------------
+## **May 7, 2017**
+#### Learned
+1. HTML elements need to be non-statically positioned in order for z-index to work.
+2. A Blob can sometimes be used in place of a File in a FormData object.  
+#### Ideas for Next Iteration
+1. Give users more control over when they capture a webcam photo
+#### Challenges
+1. Getting the canvas overlays to actually overlay the canvas without messing up the positioning of the rest of the page in the process.
+2. Figuring out why Blob objects weren't being treated as images. 
+#### Triumphs
+1. Figuring out that the reason the Blobs weren't being treated as images was because they were given the default name "blob" instead of a name ending with a image extension (such as .jpg or .png).
+2. Adding the option for users to directly upload webcam photos directly on the app.
+
+------------------------------
+## **April 14, 2017**
+#### Learned
+1. It's difficult for me to pinpoint specific things I've learned, but I've definitely been learning.
+
+#### Ideas for Next Iteration
+1. More fully completing the API results comparison.
+2. Giving users the option of submitting their results for research
+      
+
+#### Challenges
+1. Getting caught up in figuring out to display content to users
+
+#### Triumphs
+1. Getting responses from all APIs for both image files and image URLs
+2. Adding bounding boxes working for all APIs
+3. Setting up the framework for users to visually compare the results of the different APIs.
+
+------------------------------
 ## **April 21, 2017**
 #### Learned
 1. Refamiliarized myself with some of the quirks of javascript objects that I'd forgotten about
