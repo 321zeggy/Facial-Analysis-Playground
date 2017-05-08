@@ -320,6 +320,7 @@
         that = this;
         success = function(stream) {
           that._remove_message();
+          that.activeTrack = stream.getTracks()[0];
           if (window.URL) {
             that.video.src = URL.createObjectURL(stream);
           } else {
@@ -347,6 +348,12 @@
         } catch (_error) {
           error = _error;
           return navigator.getUserMedia("video", success, failure);
+        }
+      };
+
+      JpegCameraHtml5.prototype.stop = function() {
+        if (this.activeTrack) {
+          return this.activeTrack.stop();
         }
       };
 

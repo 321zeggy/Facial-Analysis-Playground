@@ -21,6 +21,8 @@
 
     var responsesCount;
 
+    var camera;
+
     function incrementResponsesCount() {
       responsesCount += 1;
       if (responsesCount == 5) {
@@ -415,9 +417,8 @@
 
     FormStuff.init();
 
-
-
     $('#file').change(function(evt) {
+      $('#camera').hide();
       if ($("#file").val !== '') {
         global_is_sample = false;
         var file = evt.target.files[0];
@@ -426,6 +427,7 @@
     });
 
     $('#submit_photo_url').click(function(evt) {
+      $('#camera').hide();
       global_is_sample = false;
       handleURLSelect($("#photo_url").val());
       $("#photo_url").val('');
@@ -466,6 +468,7 @@
     }
 
     $('.sample-img').click(function(evt) {
+      $('#camera').hide();
       global_is_sample = true;
       scorecard = new ScoreCard();
       var url = $(this).attr('src');
@@ -651,14 +654,11 @@
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    var camera = new JpegCamera(container = "#camera", options = {
-      mirror: true
-    });
-
     $('#camera-button').click(function() {
+      $('#camera').show();
+      camera = new JpegCamera(container = "#camera");
       camera.show_stream();
       $('#photoCanvas').hide();
-      $('#camera').show();
       $('#countdown').TimeCircles().restart().end().show();
     });
 
@@ -702,6 +702,7 @@
         snapshot.get_blob(function(blob) {
           blob.name = 'snapshot.png';
           global_is_sample = false;
+          camera.stop();
           handleFileSelect(blob);
         });
       }
