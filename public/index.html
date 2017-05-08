@@ -39,7 +39,8 @@
                 <canvas id="photoCanvas" width="400" height="400" style="z-index: 100; position: absolute;"></canvas>
                 <!-- <img src="images/loading.svg" id="loading" style="z-index: 300; align-self: center; position: absolute;"> -->
                 <div id="countdown" data-timer="4" style="z-index: 300; align-self: center; position: absolute; vertical-align: middle;"></div>
-                <div id="gender-age-display" class="display-4 mb-2" style="position: absolute; bottom: 0; font-size:1rem; width: 82%; text-align: center;">
+                <div id="gender-age-display" class="display-4 alert alert-info" role="alert" style="position: absolute; bottom: 0; font-size:1rem; width: 82%; text-align: center;">
+                    <h6 class="alert-heading"><span id="api-name"></span> Results: </h6>
                     <div id="detected-values">
                         <span>Gender: <span id="gender-display"></span></span><span style="margin-left: 30px; margin-right: 30px;">|</span><span>Age: <span id="age-display"></span></span>
                     </div>

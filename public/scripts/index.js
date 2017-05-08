@@ -1,5 +1,5 @@
   $(document).ready(function($) {
-    $('#photoCanvas').parent().css('min-height', $('#photoCanvas').parent().width());
+    $('#photoCanvas').parent().css('min-height', $('#photoCanvas').parent().width() + 70);
     $('#photoCanvas, #camera').css('width', '82%');
     $('#photoCanvas, #camera').css('height', $('#photoCanvas').width());
 
@@ -183,6 +183,7 @@
         drawBoundingBox(ibmBoundingBox, 'red');
         $('#gender-display').html($('.ibm_gender').html());
         $('#age-display').html($('.ibm_age').html());
+        $('#gender-age-display').show();
         $('#no-face-detected').hide();
         $('#detected-values').show();
       }
@@ -279,6 +280,7 @@
     }
 
     function reset() {
+      $('#gender-age-display').hide();
       if (!global_is_sample) {
         scorecard = new ScoreCard();
       }
@@ -504,6 +506,7 @@
 
     $('a[href="#ibm_response"]').on('show.bs.tab', function() {
       drawBoundingBox(ibmBoundingBox, 'red');
+      $('#api-name').html('IBM');
       if ($('.ibm_gender').html() != 'No face detected') {
         $('#gender-display').html($('.ibm_gender').html());
         $('#age-display').html($('.ibm_age').html());
@@ -516,6 +519,7 @@
     });
     $('a[href="#microsoft_response"]').on('show.bs.tab', function() {
       drawBoundingBox(microsoftBoundingBox, 'green');
+      $('#api-name').html('Microsoft');
       if ($('.microsoft_gender').html() != 'No face detected') {
         $('#gender-display').html($('.microsoft_gender').html());
         $('#age-display').html($('.microsoft_age').html());
@@ -528,6 +532,7 @@
     });
     $('a[href="#faceplusplus_response"]').on('show.bs.tab', function() {
       drawBoundingBox(facePlusPlusBoundingBox, 'purple');
+      $('#api-name').html('Face++');
       if ($('.faceplusplus_gender').html() != 'No face detected') {
         $('#gender-display').html($('.faceplusplus_gender').html());
         $('#age-display').html($('.faceplusplus_age').html());
@@ -540,6 +545,7 @@
     });
     $('a[href="#google_response"]').on('show.bs.tab', function() {
       drawGoogleBoundingBox(googleBoundingBox, 'yellow');
+      $('#api-name').html('Google');
       $('#gender-display').html('NA');
       $('#age-display').html('NA');
       $('#no-face-detected').hide();
@@ -547,6 +553,7 @@
     });
     $('a[href="#kairos_response"]').on('show.bs.tab', function() {
       drawBoundingBox(kairosBoundingBox, 'blue');
+      $('#api-name').html('Kairos');
       if ($('.kairos_gender').html() != 'No face detected') {
         $('#gender-display').html($('.kairos_gender').html());
         $('#age-display').html($('.kairos_age').html());
