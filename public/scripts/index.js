@@ -582,11 +582,11 @@
       $('.modal-3').show();
       $('.usr-img-modal').hide();
       $('.modal').scrollTop(0);
-      html2canvas($('#scorecard')[0], {
+      html2canvas($('.modal-body')[0], {
         allowTaint: true,
         logging: true,
         background: '#fff',
-        height: $('#scorecard').outerHeight()
+        height: $('.modal-body').outerHeight()
       }).then(function(canvas) {
         $('#download')[0].href = canvas.toDataURL();
         $('#download').removeClass('disabled');
@@ -673,28 +673,26 @@
       }
     });
 
-
-
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#camera-button').click(function() {
-      $('#camera').show();
-      camera = new JpegCamera(container = "#camera").ready(function() {
-        camera.show_stream();
-        $('#photoCanvas').hide();
+      if ($(this).filter('.btn-outline-success').length == 1) {
+        $('#camera').show();
+        camera = new JpegCamera(container = "#camera").ready(function() {
+          this.show_stream();
+          $('#photoCanvas, #gender-age-display').hide();
+          $('#camera-button.btn-outline-success')
+            .addClass('btn-success')
+            .removeClass('btn-outline-success')
+            .html('Take Snapshot <i class="fa fa-camera" aria-hidden="true"></i>');
+        });
+      } else if ($(this).filter('.btn-success').length == 1) {
         $('#countdown').TimeCircles().restart().end().show();
-      });
-
-      
-    });
-
-    $('#camera').click(function() {
-      var snapshot = camera.capture();
-      snapshot.show();
-      snapshot.get_blob(function(blob) {
-        blob.name = 'snapshot.png';
-        handleFileSelect(blob);
-      });
+        $(this)
+          .removeClass('btn-success')
+          .addClass('btn-outline-success')
+          .html('Webcam');
+      }
     });
 
     $('#countdown').TimeCircles({
@@ -723,7 +721,9 @@
     function countdownComplete(unit, value, total) {
       if (total <= 0) {
         $(this).hide();
-        var snapshot = camera.capture();
+        var snapshot = camera.capture({
+          mirror: true
+        });
         snapshot.show();
         snapshot.get_blob(function(blob) {
           blob.name = 'snapshot.png';

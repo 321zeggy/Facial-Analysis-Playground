@@ -206,11 +206,11 @@
                         </div>
                         <input type="submit" class="btn btn-primary modal-2" value="View Scorecard">
                     </form>
-                    <div id="scorecard" class="card card-outline-info modal-3">
-                        <div>
-                            <img class="card-img-left float-left" id="face_image" src="https://face2faceafrica.com/wp-content/uploads/2017/03/joy.jpg">
+                    <div id="scorecard" class="card card-outline-info modal-3" style="border-color: #292b2c;">
+                        <div style="max-height: 180px; overflow: hidden;">
+                            <img class="card-img-left float-left" id="face_image" src="#">
                             <div class="card-img-overlay" style="height: 180px;">
-                                <dl class="row" style="margin-left: 10em; font-size: 1.2em;">
+                                <dl class="row" style="font-size: 1.2em;">
                                     <dt class="col-sm-5 gender">Gender: </dt>
                                     <dd class="col-sm-3 gender" id="actual_gender"></dd>
                                     <dt class="col-sm-5 age">Age: </dt>
@@ -220,7 +220,6 @@
                                 </dl>
                             </div>
                         </div>
-                        <!-- <div> -->
                         <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
                         <div class="card-block">
                             <table id="scorecard-table" class="table table-bordered table-responsive table-striped">
