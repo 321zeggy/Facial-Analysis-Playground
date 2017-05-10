@@ -111,3 +111,13 @@ a.disabled {
 #actual_values_form * {
   box-sizing: border-box;
 }
+
+
+/*.modal-dialog{
+    overflow-y: initial !important
+}
+
+.modal-body{
+    max-height: 100vh;
+    overflow-y: auto;
+}*/

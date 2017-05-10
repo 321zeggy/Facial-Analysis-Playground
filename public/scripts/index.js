@@ -1,5 +1,5 @@
   $(document).ready(function($) {
-    $('#photoCanvas').parent().css('min-height', $('#photoCanvas').parent().width() + 70);
+    $('#photoCanvas').parent().css('min-height', $('#photoCanvas').parent().width() + 50);
     $('#photoCanvas, #camera').css('width', '82%');
     $('#photoCanvas, #camera').css('height', $('#photoCanvas').width());
 
@@ -181,6 +181,7 @@
         };
         $("#ibm_response").html(JSON.stringify(attributes, null, 4));
         drawBoundingBox(ibmBoundingBox, 'red');
+        $('#api-name').html('IBM');
         $('#gender-display').html($('.ibm_gender').html());
         $('#age-display').html($('.ibm_age').html());
         $('#gender-age-display').show();
@@ -433,17 +434,17 @@
       global_is_sample = false;
       handleURLSelect($("#photo_url").val());
       $("#photo_url").val('');
-        // jQuery.urlShortener({
-        //   longUrl: $("#photo_url").val(),
-        //   success: function(shortUrl) {
-        //     $("#photo_url").val('');
-        //     handleURLSelect(shortUrl);
-        //   },
-        //   error: function(longUrl) {
-        //     $("#photo_url").val('');
-        //     handleURLSelect(longUrl);
-        //   }
-        // });
+      // jQuery.urlShortener({
+      //   longUrl: $("#photo_url").val(),
+      //   success: function(shortUrl) {
+      //     $("#photo_url").val('');
+      //     handleURLSelect(shortUrl);
+      //   },
+      //   error: function(longUrl) {
+      //     $("#photo_url").val('');
+      //     handleURLSelect(longUrl);
+      //   }
+      // });
       return false;
     });
 
@@ -573,9 +574,23 @@
       $('.modal-1, .sample-img-modal').hide();
     });
 
+
     $('button.modal-1.sample-img-modal').click(function() {
+      scorecard.updateTotalScore();
+      $('#download').addClass('disabled');
+      $('.modal-1').hide();
       $('.modal-3').show();
-      $('.modal-1, .usr-img-modal').hide();
+      $('.usr-img-modal').hide();
+      $('.modal').scrollTop(0);
+      html2canvas($('#scorecard')[0], {
+        allowTaint: true,
+        logging: true,
+        background: '#fff',
+        height: $('#scorecard').outerHeight()
+      }).then(function(canvas) {
+        $('#download')[0].href = canvas.toDataURL();
+        $('#download').removeClass('disabled');
+      });
     });
 
     $('input.modal-2.btn-primary').click(function() {
@@ -589,7 +604,6 @@
     });
 
     $('button.modal-3.usr-img-modal').click(function() {
-      console.log('HI!');
       $('.modal-2').show();
       $('.modal-3, .sample-img-modal').hide();
     });
@@ -631,9 +645,20 @@
       } else {
         scorecard.setEthnicity();
       }
+      $('#download').addClass('disabled');
       $('.modal-3').show();
       scorecard.updateTotalScore();
       $('.modal-2, .sample-img-modal').hide();
+      $('.modal').scrollTop(0);
+      html2canvas($('#scorecard')[0], {
+        allowTaint: true,
+        logging: true,
+        background: '#fff',
+        height: $('#scorecard').outerHeight()
+      }).then(function(canvas) {
+        $('#download')[0].href = canvas.toDataURL();
+        $('#download').removeClass('disabled');
+      });
       return false;
     });
 
@@ -642,31 +667,25 @@
       $('.modal-1').show();
       $('.modal-2, .modal-3').hide();
       if (global_is_sample) {
-        // $('.sample-img-modal').show();
         $('.usr-img-modal').hide();
       } else {
         $('.sample-img-modal').hide();
-        // $('.usr-img-modal').show();
       }
     });
 
-    $('button.modal-1.sample-img-modal').click(function() {
-      scorecard.updateTotalScore();
-      $('.modal-1').hide();
-      $('.modal-3').show();
 
-      // $('.sample-img-modal').show();
-      $('.usr-img-modal').hide();
-    });
 
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#camera-button').click(function() {
       $('#camera').show();
-      camera = new JpegCamera(container = "#camera");
-      camera.show_stream();
-      $('#photoCanvas').hide();
-      $('#countdown').TimeCircles().restart().end().show();
+      camera = new JpegCamera(container = "#camera").ready(function() {
+        camera.show_stream();
+        $('#photoCanvas').hide();
+        $('#countdown').TimeCircles().restart().end().show();
+      });
+
+      
     });
 
     $('#camera').click(function() {
@@ -716,5 +735,13 @@
     }
 
     $('#sample1').click();
+
+
+
+    // $('#download').click(function() {
+    //   html2canvas($('#scorecard')[0], {allowTaint: true}).then(function(canvas) {
+    //     document.body.appendChild(canvas);
+    //   });
+    // });
 
   });
