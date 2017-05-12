@@ -67,12 +67,11 @@ var ScoreCard = function() {
 			if (this[apis[i] + '_face_detected']) {
 				if (this[className] == true_gender) {
 					total_correct += 1;
-					$(selecter).html(this[className]).addClass('bg-success');
+					$(selecter).html('<span style="font-size:1.5em;">' + this[className] + '</span>').addClass('bg-success');
 				} else {
-					$(selecter).html(this[className]).addClass('bg-danger');
+					$(selecter).html('<span style="font-size:1.5em;">' + this[className] + '</span>').addClass('bg-danger');
 				}
 			} else {
-				// $(selecter).html('No Face Detected').addClass('bg-danger');
 				$(selecter).replaceWith(
 					'<td class="' + className + ' bg-danger text-white"><i class="fa fa-2x fa-times"></i></td>');
 			}
@@ -94,20 +93,20 @@ var ScoreCard = function() {
 				if (apis[i] == 'ibm' && this.ibm_age_range) {
 					if (true_age >= this.ibm_age_range[0] && true_age <= this.ibm_age_range[1])	{
 						total_correct += 1;
-						$(selecter).html(this[className]).addClass('bg-success');
+						$(selecter).html('<span style="font-size:1.5em;">' + this[className] + '</span>').addClass('bg-success');
 					} else {
-						$(selecter).html(this[className]).addClass('bg-danger');
+						$(selecter).html('<span style="font-size:1.5em;">' + this[className] + '</span').addClass('bg-danger');
 					}
-					$(selecter).append('<sup><strong>**</strong></sup>');
+					$(selecter + ' span').append('<sup><strong>**</strong></sup>');
 					// $('[data-toggle="tooltip"]').tooltip();
 					$('.ibm-range').html('<strong>**</strong> This value is the average of the age range ' + this.ibm_age_range[0] + '-' + this.ibm_age_range[1] + 
 						' estimated by IBM').show();
 				}
 				else if (Math.abs(this[className] - true_age) <= 5) {
 					total_correct += 1;
-					$(selecter).html(this[className]).addClass('bg-success');
+					$(selecter).html('<span style="font-size:1.5em;">' + this[className] + '</span>').addClass('bg-success');
 				} else {
-					$(selecter).html(this[className]).addClass('bg-danger');
+					$(selecter).html('<span style="font-size:1.5em;">' + this[className] + '</span>').addClass('bg-danger');
 				}
 			} else {
 				// $(selecter).html('No Face Detected').addClass('bg-danger');
