@@ -204,7 +204,7 @@
                                 <input type="text" id="actual-ethnicity" name="ethnicity" class="require-if-active form-control" data-require-pair=".choice-ethnicity">
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-primary modal-2" value="View Scorecard">
+                        <input type="submit" class="btn btn-primary modal-2" value="View Scorecard" hidden>
                     </form>
                     <div id="scorecard" class="card card-outline-info modal-3" style="border-color: #292b2c;">
                         <div style="max-height: 180px; overflow: hidden;">
@@ -285,16 +285,14 @@
                 <div class="modal-footer">
                     <div class="modal-1">
                         <button type="button" class="btn btn-primary modal-1 usr-img-modal">Create Scorecard</button>
-                        <button type="button" class="btn btn-primary modal-1 sample-img-modal">View Scorecard</button>
                     </div>
                     <div class="modal-2">
-                        <!-- <button type="submit" class="btn btn-primary modal-2">View Scorecard</button> -->
                         <button type="button" class="btn btn-secondary modal-2">Back</button>
+                        <button type="button" class="btn btn-primary modal-2">View Scorecard</button>
                     </div>
                     <div class="modal-3">
                         <button type="button" class="btn btn-secondary modal-3 usr-img-modal">Back</button>
                         <button type="button" class="btn btn-secondary modal-3 sample-img-modal">Back</button>
-                        <!-- <button type="button" id="download" class="btn btn-primary modal-3">Download Scorecard</button> -->
                         <a href="canvas.toDataURL()" id="download" class="btn btn-primary modal-3" role="button" download="scorecard.png" aria-disabled="true">Download Scorecard</a>
                     </div>
                 </div>

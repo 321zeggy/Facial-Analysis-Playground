@@ -593,6 +593,10 @@
       });
     });
 
+    $('button.modal-2.btn-primary').click(function() {
+      $('input.modal-2.btn-primary').click();
+    });
+
     $('input.modal-2.btn-primary').click(function() {
       $('#actual_values_form').submit();
       $('.sample-img-modal').hide();
