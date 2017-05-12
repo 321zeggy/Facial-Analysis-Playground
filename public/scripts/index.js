@@ -252,7 +252,11 @@
 
     function facePlusPlusDetectCallback(response) {
       var facePlusPlusJSON = response;
-      if (!facePlusPlusJSON.faces[0]) {
+      if (!('faces' in facePlusPlusJSON)) {
+        $("#faceplusplus_response").html('Photo incompatible with Face++');
+        $("#comparison_table .faceplusplus_gender, #comparison_table .faceplusplus_age").html('No face detected');
+        $("#comparison_table .faceplusplus_face_detected").html('False');
+      } else if (facePlusPlusJSON.faces.length === 0) {
         console.log('no images in Face++ face response');
         $("#faceplusplus_response").html('No face detected');
         $("#comparison_table .faceplusplus_gender, #comparison_table .faceplusplus_age").html('No face detected');
