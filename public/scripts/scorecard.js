@@ -63,7 +63,7 @@ var ScoreCard = function() {
 		for (i = 0; i < apis.length; i++) {
 			var className = apis[i] + '_gender';
 			var selecter = '#scorecard .' + className;
-			$(selecter).replaceWith('<td class="' + className + ' text-white"></td');
+			$(selecter).replaceWith('<td class="' + className + ' text-white gender"></td');
 			if (this[apis[i] + '_face_detected']) {
 				if (this[className] == true_gender) {
 					total_correct += 1;
@@ -73,7 +73,7 @@ var ScoreCard = function() {
 				}
 			} else {
 				$(selecter).replaceWith(
-					'<td class="' + className + ' bg-danger text-white"><i class="fa fa-2x fa-times"></i></td>');
+					'<td class="' + className + ' bg-danger text-white gender"><i class="fa fa-2x fa-times"></i></td>');
 			}
 		}
 		$('#gender_score').html(total_correct + '/' + apis.length);
@@ -88,7 +88,7 @@ var ScoreCard = function() {
 		for (i = 0; i < apis.length; i++) {
 			var className = apis[i] + '_age';
 			var selecter = '#scorecard .' + className;
-			$(selecter).replaceWith('<td class="' + className + ' text-white"></td');
+			$(selecter).replaceWith('<td class="' + className + ' text-white age"></td');
 			if (this[apis[i] + '_face_detected']) {
 				if (apis[i] == 'ibm' && this.ibm_age_range) {
 					if (true_age >= this.ibm_age_range[0] && true_age <= this.ibm_age_range[1])	{
@@ -111,7 +111,7 @@ var ScoreCard = function() {
 			} else {
 				// $(selecter).html('No Face Detected').addClass('bg-danger');
 				$(selecter).replaceWith(
-					'<td class="' + className + ' bg-danger text-white"><i class="fa fa-2x fa-times"></i></td>');
+					'<td class="' + className + ' bg-danger text-white age"><i class="fa fa-2x fa-times"></i></td>');
 			}
 		}
 		$('#age_score').html(total_correct + '/' + apis.length);
@@ -142,16 +142,18 @@ var ScoreCard = function() {
 		var total_correct = 0;
 		var total_overall = 5;
 		if (this.actual_gender) {
-			// $('#scorecard .gender').show();
+			$('#scorecard .gender').show();
 			total_correct += this.updateGenderScores(this.actual_gender[0]); 
 			total_overall += 4;
+		} else {
+			$('#scorecard .gender').hide();
 		}
 		if (this.actual_age) {
-			// $('#scorecard .age').show();
+			$('#scorecard .age').show();
 			total_correct += this.updateAgeScores(this.actual_age);
 			total_overall += 4; 
 		} else {
-			$('.ibm-range').hide();
+			$('#scorecard .age').hide();
 		}
 		total_correct += this.updateFaceDetectedScores();
 		$('#total_score').html(total_correct + '/' + total_overall);

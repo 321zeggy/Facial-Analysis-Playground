@@ -628,6 +628,7 @@
         if ($gender.length == 1) {
           scorecard.setGender($gender.val());
         } else {
+          scorecard.setGender();
           return false;
         }
       } else {
@@ -638,6 +639,7 @@
         if ($.isNumeric($age.val()) && Number($age.attr('min')) <= $age.val() && Number($age.attr('max')) >= $age.val()) {
           scorecard.setAge($age.val());
         } else {
+          scorecard.setAge();
           return false;
         }
       } else {
@@ -648,6 +650,7 @@
         if ($ethnicity.val() !== '') {
           scorecard.setEthnicity($ethnicity.val());
         } else {
+          scorecard.setEthnicity();
           return false;
         }
       } else {
@@ -655,8 +658,8 @@
       }
       $('#download').addClass('disabled');
       $('.modal-3').show();
-      scorecard.updateTotalScore();
       $('.modal-2, .sample-img-modal').hide();
+      scorecard.updateTotalScore();
       $('.modal').scrollTop(0);
       html2canvas($('#scorecard')[0], {
         allowTaint: true,
