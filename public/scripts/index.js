@@ -435,21 +435,23 @@
     });
 
     $('#submit_photo_url').click(function(evt) {
-      $('#camera').hide();
-      global_is_sample = false;
-      handleURLSelect($("#photo_url").val());
-      $("#photo_url").val('');
-      // jQuery.urlShortener({
-      //   longUrl: $("#photo_url").val(),
-      //   success: function(shortUrl) {
-      //     $("#photo_url").val('');
-      //     handleURLSelect(shortUrl);
-      //   },
-      //   error: function(longUrl) {
-      //     $("#photo_url").val('');
-      //     handleURLSelect(longUrl);
-      //   }
-      // });
+      if ($('#photo_url').val() !== '') {
+        $('#camera').hide();
+        global_is_sample = false;
+        handleURLSelect($("#photo_url").val());
+        $("#photo_url").val('');
+        // jQuery.urlShortener({
+        //   longUrl: $("#photo_url").val(),
+        //   success: function(shortUrl) {
+        //     $("#photo_url").val('');
+        //     handleURLSelect(shortUrl);
+        //   },
+        //   error: function(longUrl) {
+        //     $("#photo_url").val('');
+        //     handleURLSelect(longUrl);
+        //   }
+        // });
+      }
       return false;
     });
 
