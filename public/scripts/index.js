@@ -289,7 +289,7 @@
       if (!global_is_sample) {
         scorecard = new ScoreCard();
       }
-      document.getElementById('actual_values_form').reset();
+      FormStuff.init();
       responsesCount = 0;
 
       $('.modal-1').show();
@@ -397,6 +397,7 @@
     var FormStuff = {
 
       init: function() {
+        document.getElementById('actual_values_form').reset();
         this.applyConditionalRequired();
         this.bindUIActions();
       },
@@ -674,7 +675,7 @@
     });
 
     $('#results-button, button.modal-3.sample-img-modal').click(function() {
-      document.getElementById('actual_values_form').reset();
+      FormStuff.init();
       $('.modal-1').show();
       $('.modal-2, .modal-3').hide();
       if (global_is_sample) {
