@@ -133,3 +133,8 @@ a.disabled {
     max-height: 100vh;
     overflow-y: auto;
 }*/
+
+tfoot th {
+  text-align: right;
+  font-size: 1.5em;
+}
