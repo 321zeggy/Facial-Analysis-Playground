@@ -33,7 +33,7 @@
     <div class="container">
         <h1 class="display-4 mb-4">Facial Analysis Playground</h1>
         <div class="row">
-            <div class="col-md-5" style="position: relative;">
+            <div class="col-sm-5" style="position: relative;">
                 <div id="camera" style="z-index: 100; position: absolute;"></div>
                 <canvas id="photoCanvas" width="400" height="400" style="z-index: 100; position: absolute;"></canvas>
                 <!-- <img src="images/loading.svg" id="loading" style="z-index: 300; align-self: center; position: absolute;"> -->
@@ -46,7 +46,7 @@
                     <span id="no-face-detected">No Face Detected</span>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-sm-5">
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills" role="tablist">
                     <li class="nav-item">
@@ -65,10 +65,31 @@
                         <a class="nav-link" data-toggle="tab" href="#kairos_response" role="tab">Kairos</a>
                     </li>
                 </ul>
+
+               <!--  <ul class="nav nav-pills flex-column flex-sm-row" role="tablist">
+                    <li class="nav-item">
+                        <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#ibm_response" role="tab">IBM</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#microsoft_response" role="tab">Microsoft</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#faceplusplus_response" role="tab">Face++</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#google_response" role="tab">Google</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#kairos_response" role="tab">Kairos</a>
+                    </li>
+                </ul> -->
+
                 <!-- Tab panes -->
                 <div class="tab-content mt-2">
-                    <div class="tab-pane fade show active responses" id="ibm_response" role="tabpanel"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-                        <span class="sr-only">Loading...</span></div>
+                    <div class="tab-pane fade show active responses" id="ibm_response" role="tabpanel">
+                        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
                     <div class="tab-pane fade responses" id="microsoft_response" role="tabpanel"><i>(Microsoft response will appear here)</i></div>
                     <div class="tab-pane fade responses" id="faceplusplus_response" role="tabpanel"><i>(Face++ response will appear here)</i></div>
                     <div class="tab-pane fade responses" id="google_response" role="tabpanel"><i>(IBM response will appear here)</i></div>
@@ -77,7 +98,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-sm-5">
                 <button id='camera-button' type="button" class="btn btn-outline-success btn-block">Webcam</button>
                 <form class="form file-input-form">
                     <div>
@@ -95,18 +116,28 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-5">
+            <div class="col-sm-5">
                 <button id="results-button" type="button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#myModal" data-animation="false" disabled>
                     Compare Results
                 </button>
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-2 col-md-offset-1"><img src="images/Joy Buolamwini-gender_Female-age_22-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample1"></div>
-            <div class="col-md-2"><img src="images/Anna Akana-gender_Female-age_25-ethnicity_Asian.jpg" class="img-fluid sample-img" id="sample2"></div>
-            <div class="col-md-2"><img src="images/Mike Colter-gender_Male-age_37-ethnicity_Black.jpg" class="img-fluid sample-img" id="sample3"></div>
-            <div class="col-md-2"><img src="images/Taylor Swift-gender_Female-age_26-ethnicity_White.jpg" class="img-fluid sample-img" id="sample4"></div>
-            <div class="col-md-2"><img src="images/Aziz Ansari-gender_Male-age_25-ethnicity_Indian.jpg" class="img-fluid sample-img" id="sample5"></div>
+            <div class="col col-md-offset-1">
+                <img src="images/Joy Buolamwini-gender_Female-age_22-ethnicity_Black.jpg" class="img-fluid sample-img rounded-circle " id="sample1">
+            </div>
+            <div class="col">
+                <img src="images/Anna Akana-gender_Female-age_25-ethnicity_Asian.jpg" class="img-fluid sample-img rounded-circle " id="sample2">
+            </div>
+            <div class="col">
+                <img src="images/Mike Colter-gender_Male-age_37-ethnicity_Black.jpg" class="img-fluid sample-img rounded-circle " id="sample3">
+            </div>
+            <div class="col">
+                <img src="images/Taylor Swift-gender_Female-age_26-ethnicity_White.jpg" class="img-fluid sample-img rounded-circle " id="sample4">
+            </div>
+            <div class="col">
+                <img src="images/Aziz Ansari-gender_Male-age_25-ethnicity_Indian.jpg" class="img-fluid sample-img rounded-circle " id="sample5">
+            </div>
         </div>
     </div>
     <!-- Modal -->

@@ -7,6 +7,11 @@
 	cursor: pointer;
 }
 
+.sample-img {
+  width: 160px;
+  height: auto;
+}
+
 a.disabled {
 	pointer-events: none;
 	cursor: default;
