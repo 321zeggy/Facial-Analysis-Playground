@@ -1020,7 +1020,6 @@ function crop(canvas, bounds) {
     var x2 = Math.min(canvas.width, Math.max(1, bounds.left + bounds.width));
     var y1 = Math.min(canvas.height - 1, Math.max(0, bounds.top));
     var y2 = Math.min(canvas.height, Math.max(1, bounds.top + bounds.height));
-    console.log('bounds:', bounds, ', x1:', x1, ', x2:', x2, ', y1:', y1, ', y2:', y2);
     croppedCanvas.width = bounds.width;
     croppedCanvas.height =  bounds.height;
     var width = x2-x1;
@@ -3358,9 +3357,6 @@ exports.decode64 = function(base64) {
 exports.getBounds = function(node) {
     if (node.getBoundingClientRect) {
         var clientRect = node.getBoundingClientRect();
-        if ($(node).data("html2canvas-node0") === 0) {
-        	console.log(node, clientRect);
-    	}
         var width = node.offsetWidth == null ? clientRect.width : node.offsetWidth;
         return {
             top: clientRect.top,
