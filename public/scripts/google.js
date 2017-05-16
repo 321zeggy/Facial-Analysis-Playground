@@ -26,3 +26,40 @@ Google.detect = function(image_data, callback, is_url) {
         error: callback
     });
 };
+
+
+Google.handleResponse = function(response, scorecard) {
+    var googleJSON = JSON.parse(response.responseText);
+      if (('error' in googleJSON.responses[0])) {
+        $("#google_response").html('Photo incompatible with Google');
+        scorecard.setGoogleFaceDetected(false);
+        return;
+      } else if (!('faceAnnotations' in googleJSON.responses[0])) {
+        $("#google_response").html('No face detected');
+        scorecard.setGoogleFaceDetected(false);
+        return;
+      } else {
+        var attributes = googleJSON.responses[0].faceAnnotations[0];
+        attributes = {
+          detectionConfidence: attributes.detectionConfidence,
+          joyLikelihood: attributes.joyLikelihood,
+          sorrowLikelihood: attributes.sorrowLikelihood,
+          angerLikelihood: attributes.angerLikelihood,
+          surpriseLikelihood: attributes.surpriseLikelihood,
+          underExposedLikelihood: attributes.underExposedLikelihood,
+          blurredLikelihood: attributes.blurredLikelihood,
+          headwearLikelihood: attributes.headwearLikelihood
+        };
+        var face = googleJSON.responses[0].faceAnnotations[0].fdBoundingPoly.vertices;
+
+        var boundingBox = {
+          top: face[0].y,
+          left: face[0].x,
+          width: face[2].x - face[0].x,
+          height: face[2].y - face[0].y
+        };
+        $("#google_response").html(JSON.stringify(attributes, null, 4));
+        scorecard.setGoogleFaceDetected(true);
+        return boundingBox;
+      }
+}

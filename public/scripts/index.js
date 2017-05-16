@@ -72,199 +72,36 @@
       imageObj.src = global_image_data;
     }
 
-    function getGender(genderString) {
-      return genderString.toUpperCase()[0];
-    }
-
     function microsoftDetectCallback(response) {
-      var microsoftJSON = JSON.parse(response.responseText);
-      if (!microsoftJSON[0]) {
-        scorecard.setMicrosoftFaceDetected(false);
-        $('#comparison_table')
-          .find('.microsoft_gender, .microsoft_age')
-          .add('#microsoft_response')
-            .html('No face detected');
-      } else {
-        var attributes = microsoftJSON[0].faceAttributes;
-        $('#comparison_table')
-          .find('.microsoft_gender')
-            .html(getGender(attributes.gender))
-            .end()
-          .find('.microsoft_age')
-            .html(attributes.age);
-        scorecard.setMicrosoftGender(getGender(attributes.gender));
-        scorecard.setMicrosoftAge(parseFloat(attributes.age));
-        scorecard.setMicrosoftFaceDetected(true);
-
-        var face = microsoftJSON[0].faceRectangle;
-        boundingBoxes.microsoft = {
-          top: face.top,
-          left: face.left,
-          width: face.width,
-          height: face.height
-        };
-        $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
-      }
-      $('a[href="#microsoft_response"]').removeClass('disabled');
+      boundingBoxes.microsoft = Microsoft.handleResponse(response, scorecard);
       incrementResponsesCount();
+      $('a[href="#microsoft_response"]').removeClass('disabled');
     }
 
     function ibmDetectCallback(response) {
-      var ibmJSON = JSON.parse(response.responseText);
-      if (!ibmJSON.images[0].faces[0]) {
-        $("#comparison_table")
-          .find('.ibm_gender, .ibm_age')
-          .add('#ibm_response')
-            .html('No face detected');
-        scorecard.setIBMFaceDetected(false);
-      } else {
-        var attributes = ibmJSON.images[0].faces[0];
-        attributes = {
-          "gender": attributes.gender,
-          "age": attributes.age
-        };
-        scorecard.setIBMGender(getGender(attributes.gender.gender));
-        $("#comparison_table .ibm_gender")
-          .html(getGender(attributes.gender.gender));
-        if ('min' in attributes.age) {
-          if ('max' in attributes.age) {
-            scorecard.setIBMAge(
-              min_age = parseInt(attributes.age.min),
-              max_age = parseInt(attributes.age.max)
-            );
-            $("#comparison_table .ibm_age")
-              .html(attributes.age.min + '-' + attributes.age.max);
-          } else {
-            $("#comparison_table .ibm_age")
-              .html(attributes.age.min);
-            scorecard.setIBMAge(min_age = parseInt(attributes.age.min));
-          }
-        } else {
-          scorecard.setIBMAge(max_age = parseInt(attributes.age.max));
-          $("#comparison_table .ibm_age").html(attributes.age.max);
-        }
-        scorecard.setIBMFaceDetected(true);
-        var face = ibmJSON.images[0].faces[0].face_location;
-        boundingBoxes.ibm = {
-          top: face.top,
-          left: face.left,
-          width: face.width,
-          height: face.height
-        };
-        $("#ibm_response").html(JSON.stringify(attributes, null, 4));
-        $('#api-name').html('IBM');
-        selectApi('ibm', 'red');
-      }
-      $('a[href="#ibm_response"]').removeClass('disabled').click();
+      boundingBoxes.ibm = IBM.handleResponse(response, scorecard);
       incrementResponsesCount();
+      $('#api-name').html('IBM');
+      $('a[href="#ibm_response"]').removeClass('disabled').click();
+      selectApi('ibm', 'red');
     }
 
-
     function kairosDetectCallback(response) {
-      var kairosJSON = JSON.parse(response.responseText);
-      if ('Errors' in kairosJSON) {
-        $('#comparison_table')
-          .find('.kairos_gender, .kairos_age')
-          .add('#kairos_response')
-            .html('No face detected');
-        scorecard.setKairosFaceDetected(false);
-      } else {
-        var attributes = kairosJSON.images[0].faces[0].attributes;
-        $('#comparison_table')
-          .find('.kairos_gender')
-            .html(getGender(attributes.gender.type))
-            .end()
-          .find('.kairos_age')
-            .html(attributes.age);
-        scorecard.setKairosGender(getGender(attributes.gender.type));
-        scorecard.setKairosAge(parseInt(attributes.age));
-        scorecard.setKairosFaceDetected(true);
-
-        var face = kairosJSON.images[0].faces[0];
-        boundingBoxes.kairos = {
-          top: face.topLeftY,
-          left: face.topLeftX,
-          width: face.width,
-          height: face.height
-        };
-        $("#kairos_response").html(JSON.stringify(attributes, null, 4));
-      }
-      $('a[href="#kairos_response"]').removeClass('disabled');
+      boundingBoxes.kairos = Kairos.handleResponse(response, scorecard);
       incrementResponsesCount();
+      $('a[href="#kairos_response"]').removeClass('disabled');
     }
 
     function googleDetectCallback(response) {
-      var googleJSON = JSON.parse(response.responseText);
-      if (('error' in googleJSON.responses[0])) {
-        $("#google_response").html('Photo incompatible with Google');
-        scorecard.setGoogleFaceDetected(false);
-      } else if (!('faceAnnotations' in googleJSON.responses[0])) {
-        $("#google_response").html('No face detected');
-        scorecard.setGoogleFaceDetected(false);
-      } else {
-        var attributes = googleJSON.responses[0].faceAnnotations[0];
-        attributes = {
-          detectionConfidence: attributes.detectionConfidence,
-          joyLikelihood: attributes.joyLikelihood,
-          sorrowLikelihood: attributes.sorrowLikelihood,
-          angerLikelihood: attributes.angerLikelihood,
-          surpriseLikelihood: attributes.surpriseLikelihood,
-          underExposedLikelihood: attributes.underExposedLikelihood,
-          blurredLikelihood: attributes.blurredLikelihood,
-          headwearLikelihood: attributes.headwearLikelihood
-        };
-        var face = googleJSON.responses[0].faceAnnotations[0].fdBoundingPoly.vertices;
-
-        boundingBoxes.google = {
-          top: face[0].y,
-          left: face[0].x,
-          width: face[2].x - face[0].x,
-          height: face[2].y - face[0].y
-        };
-        $("#google_response").html(JSON.stringify(attributes, null, 4));
-        scorecard.setGoogleFaceDetected(true);
-      }
-      $('a[href="#google_response"]').removeClass('disabled');
+      boundingBoxes.google = Google.handleResponse(response, scorecard);
       incrementResponsesCount();
+      $('a[href="#google_response"]').removeClass('disabled');
     }
 
     function facePlusPlusDetectCallback(response) {
-      var facePlusPlusJSON = response;
-      if (!('faces' in facePlusPlusJSON)) {
-        $("#faceplusplus_response").html('Photo incompatible with Face++');
-        $('#comparison_table')
-          .find('.faceplusplus_gender, .faceplusplus_age')
-            .html('No face detected');
-        scorecard.setFacePlusPlusFaceDetected(false);
-      } else if (facePlusPlusJSON.faces.length === 0) {
-        $('#comparison_table')
-          .find('.faceplusplus_gender, .faceplusplus_age')
-          .add('#faceplusplus_response')
-            .html('No face detected');
-        scorecard.setFacePlusPlusFaceDetected(false);
-      } else {
-        var attributes = facePlusPlusJSON.faces[0].attributes;
-        $('#comparison_table')
-          .find('.faceplusplus_gender')
-            .html(getGender(attributes.gender.value))
-            .end()
-          .find('.faceplusplus_age')
-            .html(attributes.age.value);
-        scorecard.setFacePlusPlusGender(getGender(attributes.gender.value));
-        scorecard.setFacePlusPlusAge(parseInt(attributes.age.value));
-        scorecard.setFacePlusPlusFaceDetected(true);
-
-        var face = facePlusPlusJSON.faces[0].face_rectangle;
-        boundingBoxes.faceplusplus = {
-          top: face.top,
-          left: face.left,
-          width: face.width,
-          height: face.height
-        };
-        $("#faceplusplus_response").html(JSON.stringify(attributes, null, 4));
-      }
-      $('a[href="#faceplusplus_response"]').removeClass('disabled');
+      boundingBoxes.faceplusplus = FacePlusPlus.handleResponse(response, scorecard);
       incrementResponsesCount();
+      $('a[href="#faceplusplus_response"]').removeClass('disabled');
     }
 
     function reset() {
@@ -615,11 +452,11 @@
       $('#download').addClass('disabled');
       $('#myModal')
         .find('.modal-3')
-          .show()
-          .end()
+        .show()
+        .end()
         .find('.modal-2, .sample-img-modal')
-          .hide()
-          .end()
+        .hide()
+        .end()
         .scrollTop(0);
       html2canvas($('#scorecard')[0], {
         allowTaint: true,
