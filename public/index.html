@@ -20,6 +20,7 @@
     <script src="https://use.fontawesome.com/f748178fc1.js"></script>
     <script src="scripts/html2canvas.js" type="text/javascript"></script>
     <script src="scripts/config.js"></script>
+    <script src="scripts/util.js"></script>
     <script src="scripts/scorecard.js"></script>
     <script src="scripts/kairos.js"></script>
     <script src="scripts/microsoft.js"></script>
@@ -100,6 +101,9 @@
         <div class="row">
             <div class="col-sm-5">
                 <button id='camera-button' type="button" class="btn btn-outline-success btn-block">Webcam</button>
+                <button id='snapshot-button' type="button" class="btn btn-success btn-block">
+                    Take Snapshot <i class="fa fa-camera" aria-hidden="true"></i>
+                </button>
                 <form class="form file-input-form">
                     <div>
                         <label></label>
@@ -190,7 +194,7 @@
                         <div>
                             <div>
                                 <label for="choice-attributes-gender" class="custom-control custom-checkbox">
-                                    <input type="checkbox" name="choice-attributes" id="choice-attributes-gender" class="choice-gender custom-control-input">
+                                    <input type="checkbox" name="include-gender" id="choice-attributes-gender" class="choice-gender custom-control-input">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Gender</span>
                                 </label>
@@ -214,7 +218,7 @@
                             </div>
                             <div>
                                 <label for="choice-attributes-age" class="custom-control custom-checkbox">
-                                    <input type="checkbox" name="choice-attributes" id="choice-attributes-age" class="choice-age custom-control-input">
+                                    <input type="checkbox" name="include-age" id="choice-attributes-age" class="choice-age custom-control-input">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Age</span>
                                 </label>
@@ -225,7 +229,7 @@
                             </div>
                             <div>
                                 <label for="choice-attributes-ethnicity" class="custom-control custom-checkbox">
-                                    <input type="checkbox" name="choice-attributes" id="choice-attributes-ethnicity" class="choice-ethnicity custom-control-input">
+                                    <input type="checkbox" name="include-ethnicity" id="choice-attributes-ethnicity" class="choice-ethnicity custom-control-input">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Ethnicity</span>
                                 </label>

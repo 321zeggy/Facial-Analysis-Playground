@@ -6,6 +6,7 @@
     $('#photoCanvas')[0].height = $('#photoCanvas').height();
 
     $('[data-toggle="tooltip"]').tooltip();
+    $('#snapshot-button').hide();
 
     var scorecard;
 
@@ -18,58 +19,15 @@
 
     var camera;
 
-    function incrementResponsesCount() {
+
+/* Upload and Process Image */
+
+function incrementResponsesCount() {
       responsesCount += 1;
       if (responsesCount == 5) {
         scorecard.setFaceImage(global_image_data);
         $("#results-button").prop('disabled', false);
       }
-    }
-
-
-    // jQuery.urlShortener.settings.apiKey = 'AIzaSyDjW-G7go9ZMvuw0oBS6a_RGZgWKOGLxR8';
-
-    function imageToDataUri(img, width, height) {
-      // create an off-screen canvas
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext('2d');
-
-      // set its dimension to target size
-      canvas.width = width;
-      canvas.height = height;
-
-      // draw source image into the off-screen canvas:
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // encode image to data-uri with base64 version of compressed image
-      return canvas.toDataURL();
-    }
-
-    // drawing method
-    function drawBoundingBox(face, color) {
-      var imageObj = new Image();
-      imageObj.onload = function() {
-        var canvas = $('#photoCanvas')[0];
-        var context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(imageObj, 0, 0, imageObj.width * global_ratio, imageObj.height * global_ratio);
-
-        if (face) {
-          var top = face.top * global_ratio;
-          var left = face.left * global_ratio;
-          var width = face.width * global_ratio;
-          var height = face.height * global_ratio;
-
-          // draw face box
-          context.beginPath();
-          context.rect(left, top, width, height);
-          context.lineWidth = 4;
-          context.strokeStyle = color;
-          context.stroke();
-        }
-        $('#photoCanvas').show();
-      };
-      imageObj.src = global_image_data;
     }
 
     function microsoftDetectCallback(response) {
@@ -104,24 +62,24 @@
       $('a[href="#faceplusplus_response"]').removeClass('disabled');
     }
 
-    function reset() {
+    function reset(image, scaling_factor) {
       $('#gender-age-display').hide();
+
+      var spinner = '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>';
+      $("#kairos_response, #microsoft_response, #ibm_response, #google_response, #faceplusplus_response").html(spinner);
+
+      // scorecards for samples are already reset, so reset for non-sample images 
       if (!global_is_sample) {
         scorecard = new ScoreCard();
       }
       FormStuff.init();
       responsesCount = 0;
 
-      $('#no-face-detected, #detected-values').hide();
-
-      global_image_data = null;
-      global_ratio = null;
+      global_image_data = image;
+      global_ratio = scaling_factor;
 
       $('.nav-link').addClass('disabled');
       $("#results-button").prop('disabled', true);
-
-      var spinner = '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>';
-      $("#kairos_response, #microsoft_response, #ibm_response, #google_response, #faceplusplus_response").html(spinner);
 
       boundingBoxes = {
         kairos: undefined,
@@ -130,13 +88,10 @@
         google: undefined,
         faceplusplus: undefined
       };
-    }
 
-    // get ratio by which to multiply image width and height in order to fit canvas
-    function getConversionRatio(imageObj, maxWidth, maxHeight) {
-      return Math.min(maxWidth / imageObj.width, maxHeight / imageObj.height);
+      $('#camera').hide();
+      $('#photoCanvas').show();
     }
-
 
     function handleFileSelect(file) {
       reset();
@@ -150,21 +105,18 @@
           var imageObj = new Image();
           imageObj.onload = function() {
             var ratio = getConversionRatio(imageObj, canvas.width, canvas.height);
-            if (!global_ratio) {
-              global_ratio = ratio;
+            if (!ratio_computed) {
+              ratio_computed = true;
               imageObj.src = imageToDataUri(imageObj, imageObj.width, imageObj.height);
             } else {
               context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
-              $('#camera').hide();
-              $('#photoCanvas').show();
               var image_data = String(imageObj.src);
               image_data = image_data.replace("data:image/jpeg;base64,", "");
               image_data = image_data.replace("data:image/jpg;base64,", "");
               image_data = image_data.replace("data:image/png;base64,", "");
               image_data = image_data.replace("data:image/gif;base64,", "");
               image_data = image_data.replace("data:image/bmp;base64,", "");
-              global_image_data = 'data:image/jpeg;base64,' + image_data;
-
+              reset('data:image/jpeg;base64,' + image_data, ratio);
               Kairos.detect(image_data, kairosDetectCallback);
               Google.detect(image_data, googleDetectCallback, is_url = false);
 
@@ -184,6 +136,7 @@
             }
 
           };
+          var ratio_computed = false;
           imageObj.src = e.target.result;
         };
         // Read in the image file as a data URL.
@@ -193,18 +146,17 @@
 
 
     function handleURLSelect(image_url) {
+      // update the file input in case it still displays the name of a previously uploaded file
       $("#file").val('');
       var canvas = $('#photoCanvas')[0];
       var context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
-      reset();
       var imageObj = new Image();
 
       imageObj.onload = function() {
         var ratio = getConversionRatio(imageObj, canvas.width, canvas.height);
         context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
-        global_image_data = imageObj.src;
-        global_ratio = ratio;
+        reset(imageObj.src, ratio);
 
         Kairos.detect(imageObj.src, kairosDetectCallback);
         FacePlusPlus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
@@ -215,39 +167,10 @@
       imageObj.src = image_url;
     }
 
-    var FormStuff = {
-
-      init: function() {
-        document.getElementById('actual_values_form').reset();
-        this.applyConditionalRequired();
-        this.bindUIActions();
-      },
-
-      bindUIActions: function() {
-        $("input[type='radio'], input[type='checkbox']").on("change", this.applyConditionalRequired);
-      },
-
-      applyConditionalRequired: function() {
-
-        $(".require-if-active").each(function() {
-          var el = $(this);
-          if ($(el.data("require-pair")).is(":checked")) {
-            el.prop("required", true);
-            el.parents('.reveal-if-active').addClass('revealed');
-          } else {
-            el.prop("required", false);
-            el.parents('.reveal-if-active').removeClass('revealed');
-          }
-        });
-
-      }
-
-    };
-
-    FormStuff.init();
-
     $('#file').change(function(evt) {
-      $('#camera').hide();
+      // in case camera div was previously shown and not re-hidden
+      $('#camera').hide(); 
+      // makes sure the file change wasn't just due to it being reset in handleURLSelect() 
       if ($("#file").val !== '') {
         global_is_sample = false;
         var file = evt.target.files[0];
@@ -255,12 +178,14 @@
       }
     });
 
+    // jQuery.urlShortener.settings.apiKey = 'AIzaSyDjW-G7go9ZMvuw0oBS6a_RGZgWKOGLxR8';
     $('#submit_photo_url').click(function(evt) {
+      // ignore clicks to the submit button when no URL is given
       if ($('#photo_url').val() !== '') {
         $('#camera').hide();
         global_is_sample = false;
         handleURLSelect($("#photo_url").val());
-        $("#photo_url").val('');
+        $("#photo_url").val(''); // reset the input field
         // jQuery.urlShortener({
         //   longUrl: $("#photo_url").val(),
         //   success: function(shortUrl) {
@@ -276,34 +201,15 @@
       return false;
     });
 
-    function dataURItoBlob(dataURI) {
-      // convert base64/URLEncoded data component to raw binary data held in a string
-      var byteString;
-      if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
-      else
-        byteString = unescape(dataURI.split(',')[1]);
-
-      // separate out the mime component
-      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-      // write the bytes of the string to a typed array
-      var ia = new Uint8Array(byteString.length);
-      for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-
-      return new Blob([ia], {
-        type: mimeString
-      });
-    }
 
     $('.sample-img').click(function(evt) {
       $('#camera').hide();
       global_is_sample = true;
       scorecard = new ScoreCard();
       var url = $(this).attr('src');
+      // split the sample's filename to extract values for any (or all) of the possible attributes
       var attributes = url.substring(url.indexOf('-') + 1, url.indexOf('.')).split('-');
+      // iterate through the attribute-value pairs, updating the scorecard accordingly
       for (i = 0; i < attributes.length; i++) {
         switch (attributes[i].split('_')[0]) {
           case 'gender':
@@ -322,6 +228,7 @@
 
       }
       var imageObj = new Image();
+      // convert sample file to blob in order to make it compatible with handleFileSelect()
       imageObj.onload = function() {
         var blob = dataURItoBlob(imageToDataUri(imageObj, imageObj.width, imageObj.height));
         blob.name = 'blob.png';
@@ -332,8 +239,10 @@
       return false;
     });
 
+    /* View API Results */
+
     var selectApi = function(api, color) {
-      drawBoundingBox(boundingBoxes[api], color);
+      drawBoundingBox(boundingBoxes[api], color, global_image_data, global_ratio);
       var faceDetected = $('#comparison_table .' + api + '_gender').html() != 'No face detected';
       $('#no-face-detected').toggle(!faceDetected);
       $('#detected-values').toggle(faceDetected);
@@ -347,7 +256,7 @@
     };
 
     $('#apis_nav .nav-link').on('show.bs.tab', function() {
-      switch( $(this).attr('href') ) {
+      switch ($(this).attr('href')) {
         case '#ibm_response':
           $('#api-name').html('IBM');
           selectApi('ibm', 'red');
@@ -365,7 +274,7 @@
           selectApi('kairos', 'blue');
           break;
         case '#google_response':
-          drawBoundingBox(boundingBoxes.google, 'yellow');
+          drawBoundingBox(boundingBoxes.google, 'yellow', global_image_data, global_ratio);
           $('#api-name').html('Google');
           $('#gender-display, #age-display').html('NA');
           $('#no-face-detected').hide();
@@ -373,131 +282,114 @@
       }
     });
 
-    $('button.modal-1.usr-img-modal').click(function() {
+/* MODAL */
+
+    function displayComparisonTable() {
+      $('.modal-1').show();
+      $('.modal-2, .modal-3').hide();
+      $('.sample-img-modal').toggle(global_is_sample);
+      $('.usr-img-modal').toggle(!global_is_sample);
+    }
+
+    function displayGroundTruthForm() {
       $('.modal-2').show();
-      $('.modal-1, .sample-img-modal').hide();
-    });
+      $('.modal-1, .modal-3').hide();
+    }
 
-
-    $('button.modal-1.sample-img-modal').click(function() {
+    function displayScoreCard() {
       scorecard.updateTotalScore();
       $('#download').addClass('disabled');
-      $('.modal-1').hide();
       $('.modal-3').show();
-      $('.usr-img-modal').hide();
-      $('.modal').scrollTop(0);
-      html2canvas($('.modal-body')[0], {
+      $('.modal-1, .modal-2').hide();
+      $('.sample-img-modal').toggle(global_is_sample);
+      $('.usr-img-modal').toggle(!global_is_sample);
+      $('#myModal').scrollTop(0);
+      html2canvas($('#scorecard'), {
         allowTaint: true,
-        background: '#fff',
-        height: $('.modal-body').outerHeight()
+        background: '#fff'
       }).then(function(canvas) {
         $('#download').removeClass('disabled')[0].href = canvas.toDataURL();
       });
-    });
+    }
 
+    $('#results-button, button.modal-2.btn-secondary, .modal-3.btn-secondary.sample-img-modal').click(displayComparisonTable);
+    $('button.modal-1.usr-img-modal, .modal-3.btn-secondary.usr-img-modal').click(displayGroundTruthForm);
+    $('button.modal-1.sample-img-modal').click(displayScoreCard);
     $('button.modal-2.btn-primary').click(function() {
+      // submit the #actual_values_form
       $('input.modal-2.btn-primary').click();
     });
 
-    $('input.modal-2.btn-primary').click(function() {
-      $('#actual_values_form').submit();
-      $('.sample-img-modal').hide();
-    });
-
-    $('button.modal-2.btn-secondary').click(function() {
-      $('.modal-1').show();
-      $('.modal-2, .sample-img-modal').hide();
-    });
-
-    $('button.modal-3.usr-img-modal').click(function() {
-      $('.modal-2').show();
-      $('.modal-3, .sample-img-modal').hide();
-    });
-
-    $('button.modal-3.sample-img-modal').click(function() {
-      $('.modal-1').show();
-      $('.modal-3, .usr-img-modal').hide();
-    });
-
-    $('#actual_values_form').submit(function() {
-      var gender, age;
-      scorecard.setGender();
-      if ($('.choice-gender[name="choice-attributes"]:checked').length > 0) {
-        var $gender = $('input[name="gender"]:checked');
-        if ($gender.length == 1) {
-          scorecard.setGender($gender.val());
+    $('#actual_values_form').submit(function(event) {
+      scorecard.setGender(); // clear any previous gender value
+      // handle the case of user opting to include gender on scorecard
+      if ($('[name="include-gender"]:checked').length) {
+        // check if a gender has been selected
+        if ($('[name="gender"]:checked').length) {
+          var gender = $('[name="gender"]:checked').val();
+          // update the scorecard with the selected gender
+          scorecard.setGender(gender);
+          // user opted to include gender, but has not actually selected one
         } else {
+          // fail validation
           return false;
         }
       }
-      scorecard.setAge();
-      if ($('.choice-age[name="choice-attributes"]:checked').length > 0) {
-        var $age = $('input[name="age"]');
-        if ($.isNumeric($age.val()) && Number($age.attr('min')) <= $age.val() && Number($age.attr('max')) >= $age.val()) {
-          scorecard.setAge($age.val());
+      scorecard.setAge(); // clear any previous age value
+      // handle the case of user opting to include age on scorecard
+      if ($('[name="include-age"]:checked').length) {
+        var age = $('input[name="age"]').val();
+        var minAge = $('input[name="age"]').attr('min');
+        var maxAge = $('input[name="age"]').attr('max');
+        // check if the given age value is valid (a nonnegetive number no larger than the set max)
+        if ($.isNumeric(age) && age >= Number(minAge) && age <= Number(maxAge)) {
+          // update the scorecard with the given age
+          scorecard.setAge(age);
+          // user opted to include age, but failed to submit a valid value
         } else {
+          // fail validation
           return false;
         }
       }
-      scorecard.setEthnicity();
-      if ($('.choice-ethnicity[name="choice-attributes"]:checked').length > 0) {
-        var $ethnicity = $('input[name="ethnicity"]');
-        if ($ethnicity.val() !== '') {
-          scorecard.setEthnicity($ethnicity.val());
+      scorecard.setEthnicity(); // clear any previous ethnicity value
+      // handle the case of user opting to include ethnicity on scorecard
+      if ($('[name="include-ethnicity"]:checked').length) {
+        var ethnicity = $('input[name="ethnicity"]').val();
+        // check if a valid (nonempty) ethnicity value was given
+        if (ethnicity !== '') {
+          // update the scorecard with the given ethnicity
+          scorecard.setEthnicity(ethnicity);
+          // user opted to include ethnicity, but failed to submit a value
         } else {
+          // fail validation
           return false;
         }
       }
-      scorecard.updateTotalScore();
-      $('#download').addClass('disabled');
-      $('#myModal')
-        .find('.modal-3')
-        .show()
-        .end()
-        .find('.modal-2, .sample-img-modal')
-        .hide()
-        .end()
-        .scrollTop(0);
-      html2canvas($('#scorecard')[0], {
-        allowTaint: true,
-        background: '#fff',
-        height: $('#scorecard').outerHeight()
-      }).then(function(canvas) {
-        $('#download').removeClass('disabled')[0].href = canvas.toDataURL();
-      });
-      return false;
+      // VALIDATION SUCCESSFUL
+
+      // display updated scorecard
+      displayScoreCard();
+
+      // prevent form from actually submitting
+      event.preventDefault();
     });
 
-    $('#results-button, button.modal-3.sample-img-modal').click(function() {
-      FormStuff.init();
-      $('.modal-1').show();
-      $('.modal-2, .modal-3').hide();
-      if (global_is_sample) {
-        $('.usr-img-modal').hide();
-      } else {
-        $('.sample-img-modal').hide();
-      }
-    });
 
     $('#camera-button').click(function() {
-      if ($(this).filter('.btn-outline-success').length == 1) {
-        $('#camera').show();
-        $('#photoCanvas').hide();
-        camera = new JpegCamera(container = "#camera").ready(function() {
-          this.show_stream();
-          $('#photoCanvas, #gender-age-display').hide();
-          $('#camera-button.btn-outline-success')
-            .addClass('btn-success')
-            .removeClass('btn-outline-success')
-            .html('Take Snapshot <i class="fa fa-camera" aria-hidden="true"></i>');
-        });
-      } else if ($(this).filter('.btn-success').length == 1) {
-        $('#countdown').TimeCircles().restart().end().show();
-        $(this)
-          .removeClass('btn-success')
-          .addClass('btn-outline-success')
-          .html('Webcam');
-      }
+      $('#camera').show();
+      $('#photoCanvas').hide();
+      camera = new JpegCamera("#camera").ready(function() {
+        this.show_stream();
+        $('#photoCanvas, #gender-age-display').hide();
+      });
+      $(this).hide();
+      $('#snapshot-button').show();
+    });
+
+    $('#snapshot-button').click(function() {
+      $('#countdown').TimeCircles().restart().end().show();
+      $(this).hide();
+      $('#camera-button').show();
     });
 
     $('#countdown').TimeCircles({
@@ -515,8 +407,8 @@
           color: "#C0C8CF"
         }
       },
-      total_duration: 4,
-      start: false
+      total_duration: 4, // 4 secs, counting down from 3 to 0,  
+      start: false // don't start countdown immediately (waits until user clicks snapshot button)
     });
     $('#countdown').TimeCircles({
       count_past_zero: false
