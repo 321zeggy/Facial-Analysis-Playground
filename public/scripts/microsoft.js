@@ -4,30 +4,40 @@ var Microsoft = {
 };
 
 Microsoft.detect = function(image_data, callback, is_url) {
-    var data;
     var header_settings = {
-        'Ocp-Apim-Subscription-Key': this.api_key
+        'Ocp-Apim-Subscription-Key': Microsoft.api_key
     };
     if (is_url) {
         header_settings['Content-type'] = 'application/json';
-        data = JSON.stringify({
-            'url': image_data
+        $.ajax({
+            url: Microsoft.api_host + 'detect?returnFaceAttributes=age,gender',
+            headers: header_settings,
+            type: 'POST',
+            data: JSON.stringify({
+                'url': image_data
+            }),
+            dataType: 'raw',
+            processData: false,
+            success: callback,
+            error: callback
         });
     } else {
         header_settings['Content-type'] = 'application/octet-stream';
-        data = image_data;
+        var dataReader = new FileReader();
+        dataReader.onloadend = function(e) {
+            $.ajax({
+                url: Microsoft.api_host + 'detect?returnFaceAttributes=age,gender',
+                headers: header_settings,
+                type: 'POST',
+                data: e.target.result,
+                dataType: 'raw',
+                processData: false,
+                success: callback,
+                error: callback
+            });
+        };
+        dataReader.readAsArrayBuffer(image_data);
     }
-
-    $.ajax({
-        url: this.api_host + 'detect?returnFaceAttributes=age,gender',
-        headers: header_settings,
-        type: 'POST',
-        data: data,
-        dataType: 'raw',
-        processData: false,
-        success: callback,
-        error: callback
-    });
 };
 
 Microsoft.handleResponse = function(response, scorecard) {

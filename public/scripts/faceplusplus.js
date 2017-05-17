@@ -14,7 +14,8 @@ FacePlusPlus.detect = function(image_data, callback, is_url) {
         data = {};
         url += '&image_url=' + image_data;
     } else {
-        data = image_data;
+        data = new FormData();
+        data.append('image_file', image_data, image_data.name);
     }
     $.ajax(url, {
         type: 'POST',

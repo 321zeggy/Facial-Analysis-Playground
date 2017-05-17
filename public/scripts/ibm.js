@@ -27,10 +27,12 @@ IBM.detect = function(image_data, callback, is_url) {
             error: callback
         });
     } else {
+        data = new FormData();
+        data.append('images_file', image_data, image_data.name);
         url += '?api_key=' + this.api_key + '&version=' + this.version;
         $.ajax(url, {
             type: 'POST',
-            data: image_data,
+            data: data,
             dataType: 'raw',
             processData: false,
             contentType: false,

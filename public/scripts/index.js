@@ -20,9 +20,9 @@
     var camera;
 
 
-/* Upload and Process Image */
+    /* Upload and Process Image */
 
-function incrementResponsesCount() {
+    function incrementResponsesCount() {
       responsesCount += 1;
       if (responsesCount == 5) {
         scorecard.setFaceImage(global_image_data);
@@ -105,38 +105,22 @@ function incrementResponsesCount() {
           var imageObj = new Image();
           imageObj.onload = function() {
             var ratio = getConversionRatio(imageObj, canvas.width, canvas.height);
-            if (!ratio_computed) {
-              ratio_computed = true;
-              imageObj.src = imageToDataUri(imageObj, imageObj.width, imageObj.height);
-            } else {
-              context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
-              var image_data = String(imageObj.src);
-              image_data = image_data.replace("data:image/jpeg;base64,", "");
-              image_data = image_data.replace("data:image/jpg;base64,", "");
-              image_data = image_data.replace("data:image/png;base64,", "");
-              image_data = image_data.replace("data:image/gif;base64,", "");
-              image_data = image_data.replace("data:image/bmp;base64,", "");
-              reset('data:image/jpeg;base64,' + image_data, ratio);
-              Kairos.detect(image_data, kairosDetectCallback);
-              Google.detect(image_data, googleDetectCallback, is_url = false);
+            context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
 
-              var dataReader = new FileReader();
-              dataReader.onloadend = function(e) {
-                Microsoft.detect(e.target.result, microsoftDetectCallback, is_url = false);
-              };
-              dataReader.readAsArrayBuffer(file);
+            var image_data = String(imageToDataUri(imageObj, imageObj.width, imageObj.height));
+            image_data = image_data.replace("data:image/jpeg;base64,", "");
+            image_data = image_data.replace("data:image/jpg;base64,", "");
+            image_data = image_data.replace("data:image/png;base64,", "");
+            image_data = image_data.replace("data:image/gif;base64,", "");
+            image_data = image_data.replace("data:image/bmp;base64,", "");
+            reset('data:image/jpeg;base64,' + image_data, ratio);
 
-              var ibmFormData = new FormData();
-              ibmFormData.append('images_file', file, file.name);
-              IBM.detect(ibmFormData, ibmDetectCallback, is_url = false);
-
-              var facePlusPlusFormData = new FormData();
-              facePlusPlusFormData.append('image_file', file, file.name);
-              FacePlusPlus.detect(facePlusPlusFormData, facePlusPlusDetectCallback, is_url = false);
-            }
-
+            Kairos.detect(file, kairosDetectCallback, is_url = false);
+            Google.detect(file, googleDetectCallback, is_url = false);
+            Microsoft.detect(file, microsoftDetectCallback, is_url = false);
+            IBM.detect(file, ibmDetectCallback, is_url = false);
+            FacePlusPlus.detect(file, facePlusPlusDetectCallback, is_url = false);
           };
-          var ratio_computed = false;
           imageObj.src = e.target.result;
         };
         // Read in the image file as a data URL.
@@ -158,7 +142,7 @@ function incrementResponsesCount() {
         context.drawImage(imageObj, 0, 0, imageObj.width * ratio, imageObj.height * ratio);
         reset(imageObj.src, ratio);
 
-        Kairos.detect(imageObj.src, kairosDetectCallback);
+        Kairos.detect(imageObj.src, kairosDetectCallback, is_url = true);
         FacePlusPlus.detect(image_url, facePlusPlusDetectCallback, is_url = true);
         Microsoft.detect(imageObj.src, microsoftDetectCallback, is_url = true);
         IBM.detect(imageObj.src, ibmDetectCallback, is_url = true);
@@ -169,7 +153,7 @@ function incrementResponsesCount() {
 
     $('#file').change(function(evt) {
       // in case camera div was previously shown and not re-hidden
-      $('#camera').hide(); 
+      $('#camera').hide();
       // makes sure the file change wasn't just due to it being reset in handleURLSelect() 
       if ($("#file").val !== '') {
         global_is_sample = false;
@@ -282,7 +266,7 @@ function incrementResponsesCount() {
       }
     });
 
-/* MODAL */
+    /* MODAL */
 
     function displayComparisonTable() {
       $('.modal-1').show();
