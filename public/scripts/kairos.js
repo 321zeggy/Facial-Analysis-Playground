@@ -4,14 +4,14 @@ var Kairos = {
     api_host: 'https://api.kairos.com/'
 };
 
-/* Detect faces in an image */
+// send facial analysis request to Kairos's API
 Kairos.detect = function(image_data, callback, is_url) {
     var imageObj = new Image();
     imageObj.onload = function() {
         if (is_url) {
             data = image_data;
         } else {
-            data = String(imageToDataUri(imageObj, imageObj.width, imageObj.height));
+            data = String(imageToDataURI(imageObj));
             data = data.replace("data:image/jpeg;base64,", "");
             data = data.replace("data:image/jpg;base64,", "");
             data = data.replace("data:image/png;base64,", "");
@@ -46,12 +46,13 @@ Kairos.detect = function(image_data, callback, is_url) {
     }
 };
 
+// process Kairos's API's facial analysis response
 Kairos.handleResponse = function(response, scorecard) {
     var kairosJSON = JSON.parse(response.responseText);
     if ('Errors' in kairosJSON) {
         $('#comparison_table')
             .find('.kairos_gender, .kairos_age')
-            .add('#kairos_response')
+            .add('#kairos-response')
             .html('No face detected');
         scorecard.setKairosFaceDetected(false);
         return;
@@ -74,7 +75,7 @@ Kairos.handleResponse = function(response, scorecard) {
             width: face.width,
             height: face.height
         };
-        $("#kairos_response").html(JSON.stringify(attributes, null, 4));
+        $("#kairos-response").html(JSON.stringify(attributes, null, 4));
         return boundingBox;
     }
 };

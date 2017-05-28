@@ -4,7 +4,7 @@ var FacePlusPlus = {
     api_host: 'https://api-us.faceplusplus.com/facepp/v3/'
 };
 
-/* Detect faces in an image */
+// send facial analysis request to Face++'s API
 FacePlusPlus.detect = function(image_data, callback, is_url) {
     var url = this.api_host + 'detect';
     url += '?return_attributes=age,gender&';
@@ -27,10 +27,11 @@ FacePlusPlus.detect = function(image_data, callback, is_url) {
     });
 };
 
+// process Face++'s API's facial analysis response
 FacePlusPlus.handleResponse = function(response, scorecard) {
     var facePlusPlusJSON = response;
     if (!('faces' in facePlusPlusJSON)) {
-        $("#faceplusplus_response").html('Photo incompatible with Face++');
+        $("#faceplusplus-response").html('Photo incompatible with Face++');
         $('#comparison_table')
             .find('.faceplusplus_gender, .faceplusplus_age')
             .html('No face detected');
@@ -39,7 +40,7 @@ FacePlusPlus.handleResponse = function(response, scorecard) {
     } else if (facePlusPlusJSON.faces.length === 0) {
         $('#comparison_table')
             .find('.faceplusplus_gender, .faceplusplus_age')
-            .add('#faceplusplus_response')
+            .add('#faceplusplus-response')
             .html('No face detected');
         scorecard.setFacePlusPlusFaceDetected(false);
         return;
@@ -62,7 +63,7 @@ FacePlusPlus.handleResponse = function(response, scorecard) {
             width: face.width,
             height: face.height
         };
-        $("#faceplusplus_response").html(JSON.stringify(attributes, null, 4));
+        $("#faceplusplus-response").html(JSON.stringify(attributes, null, 4));
         return boundingBox;
     }
 };

@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link href="styles/main.css" rel="stylesheet">
-    <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- tether -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <!-- bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script src="scripts/jquery.urlshortener.min.js" type="text/javascript"></script>
     <script src="/jpeg_camera/swfobject.min.js" type="text/javascript"></script>
@@ -35,66 +32,49 @@
         <h1 class="display-4 mb-4">Facial Analysis Playground</h1>
         <div class="row">
             <div class="col-sm-5" style="position: relative;">
-                <div id="camera" style="z-index: 100; position: absolute;"></div>
-                <canvas id="photoCanvas" width="400" height="400" style="z-index: 100; position: absolute;"></canvas>
-                <!-- <img src="images/loading.svg" id="loading" style="z-index: 300; align-self: center; position: absolute;"> -->
-                <div id="countdown" data-timer="4" style="z-index: 300; align-self: center; position: absolute; vertical-align: middle;"></div>
-                <div id="gender-age-display" class="display-4 alert alert-info" role="alert" style="position: absolute; bottom: 0; font-size:1rem; width: 82%; text-align: center;">
+                <div id="camera"></div>
+                <canvas id="photoCanvas" width="400" height="400"></canvas>
+                <div id="countdown" data-timer="4"></div>
+                <div id="gender-age-display" class="display-4 alert alert-info" role="alert">
                     <h6 class="alert-heading"><span id="api-name"></span> Results: </h6>
                     <div id="detected-values">
-                        <span>Gender: <span id="gender-display" class="gender"></span></span><span style="margin-left: 30px; margin-right: 30px;">|</span><span>Age: <span id="age-display" class="age"></span></span>
+                        <span>Gender: <span id="gender-display" class="gender"></span></span>
+                        <span style="margin-left: 30px; margin-right: 30px;">|</span>
+                        <span>Age: <span id="age-display" class="age"></span></span>
                     </div>
                     <span id="no-face-detected">No Face Detected</span>
                 </div>
             </div>
             <div class="col-sm-5">
                 <!-- Nav tabs -->
-                <ul id="apis_nav" class="nav nav-pills" role="tablist">
+                <ul id="apis-nav" class="nav nav-pills" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#ibm_response" role="tab">IBM</a>
+                        <a class="nav-link active" data-toggle="tab" href="#ibm-response" role="tab">IBM</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#microsoft_response" role="tab">Microsoft</a>
+                        <a class="nav-link" data-toggle="tab" href="#microsoft-response" role="tab">Microsoft</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#faceplusplus_response" role="tab">Face++</a>
+                        <a class="nav-link" data-toggle="tab" href="#faceplusplus-response" role="tab">Face++</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#google_response" role="tab">Google</a>
+                        <a class="nav-link" data-toggle="tab" href="#google-response" role="tab">Google</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#kairos_response" role="tab">Kairos</a>
+                        <a class="nav-link" data-toggle="tab" href="#kairos-response" role="tab">Kairos</a>
                     </li>
                 </ul>
 
-               <!--  <ul class="nav nav-pills flex-column flex-sm-row" role="tablist">
-                    <li class="nav-item">
-                        <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="tab" href="#ibm_response" role="tab">IBM</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#microsoft_response" role="tab">Microsoft</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#faceplusplus_response" role="tab">Face++</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#google_response" role="tab">Google</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="flex-sm-fill text-sm-center nav-link" data-toggle="tab" href="#kairos_response" role="tab">Kairos</a>
-                    </li>
-                </ul> -->
-
                 <!-- Tab panes -->
                 <div class="tab-content mt-2">
-                    <div class="tab-pane fade show active responses" id="ibm_response" role="tabpanel">
+                    <div class="tab-pane fade show active responses" id="ibm-response" role="tabpanel">
                         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <div class="tab-pane fade responses" id="microsoft_response" role="tabpanel"><i>(Microsoft response will appear here)</i></div>
-                    <div class="tab-pane fade responses" id="faceplusplus_response" role="tabpanel"><i>(Face++ response will appear here)</i></div>
-                    <div class="tab-pane fade responses" id="google_response" role="tabpanel"><i>(IBM response will appear here)</i></div>
-                    <div class="tab-pane fade responses" id="kairos_response" role="tabpanel"><i>(Kairos response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="microsoft-response" role="tabpanel"><i>(Microsoft response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="faceplusplus-response" role="tabpanel"><i>(Face++ response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="google-response" role="tabpanel"><i>(IBM response will appear here)</i></div>
+                    <div class="tab-pane fade responses" id="kairos-response" role="tabpanel"><i>(Kairos response will appear here)</i></div>
                 </div>
             </div>
         </div>
@@ -241,9 +221,9 @@
                         </div>
                         <input type="submit" class="btn btn-primary modal-2" value="View Scorecard" hidden>
                     </form>
-                    <div id="scorecard" class="card card-outline-info modal-3" style="border-color: #292b2c;">
+                    <div id="scorecard" class="card card-outline-info modal-3">
                         <h1 id="coded-gaze" class="display-4 card-header">Coded Gaze Score: <strong id="total_score">4/13</strong></h1>
-                        <div class="card-block" style="max-height: 180px; overflow: hidden;">
+                        <div id="ground-truth-display" class="card-block">
                             <img class="card-img-left float-left" id="face_image" src="#">
                             <div class="card-img-overlay" style="height: 180px;">
                                 <dl class="row" style="font-size: 1.2em;">

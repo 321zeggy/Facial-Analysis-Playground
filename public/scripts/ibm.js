@@ -4,8 +4,9 @@ var IBM = {
     api_host: "https://gateway-a.watsonplatform.net/visual-recognition/api/"
 };
 
+// send facial analysis request to IBM's API 
 IBM.detect = function(image_data, callback, is_url) {
-    var url = this.api_host + 'v3/detect_faces';
+    var url = this.api_host + 'v3/detect_faces?api_key=' + this.api_key + '&version=' + this.version;
     var header_settings = {};
     var data;
     if (is_url) {
@@ -20,16 +21,13 @@ IBM.detect = function(image_data, callback, is_url) {
             type: 'GET',
             data: data,
             dataType: 'raw',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('api_key', this.api_key);
-            },
             success: callback,
             error: callback
         });
     } else {
         data = new FormData();
         data.append('images_file', image_data, image_data.name);
-        url += '?api_key=' + this.api_key + '&version=' + this.version;
+
         $.ajax(url, {
             type: 'POST',
             data: data,
@@ -42,12 +40,13 @@ IBM.detect = function(image_data, callback, is_url) {
     }
 };
 
+// process IBM's API's facial analysis response
 IBM.handleResponse = function(response, scorecard) {
     var ibmJSON = JSON.parse(response.responseText);
     if (!ibmJSON.images[0].faces[0]) {
         $("#comparison_table")
             .find('.ibm_gender, .ibm_age')
-            .add('#ibm_response')
+            .add('#ibm-response')
             .html('No face detected');
         scorecard.setIBMFaceDetected(false);
         return;
@@ -85,7 +84,7 @@ IBM.handleResponse = function(response, scorecard) {
             width: face.width,
             height: face.height
         };
-        $("#ibm_response").html(JSON.stringify(attributes, null, 4));
+        $("#ibm-response").html(JSON.stringify(attributes, null, 4));
         return boundingBox;
 
     }

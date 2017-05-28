@@ -1,3 +1,23 @@
+#photoCanvas, #camera {
+  z-index: 100; 
+  position: absolute;
+}
+
+#countdown {
+  z-index: 300; 
+  align-self: center; 
+  position: absolute; 
+  vertical-align: middle;
+}
+
+#gender-age-display {
+  position: absolute; 
+  bottom: 0; 
+  font-size:1rem; 
+  width: 82%; 
+  text-align: center;
+}
+
 .responses { 
 	white-space: pre; 
 	font-family: monospace; 
@@ -21,6 +41,11 @@ a.disabled {
 	cursor: progress;
 }
 
+#ground-truth-display {
+  max-height: 180px; 
+  overflow: hidden;
+}
+
 .card-columns {
 	column-count: 1;
 }
@@ -37,6 +62,10 @@ a.disabled {
   width: 50%;
   float: right;
   position: relative;
+}
+
+#scorecard {
+  border-color: #292b2c;
 }
 
 #scorecard-table {

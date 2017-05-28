@@ -3,6 +3,7 @@ var Microsoft = {
     api_host: 'https://westus.api.cognitive.microsoft.com/face/v1.0/'
 };
 
+// send facial analysis request to Microsoft's API
 Microsoft.detect = function(image_data, callback, is_url) {
     var header_settings = {
         'Ocp-Apim-Subscription-Key': Microsoft.api_key
@@ -40,13 +41,14 @@ Microsoft.detect = function(image_data, callback, is_url) {
     }
 };
 
+// process Microsoft's API's facial analysis response
 Microsoft.handleResponse = function(response, scorecard) {
     var microsoftJSON = JSON.parse(response.responseText);
     if (!microsoftJSON[0]) {
         scorecard.setMicrosoftFaceDetected(false);
         $('#comparison_table')
             .find('.microsoft_gender, .microsoft_age')
-            .add('#microsoft_response')
+            .add('#microsoft-response')
             .html('No face detected');
         return;
     } else {
@@ -68,7 +70,7 @@ Microsoft.handleResponse = function(response, scorecard) {
             width: face.width,
             height: face.height
         };
-        $("#microsoft_response").html(JSON.stringify(attributes, null, 4));
+        $("#microsoft-response").html(JSON.stringify(attributes, null, 4));
         return boundingBox;
     }
 };

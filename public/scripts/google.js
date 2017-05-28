@@ -3,42 +3,32 @@ var Google = {
   api_host: 'https://vision.googleapis.com/v1/'
 };
 
-/* Detect faces in an image */
+// send facial analysis request to Google's API
 Google.detect = function(image_data, callback, is_url) {
   var imageObj = new Image();
   imageObj.onload = function() {
     var image;
     if (is_url) {
       image = {
-        'source': {
-          'imageUri': image_data
-        }
+        'source': { 'imageUri': image_data }
       };
-    } else {
-      var dataString = String(imageToDataUri(imageObj, imageObj.width, imageObj.height));
-      dataString = dataString.replace("data:image/jpeg;base64,", "");
-      dataString = dataString.replace("data:image/jpg;base64,", "");
-      dataString = dataString.replace("data:image/png;base64,", "");
-      dataString = dataString.replace("data:image/gif;base64,", "");
-      dataString = dataString.replace("data:image/bmp;base64,", "");
-      image = {
-        'content': dataString
-      };
+    } 
+    else {
+      var dataString = String(imageToDataURI(imageObj));
+      var fileExtensions = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+      for (var i = 0; i <= fileExtensions.length; i++) {
+        dataString = dataString.replace('data:image/' + fileExtensions[i] + ';base64,', "");
+      }
+      image = { 'content': dataString };
     }
-    var data = {
-      'requests': [{
-        'image': image,
-        'features': [{
-          'type': 'FACE_DETECTION'
-        }]
-      }]
+    var data = { 'requests': [{
+      'image': image,
+      'features': [{'type': 'FACE_DETECTION'}]}]
     };
     var url = Google.api_host + 'images:annotate?key=' + Google.api_key;
     $.ajax(url, {
       type: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
+      headers: {'Content-type': 'application/json'},
       data: JSON.stringify(data),
       processData: false,
       dataType: 'raw',
@@ -46,7 +36,7 @@ Google.detect = function(image_data, callback, is_url) {
       error: callback
     });
   };
-
+  
   if (is_url) {
     imageObj.src = image_data;
   } else {
@@ -56,20 +46,17 @@ Google.detect = function(image_data, callback, is_url) {
     };
     reader.readAsDataURL(image_data);
   }
-
-
-
 };
 
-
+// process Google's API's facial analysis response
 Google.handleResponse = function(response, scorecard) {
   var googleJSON = JSON.parse(response.responseText);
   if (('error' in googleJSON.responses[0])) {
-    $("#google_response").html('Photo incompatible with Google');
+    $("#google-response").html('Photo incompatible with Google');
     scorecard.setGoogleFaceDetected(false);
     return;
   } else if (!('faceAnnotations' in googleJSON.responses[0])) {
-    $("#google_response").html('No face detected');
+    $("#google-response").html('No face detected');
     scorecard.setGoogleFaceDetected(false);
     return;
   } else {
@@ -92,7 +79,7 @@ Google.handleResponse = function(response, scorecard) {
       width: face[2].x - face[0].x,
       height: face[2].y - face[0].y
     };
-    $("#google_response").html(JSON.stringify(attributes, null, 4));
+    $("#google-response").html(JSON.stringify(attributes, null, 4));
     scorecard.setGoogleFaceDetected(true);
     return boundingBox;
   }
